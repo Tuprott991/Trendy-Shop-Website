@@ -8,12 +8,14 @@ module.exports = app => {
   router.post("/auth/signup", authController.signup);
   router.post("/auth/login", authController.login);
 
+
   // Retailer dashboard Routes
   router.get('/dashboard', retailer_dashboardController.getDashboardData);
   router.post('/product', retailer_dashboardController.addProduct);
   router.put('/product/:id', retailer_dashboardController.updateProduct);
   router.delete('/product/:id', retailer_dashboardController.deleteProduct);
   router.get('/product/:id', retailer_dashboardController.getProductDetails);
+  
 
 
   // Mount the router to `/api`
