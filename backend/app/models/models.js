@@ -12,14 +12,15 @@ const userSchema = new Schema({
 
 // Category Schema
 const categorySchema = new Schema({
-  name: { type: String, required: true }
+  category: { type: String, required: true },
+  target: {type: String, required: true}
 }, { timestamps: true });
 
 // Product Schema
 const productSchema = new Schema({
   name: { type: String, required: true },
   description: { type: String },
-  price: { type: Number, required: true },
+  price: { type: Number, required: true },  
   category_id: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
   stock_quantity: { type: Number, default: 0 },
   image_url: { type: String }
@@ -32,6 +33,7 @@ const orderSchema = new Schema({
   status: { type: String, enum: ['pending', 'completed', 'canceled'], default: 'pending' },
   address: { type: String },
   phone: { type: String },
+  payment_method: { type: String, enum: ['credit_card', 'cash', 'paypal'], required: true },
   items: [
     {
       product_id: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
@@ -42,11 +44,11 @@ const orderSchema = new Schema({
 }, { timestamps: true });
 
 // Payment Schema
-const paymentSchema = new Schema({
-  order_id: { type: Schema.Types.ObjectId, ref: 'Order', required: true },
-  payment_method: { type: String, enum: ['credit_card', 'cash', 'paypal'], required: true },
-  payment_status: { type: String, enum: ['success', 'failed'], default: 'failed' }
-}, { timestamps: true });
+// const paymentSchema = new Schema({
+//   order_id: { type: Schema.Types.ObjectId, ref: 'Order', required: true },
+//   payment_method: { type: String, enum: ['credit_card', 'cash', 'paypal'], required: true },
+//   payment_status: { type: String, enum: ['success', 'failed'], default: 'failed' }
+// }, { timestamps: true });
 
 // Voucher Schema
 const voucherSchema = new Schema({
@@ -66,7 +68,7 @@ const User = mongoose.model('User', userSchema);
 const Category = mongoose.model('Category', categorySchema);
 const Product = mongoose.model('Product', productSchema);
 const Order = mongoose.model('Order', orderSchema);
-const Payment = mongoose.model('Payment', paymentSchema);
+//const Payment = mongoose.model('Payment', paymentSchema);
 const Voucher = mongoose.model('Voucher', voucherSchema);
 
-module.exports = { User, Category, Product, Order, Payment, Voucher };
+module.exports = { User, Category, Product, Order, Voucher };
