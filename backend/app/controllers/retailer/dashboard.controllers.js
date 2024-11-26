@@ -1,6 +1,7 @@
-const { Product, Order } = require('../models'); // Import your models
+const Product = require('../../models').Product;
+const Order = require('../../models').Order;
 
-const getDashboardData = async (req, res) => {
+exports.getDashboardData = async (req, res) => {
   try {
     // Fetch total products
     const totalProducts = await Product.countDocuments();
@@ -44,7 +45,7 @@ const getDashboardData = async (req, res) => {
 /**
  * Add a New Product
  */
-const addProduct = async (req, res) => {
+exports.addProduct = async (req, res) => {
   const { name, description, price, category_id, stock_quantity, image_url } = req.body;
   try {
     const newProduct = new Product({
@@ -67,7 +68,7 @@ const addProduct = async (req, res) => {
 /**
  * Update a Product
  */
-const updateProduct = async (req, res) => {
+exports.updateProduct = async (req, res) => {
   const { id } = req.params;
   const updateData = req.body;
 
@@ -87,7 +88,7 @@ const updateProduct = async (req, res) => {
 /**
  * Delete a Product
  */
-const deleteProduct = async (req, res) => {
+exports.deleteProduct = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -106,7 +107,7 @@ const deleteProduct = async (req, res) => {
 /**
  * Get Product Details (View Action)
  */
-const getProductDetails = async (req, res) => {
+exports.getProductDetails = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -120,12 +121,4 @@ const getProductDetails = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Error fetching product details' });
   }
-};
-
-module.exports = {
-  getDashboardData,
-  addProduct,
-  updateProduct,
-  deleteProduct,
-  getProductDetails
 };
