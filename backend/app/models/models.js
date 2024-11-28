@@ -20,9 +20,11 @@ const categorySchema = new Schema({
 const productSchema = new Schema({
   name: { type: String, required: true },
   description: { type: String },
-  price: { type: Number, required: true },  
+  price: { type: Number, required: true },
   category_id: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
+  size: {type: String, required: false},
   stock_quantity: { type: Number, default: 0 },
+  rating :{type: Number, default: 0.0, max: 5.0},
   image_url: { type: String }
 }, { timestamps: true });
 
@@ -38,7 +40,11 @@ const orderSchema = new Schema({
     {
       product_id: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
       quantity: { type: Number, required: true },
-      price: { type: Number, required: true }
+    }
+  ],
+  vouchers: [
+    {
+      voucher_code:{ type: String, ref: 'Voucher', required: false },
     }
   ]
 }, { timestamps: true });
@@ -54,7 +60,6 @@ const orderSchema = new Schema({
 const voucherSchema = new Schema({
   code: { type: String, required: true, unique: true },
   description: { type: String },
-  discount_type: { type: String, enum: ['percentage', 'fixed_amount'], required: true },
   discount_value: { type: Number, required: true },
   valid_from: { type: Date, required: true },
   valid_to: { type: Date, required: true },
