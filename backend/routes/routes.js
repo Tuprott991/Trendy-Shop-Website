@@ -1,6 +1,6 @@
 module.exports = app => {
-  const authController = require("../controllers/auth.controller.js");
-  const retailer_dashboardController = require("../controllers/retailer/dashboard.controllers.js");
+  const authController = require("../controllers/UserController/auth.controller.js");
+  const retailer_dashboardController = require("../controllers/UserController/re_dashboard.controllers.js");
   
   const router = require("express").Router();
 

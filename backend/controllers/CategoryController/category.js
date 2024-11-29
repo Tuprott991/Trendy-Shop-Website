@@ -1,8 +1,6 @@
-const User = require("../models/models.js").User;
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const Category = require("../../models/models").Category;
 
-exports.signup = async (req, res) => {
+exports.add_cate = async (req, res) => {
     try {
       const { name, email, password, role } = req.body;
   
@@ -17,7 +15,7 @@ exports.signup = async (req, res) => {
       }
   
       // Check if the user already exists
-      const existingUser = await User.findOne({ email });
+      const existingUser = await Category.findOne({ email });
       if (existingUser) {
         return res.status(400).send({ message: "Email is already in use!" });
       }
@@ -26,7 +24,7 @@ exports.signup = async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, 10);
   
       // Create a new User
-      const user = new User({
+      const category = new Category({
         name,
         email,
         password: hashedPassword,
@@ -35,7 +33,7 @@ exports.signup = async (req, res) => {
       });
   
       // Save User to the database
-      const savedUser = await user.save();
+      const savedUser = await category.save();
   
       // Return the saved user details (excluding the password for security)
       const { password: _, ...userData } = savedUser.toObject();
@@ -49,30 +47,14 @@ exports.signup = async (req, res) => {
       });
     }
   };
-  
 
-exports.login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    // Find the user by email
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).send({ message: "User not found" });
-    }
-
-    // Compare the password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(401).send({ message: "Invalid password" });
-    }
-
-    // Generate a JWT token
-    const token = jwt.sign({ id: user._id, role: user.role}, "secret_key", { expiresIn: "1d" });
-
-
-    res.status(200).send({ message: "Login successful", user ,token });
-  } catch (err) {
-    res.status(500).send({ message: "Error during login", error: err.message });
-  }
+const categoryDictionary = {
+'Men': ['T-shirts', 'Casual Shirts','Formal Shirts','Jackets'],
+'Woman': ['T-shirts', 'Casual Shirts','Formal Shirts','Jackets'],
+'Footwear':[],
+'Kids':[],
+'Western':[],
+'Eastern':[],
+'Product feature':[]
 };
+  
