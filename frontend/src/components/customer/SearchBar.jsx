@@ -1,63 +1,45 @@
 import { AiOutlineSearch } from "react-icons/ai";
+import { categoryService } from "../../services/categoryService";
+import { useEffect, useState } from "react";
 const SearchBar = () => {
+ const [categories, setCategories] = useState([]);
  const handleSubmit = (e) => {
   e.preventDefault();
   const searchValue = e.target.search.value;
   console.log("Search for:", searchValue);
  };
- const categories = {
-  Men: [
-   "Topwear",
-   "Innerwear",
-   "Shoes",
-   "Bottomwear",
-   "Sandal",
-   "Dress",
-   "Socks",
-  ],
-  Women: [
-   "Topwear",
-   "Innerwear",
-   "Shoes",
-   "Bottomwear",
-   "Sandal",
-   "Dress",
-   "Socks",
-  ],
-  Girls: [
-   "Topwear",
-   "Innerwear",
-   "Shoes",
-   "Bottomwear",
-   "Sandal",
-   "Dress",
-   "Socks",
-  ],
-  Boys: [
-   "Topwear",
-   "Innerwear",
-   "Shoes",
-   "Bottomwear",
-   "Sandal",
-   "Dress",
-   "Socks",
-  ],
-  Unisex: [
-   "Topwear",
-   "Innerwear",
-   "Shoes",
-   "Bottomwear",
-   "Sandal",
-   "Dress",
-   "Socks",
-  ],
- };
+ useEffect(() => {
+  const fetchAndProcessCategories = async () => {
+   try {
+    const response = await categoryService.getAll();
+    console.log(response);
+    const reducedCategories = response.data.reduce(
+     (acc, { category, target }) => {
+      if (!acc[target]) {
+       acc[target] = [];
+      }
+      if (!acc[target].includes(category)) {
+       acc[target].push(category);
+      }
+      return acc;
+     },
+     {}
+    );
+
+    setCategories(reducedCategories);
+   } catch (error) {
+    console.error("Failed to fetch categories:", error);
+   }
+  };
+
+  fetchAndProcessCategories();
+ }, []);
 
  return (
   <>
-   <div className="flex gap-12 font-bold text-sm text-gray-900">
+   <div className="flex gap-8 font-bold text-sm text-gray-900">
     <div className="group relative h-full">
-     <div className=" cursor-pointer  flex items-center  group-hover:text-green-600 duration-100 ">
+     <div className="ml-8 cursor-pointer  flex items-center  group-hover:text-green-600 duration-100 ">
       Category
       <svg
        className="-mr-1 size-5 text-gray-900 group-hover:text-green-600 duration-100"
@@ -111,10 +93,14 @@ const SearchBar = () => {
      </div>
     </div>
 
-    <div>On sale</div>
-    <div>Retailer</div>
+    <div className="cursor-pointer hover:text-green-500 transition-all duration-75">
+     On sale
+    </div>
+    <div className="cursor-pointer hover:text-green-500 transition-all duration-75">
+     Retailer
+    </div>
    </div>
-   <form onSubmit={handleSubmit} className="flex items-center w-[45%]">
+   <form onSubmit={handleSubmit} className="ml-8 flex items-center w-[45%]">
     <div className="absolute ml-4">
      <AiOutlineSearch size={20} />
     </div>
