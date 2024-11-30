@@ -1,9 +1,13 @@
-import React from "react";
+import FirstSection from "../../components/customer/FirstSection";
+import TopSellingSection from "../../components/customer/TopSellingSection";
 
 const CustomerHome = () => {
- console.log(123);
-
- return <div>CustomerHome</div>;
+ return (
+  <div className="">
+   <FirstSection></FirstSection>
+   <TopSellingSection></TopSellingSection>
+  </div>
+ );
 };
 
 export default CustomerHome;
