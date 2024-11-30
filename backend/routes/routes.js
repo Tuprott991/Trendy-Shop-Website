@@ -1,7 +1,7 @@
 module.exports = app => {
   const authController = require("../controllers/UserController/auth.controller.js");
   const retailer_dashboardController = require("../controllers/UserController/re_dashboard.controllers.js");
-  
+
   const router = require("express").Router();
 
   // Authentication Routes
@@ -15,7 +15,6 @@ module.exports = app => {
   router.put('/product/:id', retailer_dashboardController.updateProduct);
   router.delete('/product/:id', retailer_dashboardController.deleteProduct);
   router.get('/product/:id', retailer_dashboardController.getProductDetails);
-  
 
 
   // Mount the router to `/api`
