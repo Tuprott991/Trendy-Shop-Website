@@ -41,6 +41,15 @@ const Signup = () => {
    }));
    return;
   }
+  if (password.length < 8 || !/[A-Z]/.test(password) || !/\d/.test(password)) {
+   setFormData((prevData) => ({
+    ...prevData,
+    error:
+     "Password must be at least 8 characters long, include at least one uppercase letter, and one number.",
+   }));
+   setIsLoading(false);
+   return;
+  }
 
   try {
    const response = await authenticationService.signup(

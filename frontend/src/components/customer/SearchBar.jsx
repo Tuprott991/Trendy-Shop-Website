@@ -12,7 +12,6 @@ const SearchBar = () => {
   const fetchAndProcessCategories = async () => {
    try {
     const response = await categoryService.getAll();
-    console.log(response);
     const reducedCategories = response.data.reduce(
      (acc, { category, target }) => {
       if (!acc[target]) {
@@ -81,7 +80,7 @@ const SearchBar = () => {
           {categories[category].map((item) => (
            <li
             key={item}
-            className="text-sm text-gray-800 font-medium hover:bg-gray-100 px-3 py-2 rounded-md cursor-pointer"
+            className="text-sm text-gray-800 font-medium hover:bg-gray-100 hover:text-green-500 px-3 py-2 rounded-md cursor-pointer"
            >
             {item}
            </li>

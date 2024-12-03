@@ -3,13 +3,16 @@ import "./App.css";
 
 import { AuthProvider } from "./context/AuthContext.jsx";
 import AppRoutes from "./routes/routes.jsx";
+import { DropdownProvider } from "./context/DropDownContext.jsx";
 
 const App = () => {
  return (
   <AuthProvider>
-   <BrowserRouter>
-    <AppRoutes />
-   </BrowserRouter>
+   <DropdownProvider>
+    <BrowserRouter>
+     <AppRoutes />
+    </BrowserRouter>
+   </DropdownProvider>
   </AuthProvider>
  );
 };
