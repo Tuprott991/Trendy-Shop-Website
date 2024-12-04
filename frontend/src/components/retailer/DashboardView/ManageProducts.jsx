@@ -3,7 +3,7 @@ import { FaEye, FaPen, FaTrash } from "react-icons/fa";
 import ReactPaginate from "react-paginate";
 
 const App = () => {
-    const products = [
+    const [products, setProducts] = useState([
         { name: "Gradient Graphic T-shirt", category: "Shirt", cost: "$128" },
         { name: "Polo with Tipping Details", category: "Shirt", cost: "$128" },
         { name: "Black Striped T-shirt", category: "Shirt", cost: "$128" },
@@ -19,9 +19,18 @@ const App = () => {
         { name: "Skinny Fit Jeans", category: "Jeans", cost: "$128" },
         { name: "Checkered Shirt", category: "Shirt", cost: "$128" },
         { name: "Checkered Shirt", category: "Shirt", cost: "$128" },
-    ];
+    ]);
 
     const [currentPage, setCurrentPage] = useState(0);
+    const [isAddVisible, setIsAddVisible] = useState(false);
+    const [newProduct, setNewProduct] = useState({
+        name: "",
+        category: "",
+        size: "",
+        cost: "",
+        description: ""
+    });
+
     const itemsPerPage = 5;
 
     const offset = currentPage * itemsPerPage;
@@ -33,7 +42,11 @@ const App = () => {
     };
 
     const handleAddClick = () => {
-        alert("Button Clicked!");
+        setIsAddVisible(true);
+    };
+
+    const handleCloseAdd = () => {
+        setIsAddVisible(false);
     };
 
     const handleViewClick = () => {
@@ -48,12 +61,33 @@ const App = () => {
         alert("Delete Button Clicked!");
     };
 
+    const handleInputChange = (e) => {
+        const { id, value } = e.target;
+        setNewProduct((prev) => ({
+            ...prev,
+            [id]: value
+        }));
+    };
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        const { name, category, size, cost, description } = newProduct;
+        if (!name || !category || !size || !cost || !description) {
+            alert("Please fill out all fields.");
+            return;
+        }
+        setProducts([...products, newProduct]);
+        setIsAddVisible(false);
+        setNewProduct({ name: "", category: "", size: "", cost: "", description: "" });
+    };
+    
+
     return (
         <div className="px-5 py-0">
             <div className="overflow-hidden rounded-lg shadow-md">
                 <table className="min-w-full bg-white">
                     <caption className="text-lg font-bold py-2 bg-white">
-                        <div class="flex flex justify-between items-center pl-6 pr-3">
+                        <div className="flex justify-between items-center pl-6 pr-3">
                             <p>List Products</p>
                             <button
                                 onClick={handleAddClick}
@@ -109,6 +143,88 @@ const App = () => {
                     </tbody>
                 </table>
             </div>
+            {/* Overlay background when form is visible */}
+            {isAddVisible && (
+                <>
+                    <div className="fixed inset-0 bg-gray-800 bg-opacity-70 z-10" onClick={handleCloseAdd}></div>
+                    <div className="fixed inset-0 flex justify-center items-center z-20">
+                        <div className="bg-white p-8 rounded-lg shadow-lg max-w-xl w-full relative">
+                            <div className="mb-6">
+                                <h3 className="text-xl font-bold text-gray-800">Add Product</h3>
+                            </div>
+                            <form onSubmit={handleFormSubmit}>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="col-span-1">
+                                        <label className="block text-sm font-medium text-gray-700">Name<span className="text-red-500">*</span></label>
+                                        <input
+                                            type="text"
+                                            id="name"
+                                            value={newProduct.name}
+                                            onChange={handleInputChange}
+                                            className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <label className="block text-sm font-medium text-gray-700">Category<span className="text-red-500">*</span></label>
+                                        <input
+                                            type="text"
+                                            id="category"
+                                            value={newProduct.category}
+                                            onChange={handleInputChange}
+                                            className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <label className="block text-sm font-medium text-gray-700">Size<span className="text-red-500">*</span></label>
+                                        <input
+                                            type="text"
+                                            id="size"
+                                            value={newProduct.size}
+                                            onChange={handleInputChange}
+                                            className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <label className="block text-sm font-medium text-gray-700">Cost<span className="text-red-500">*</span></label>
+                                        <input
+                                            type="text"
+                                            id="cost"
+                                            value={newProduct.cost}
+                                            onChange={handleInputChange}
+                                            className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <label className="block text-sm font-medium text-gray-700">Description<span className="text-red-500">*</span></label>
+                                        <textarea
+                                            id="description"
+                                            value={newProduct.description}
+                                            onChange={handleInputChange}
+                                            className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
+                                            rows="3"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="mt-6 flex justify-end space-x-4">
+                                    <button
+                                        type="button"
+                                        onClick={handleCloseAdd}
+                                        className="py-2 px-4 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-200 transition duration-300"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
+                                    >
+                                        Ok
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </>
+            )}
             <div className="flex justify-center items-center mt-5">
                 <ReactPaginate
                     previousLabel={"Previous"}
