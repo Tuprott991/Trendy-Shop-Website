@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef } from "react";
 import { CgHome, CgCopy } from "react-icons/cg";
 import { RiCoupon2Line } from "react-icons/ri";
 import { IoLogOutOutline } from "react-icons/io5";
+import { CgProfile } from "react-icons/cg";
 import { DropdownContext } from "../../context/DropDownContext";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -36,6 +37,7 @@ const RetailerAside = ({ onSelectComponent, selectedComponent }) => {
     const DASHBOARD = 'dashboard';
     const ORDERS = 'orders';
     const VOUCHERS = 'vouchers';
+    const PROFILE = 'profile';
 
     return (
         <>
@@ -105,6 +107,16 @@ const RetailerAside = ({ onSelectComponent, selectedComponent }) => {
                     >
                         <RiCoupon2Line size={24} />
                         <span className="text-sm font-semibold">Voucher</span>
+                    </div>
+
+                    {/* Vouchers */}
+                    <div
+                        className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all 
+        ${selectedComponent === PROFILE ? 'bg-emerald-500 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+                        onClick={() => onSelectComponent(PROFILE)}
+                    >
+                        <CgProfile size={24} />
+                        <span className="text-sm font-semibold">Profile</span>
                     </div>
 
                     {/* Logout */}
