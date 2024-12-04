@@ -80,7 +80,7 @@ const App = () => {
         setIsAddVisible(false);
         setNewProduct({ name: "", category: "", size: "", cost: "", description: "" });
     };
-    
+
 
     return (
         <div className="px-5 py-0">
@@ -143,7 +143,7 @@ const App = () => {
                     </tbody>
                 </table>
             </div>
-            {/* Overlay background when form is visible */}
+
             {isAddVisible && (
                 <>
                     <div className="fixed inset-0 bg-gray-800 bg-opacity-70 z-10" onClick={handleCloseAdd}></div>

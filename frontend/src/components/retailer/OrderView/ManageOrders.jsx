@@ -49,7 +49,7 @@ const OrdersTable = () => {
         <div className="px-6 py-5">
             <div className="overflow-hidden rounded-xl shadow-lg bg-white">
                 <table className="min-w-full table-auto">
-                    <caption className="text-lg font-bold pb-4 pt-4">
+                    <caption className="text-lg font-bold pb-4 pt-4 bg-gradient-to-r from-green-400 to-blue-500 text-white">
                         <div className="flex justify-between items-center pl-6 pr-3">
                             <p className="text-xl">Orders List</p>
                         </div>

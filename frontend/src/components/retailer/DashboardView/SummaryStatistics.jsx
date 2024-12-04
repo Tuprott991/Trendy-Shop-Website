@@ -3,8 +3,8 @@ import React from "react";
 const Dashboard = () => {
     const stats = [
         { id: 1, label: "Total Products", value: 5, icon: "📋" },
-        { id: 2, label: "Total Orders", value: 75, icon: "📦" },
-        { id: 3, label: "Total Delivered", value: 357, icon: "📮" },
+        { id: 2, label: "Total Orders", value: 357, icon: "📦" },
+        { id: 3, label: "Total Delivered", value: 75, icon: "📮" },
         { id: 4, label: "Total Revenue", value: "$128", icon: "💰" },
     ];
 
