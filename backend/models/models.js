@@ -33,7 +33,7 @@ const productSchema = new Schema({
 const orderSchema = new Schema({
   user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   total_amount: { type: Number, required: true },
-  status: { type: String, enum: ['pending', 'completed', 'canceled'], default: 'pending' },
+  status: { type: String, enum: ['pending', 'completed'], default: 'pending' },
   address: { type: String },
   phone: { type: String },
   payment_method: { type: String, enum: ['credit_card', 'cash', 'paypal'], required: true },

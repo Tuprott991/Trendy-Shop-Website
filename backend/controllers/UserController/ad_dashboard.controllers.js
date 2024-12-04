@@ -1,15 +1,19 @@
 const User = require('../../models').User;
+const Product = require('../../models').Product
 
 exports.getDashboardData = async (req, res) => {
     try {
       // Fetch total products
       const range = await User.countDocuments();
-  
+
+      // Loop User['Retailer'] += 1 
+
+
       // Fetch total orders
-      const totalOrders = await Order.countDocuments();
+      const totalOrders = await Order.countDocuments(); // -> Total Delieved 
   
       // Fetch total delivered orders
-      const totalDelivered = await Order.countDocuments({ status: 'completed' });
+      const totalDelivered = await Order.countDocuments({ status: 'completed' }); // -> Delieved 
   
       // Calculate total revenue
       const orders = await Order.find({ status: 'completed' });
