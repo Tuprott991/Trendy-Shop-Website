@@ -8,7 +8,7 @@ module.exports = (app) => {
 
  // Use routes
  app.use("/api/auth", authRoutes); // Mount authentication routes
- app.use("api/admin", adminRoutes);
+ app.use("/api/admin", adminRoutes);
  app.use("/api/retailer", reDashboardRoutes); // Mount retailer dashboard routes
  app.use("/api/customer", cuHomepage);
  // Mount the router to `/api` (if necessary)

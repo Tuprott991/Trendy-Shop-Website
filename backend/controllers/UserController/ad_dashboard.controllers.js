@@ -1,46 +1,34 @@
 const User = require('../../models').User;
-const Product = require('../../models').Product
+const Order = require('../../models').Order
 
 exports.getDashboardData = async (req, res) => {
     try {
       // Fetch total products
-      const range = await User.countDocuments();
-
-      // Loop User['Retailer'] += 1 
-
+      const retailerCount = await User.countDocuments({ role: 'retailer' });
 
       // Fetch total orders
-      const totalOrders = await Order.countDocuments(); // -> Total Delieved 
+      const totalOrders = await Order.countDocuments(); // -> Total orders
   
       // Fetch total delivered orders
       const totalDelivered = await Order.countDocuments({ status: 'completed' }); // -> Delieved 
   
       // Calculate total revenue
-      const orders = await Order.find({ status: 'completed' });
-      const totalRevenue = orders.reduce((sum, order) => sum + order.total_amount, 0);
-  
-      // Fetch product list
-      const products = await Product.find().populate('category_id', 'name');
-  
-      // Format product list
-      const productList = products.map(product => ({
-        name: product.name,
-        category: product.category_id.name,
-        sizes: ['S', 'M', 'L'], // Assuming these are the default sizes
-        cost: `$${product.price}`, // Format cost
-        productId: product._id
-      }));
-  
+
+      const orders = await Order.find({ status: 'completed' }); // ID  -> Mảng
+
+      // sum là giá trị tích lũy, order là currentValue khi lướt qua mảng, 0 là giá trị khởi tạo, đây là loop
+      const totalRevenue = orders.reduce((sum, order) => sum + order.total_amount, 0); 
+
       // Send the response
       res.json({
-        totalProducts,
+        retailerCount,
         totalOrders,
         totalDelivered,
         totalRevenue,
-        products: productList
       });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Error fetching dashboard data' });
     }
   };
+  
