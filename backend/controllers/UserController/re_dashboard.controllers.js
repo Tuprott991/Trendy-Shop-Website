@@ -1,5 +1,5 @@
-const Product = require('../../models').Product;
-const Order = require('../../models').Order;
+const Product = require('../../models/index').Product;
+const Order = require('../../models/index').Order;
 
 exports.getDashboardData = async (req, res) => {
   try {
