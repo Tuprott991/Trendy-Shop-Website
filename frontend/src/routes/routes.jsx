@@ -5,7 +5,6 @@ import CustomerLayout from "../pages/customer/CustomerLayout.jsx";
 import Signup from "../pages/authentication/Signup.jsx";
 import AdminHome from "../pages/admin/AdminHome.jsx";
 import RetailerLayout from "../pages/retailer/RetailerLayout.jsx";
-import RetailerDashboard from "../pages/retailer/RetailerDashboard.jsx";
 import Authorization from "../auth/Authorization.jsx";
 import CustomerHome from "../pages/customer/CustomerHome.jsx";
 
@@ -40,12 +39,6 @@ const AppRoutes = () => {
                 {
                     path: "retailer",
                     element: <RetailerLayout />,
-                    children: [
-                        {
-                            index: true,
-                            element: <RetailerDashboard />,
-                        },
-                    ],
                 },
                 {
                     path: "admin",

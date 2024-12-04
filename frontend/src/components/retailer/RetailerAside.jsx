@@ -5,7 +5,7 @@ import { IoLogOutOutline } from "react-icons/io5";
 import { DropdownContext } from "../../context/DropDownContext";
 import { AuthContext } from "../../context/AuthContext";
 
-const RetailerAside = () => {
+const RetailerAside = ({ onSelectComponent }) => {
     const { isOpen, setIsOpen } = useContext(DropdownContext);
     const { isLoginSuccess, logout, setIsLoginSuccess } = useContext(AuthContext);
     const divRef = useRef(null);
@@ -66,7 +66,7 @@ const RetailerAside = () => {
 
             <div className="h-screen w-64 bg-white flex flex-col justify-between">
                 {/* Title */}
-                <div className="px-6 py-4 mb-10"> {/* Thêm lớp mb-4 ở đây */}
+                <div className="px-6 py-4 mb-10">
                     <h1 className="text-2xl font-bold text-green-600 cursor-pointer hover:opacity-90">
                         SoftWear
                     </h1>
@@ -74,17 +74,26 @@ const RetailerAside = () => {
                 </div>
                 {/* Buttons */}
                 <div className="flex-1 flex flex-col gap-6 px-6">
-                    <div className="flex items-center gap-3 cursor-pointer hover:text-green-600 transition-all">
+                    <div
+                        className="flex items-center gap-3 cursor-pointer hover:text-green-600 transition-all"
+                        onClick={() => onSelectComponent('dashboard')}
+                    >
                         <CgHome size={24} className="text-gray-700" />
                         <span className="text-gray-700 text-sm">Dashboard</span>
                     </div>
 
-                    <div className="flex items-center gap-3 cursor-pointer hover:text-green-600 transition-all">
+                    <div
+                        className="flex items-center gap-3 cursor-pointer hover:text-green-600 transition-all"
+                        onClick={() => onSelectComponent('orders')}
+                    >
                         <CgCopy size={24} className="text-gray-700" />
                         <span className="text-gray-700 text-sm">Order</span>
                     </div>
 
-                    <div className="flex items-center gap-3 cursor-pointer hover:text-green-600 transition-all">
+                    <div
+                        className="flex items-center gap-3 cursor-pointer hover:text-green-600 transition-all"
+                        onClick={() => onSelectComponent('vouchers')}
+                    >
                         <RiCoupon2Line size={24} className="text-gray-700" />
                         <span className="text-gray-700 text-sm">Voucher</span>
                     </div>
