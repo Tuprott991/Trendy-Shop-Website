@@ -5,13 +5,12 @@ import { IoLogOutOutline } from "react-icons/io5";
 import { DropdownContext } from "../../context/DropDownContext";
 import { AuthContext } from "../../context/AuthContext";
 
-const RetailerAside = ({ onSelectComponent }) => {
+const RetailerAside = ({ onSelectComponent, selectedComponent }) => {
     const { isOpen, setIsOpen } = useContext(DropdownContext);
     const { isLoginSuccess, logout, setIsLoginSuccess } = useContext(AuthContext);
     const divRef = useRef(null);
 
     useEffect(() => {
-        console.log(isLoginSuccess);
         if (isLoginSuccess) {
             const timer = setTimeout(() => setIsLoginSuccess(false), 3500);
             return () => clearTimeout(timer);
@@ -31,9 +30,12 @@ const RetailerAside = ({ onSelectComponent }) => {
     }, [isOpen, setIsOpen]);
 
     const handleLogout = () => {
-        console.log("Logging out...");
         logout();
     };
+
+    const DASHBOARD = 'dashboard';
+    const ORDERS = 'orders';
+    const VOUCHERS = 'vouchers';
 
     return (
         <>
@@ -72,39 +74,46 @@ const RetailerAside = ({ onSelectComponent }) => {
                     </h1>
                     <p className="text-gray-500 text-sm mt-2">Retailer Dashboard</p>
                 </div>
+
                 {/* Buttons */}
-                <div className="flex-1 flex flex-col gap-6 px-6">
+                <div className="flex-1 flex flex-col px-6 py-4 space-y-4">
+                    {/* Dashboard */}
                     <div
-                        className="flex items-center gap-3 cursor-pointer hover:text-green-600 transition-all"
-                        onClick={() => onSelectComponent('dashboard')}
+                        className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all 
+        ${selectedComponent === DASHBOARD ? 'bg-emerald-500 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+                        onClick={() => onSelectComponent(DASHBOARD)}
                     >
-                        <CgHome size={24} className="text-gray-700" />
-                        <span className="text-gray-700 text-sm">Dashboard</span>
+                        <CgHome size={24} />
+                        <span className="text-sm font-semibold">Dashboard</span>
                     </div>
 
+                    {/* Orders */}
                     <div
-                        className="flex items-center gap-3 cursor-pointer hover:text-green-600 transition-all"
-                        onClick={() => onSelectComponent('orders')}
+                        className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all 
+        ${selectedComponent === ORDERS ? 'bg-emerald-500 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+                        onClick={() => onSelectComponent(ORDERS)}
                     >
-                        <CgCopy size={24} className="text-gray-700" />
-                        <span className="text-gray-700 text-sm">Order</span>
+                        <CgCopy size={24} />
+                        <span className="text-sm font-semibold">Order</span>
                     </div>
 
+                    {/* Vouchers */}
                     <div
-                        className="flex items-center gap-3 cursor-pointer hover:text-green-600 transition-all"
-                        onClick={() => onSelectComponent('vouchers')}
+                        className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all 
+        ${selectedComponent === VOUCHERS ? 'bg-emerald-500 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+                        onClick={() => onSelectComponent(VOUCHERS)}
                     >
-                        <RiCoupon2Line size={24} className="text-gray-700" />
-                        <span className="text-gray-700 text-sm">Voucher</span>
+                        <RiCoupon2Line size={24} />
+                        <span className="text-sm font-semibold">Voucher</span>
                     </div>
 
                     {/* Logout */}
                     <div
-                        className="flex items-center gap-3 cursor-pointer hover:text-green-600 transition-all"
+                        className="flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-red-100 text-gray-700 transition-all"
                         onClick={handleLogout}
                     >
-                        <IoLogOutOutline size={24} className="text-gray-700" />
-                        <span className="text-gray-700 text-sm">Logout</span>
+                        <IoLogOutOutline size={24} />
+                        <span className="text-sm font-semibold">Logout</span>
                     </div>
                 </div>
             </div>

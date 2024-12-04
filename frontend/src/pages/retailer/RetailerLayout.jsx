@@ -9,7 +9,7 @@ import ManageVouchers from "../../components/retailer/VoucherView/ManageVouchers
 import VoucherHeader from "../../components/retailer/VoucherView/VoucherHeader";
 
 const RetailerLayout = () => {
-    const [selectedComponent, setSelectedComponent] = useState('dashboard'); // Mặc định hiển thị "dashboard"
+    const [selectedComponent, setSelectedComponent] = useState('dashboard');
 
     const renderComponent = () => {
         switch (selectedComponent) {
@@ -49,7 +49,8 @@ const RetailerLayout = () => {
     return (
         <div style={{ display: 'flex' }}>
             <aside style={{ flex: '1', padding: '10px' }}>
-                <RetailerAside onSelectComponent={setSelectedComponent} />
+                {/* Truyền selectedComponent vào RetailerAside */}
+                <RetailerAside onSelectComponent={setSelectedComponent} selectedComponent={selectedComponent} />
             </aside>
             <main className="bg-gray-100" style={{ flex: '4', padding: '10px' }}>
                 {renderComponent()}
