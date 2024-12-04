@@ -69,7 +69,7 @@ const VoucherList = () => {
                   <select
                     value={voucher.status}
                     onChange={(e) => handleStatusChange(voucher.id, e.target.value)}
-                    className={`border border-gray-300 rounded px-2 py-1 text-sm 
+                    className={`rounded px-2 py-1 text-sm 
       focus:bg-white focus:text-black ${voucher.status === 'Complete' ? 'bg-emerald-200 text-black' : 'bg-gray-300 text-black'
                       }`}
                     onBlur={(e) => {
