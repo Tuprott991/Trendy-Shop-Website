@@ -1,8 +1,9 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { CgHome, CgCopy } from "react-icons/cg";
 import { RiCoupon2Line } from "react-icons/ri";
 import { IoLogOutOutline } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
+import { BsPatchExclamation } from "react-icons/bs";
 import { DropdownContext } from "../../context/DropDownContext";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -10,6 +11,8 @@ const RetailerAside = ({ onSelectComponent, selectedComponent }) => {
     const { isOpen, setIsOpen } = useContext(DropdownContext);
     const { isLoginSuccess, logout, setIsLoginSuccess } = useContext(AuthContext);
     const divRef = useRef(null);
+
+    const [showLogoutModal, setShowLogoutModal] = useState(false);  // State for modal
 
     useEffect(() => {
         if (isLoginSuccess) {
@@ -32,6 +35,11 @@ const RetailerAside = ({ onSelectComponent, selectedComponent }) => {
 
     const handleLogout = () => {
         logout();
+        setShowLogoutModal(false);  // Close modal after logout
+    };
+
+    const handleCancelLogout = () => {
+        setShowLogoutModal(false);  // Close modal if canceled
     };
 
     const DASHBOARD = 'dashboard';
@@ -109,7 +117,7 @@ const RetailerAside = ({ onSelectComponent, selectedComponent }) => {
                         <span className="text-sm font-semibold">Voucher</span>
                     </div>
 
-                    {/* Vouchers */}
+                    {/* Profile */}
                     <div
                         className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all 
         ${selectedComponent === PROFILE ? 'bg-emerald-500 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
@@ -122,13 +130,40 @@ const RetailerAside = ({ onSelectComponent, selectedComponent }) => {
                     {/* Logout */}
                     <div
                         className="flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-red-100 text-gray-700 transition-all"
-                        onClick={handleLogout}
+                        onClick={() => setShowLogoutModal(true)}
                     >
                         <IoLogOutOutline size={24} />
                         <span className="text-sm font-semibold">Logout</span>
                     </div>
                 </div>
             </div>
+
+            {/* Logout Confirmation Modal */}
+            {showLogoutModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg w-96">
+                        <div className="flex justify-center items-center mb-3">
+                            <BsPatchExclamation size={150} />
+                        </div>
+                        <h2 className="text-xl font-semibold text-gray-700 text-center">Are you sure?</h2>
+                        <p className="text-gray-600 mt-2 text-center">You will be returned to the login screen.</p>
+                        <div className="mt-4 flex justify-end gap-4">
+                            <button
+                                className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg font-bold"
+                                onClick={handleCancelLogout}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="px-4 py-2 bg-red-500 text-white rounded-lg font-bold"
+                                onClick={handleLogout}
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 };
