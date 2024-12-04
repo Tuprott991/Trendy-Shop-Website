@@ -1,5 +1,5 @@
-const User = require('../../models').User;
-const Order = require('../../models').Order
+const User = require('../../models/index').User;
+const Order = require('../../models/index');
 
 exports.getDashboardData = async (req, res) => {
     try {
@@ -32,3 +32,15 @@ exports.getDashboardData = async (req, res) => {
     }
   };
   
+exports.getRetailerInfor = async (req, res) =>{
+  try{
+    const retailerInfo = await User.find({ role: 'retailer' });
+
+    res.json({
+      retailerInfo
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching dashboard data' });
+  }
+};

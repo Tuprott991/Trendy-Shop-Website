@@ -1,3 +1,6 @@
+const { getInfo } = require("../models/userModel.js");
+
+
 // routes/routes.js
 module.exports = (app) => {
  // Import the route functions
@@ -5,8 +8,10 @@ module.exports = (app) => {
  const reDashboardRoutes = require("./retailerRoutes.js")();
  const cuHomepage = require("./customerRoutes.js")();
  const adminRoutes = require("./adminRoutes.js")();
+ const userRoutes = require("./userRoutes.js")();
 
  // Use routes
+ app.use("/api/user", userRoutes)
  app.use("/api/auth", authRoutes); // Mount authentication routes
  app.use("/api/admin", adminRoutes);
  app.use("/api/retailer", reDashboardRoutes); // Mount retailer dashboard routes
