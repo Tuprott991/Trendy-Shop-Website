@@ -1,5 +1,6 @@
 // controllers/CategoryController/category.js
 const Voucher = require("../../models/index").Voucher;
+const User = require("../../models/index").User;
 
 exports.createVoucher = async (req, res) => {
     try {
@@ -11,13 +12,13 @@ exports.createVoucher = async (req, res) => {
         }
   
         // Check if voucher code already exists
-        const existingVoucher = await this.findOne({ code });
+        const existingVoucher = await Voucher.findOne({ code });
         if (existingVoucher) {
           return res.status(400).send({ message: "Voucher code is already in use!" });
         }
   
         // Create a new voucher
-        const voucher = new this({
+        const voucher = new Voucher({
           code,
           discount_value,
           description,
@@ -28,14 +29,44 @@ exports.createVoucher = async (req, res) => {
         });
   
         // Save the voucher
-        const savedVoucher = await voucher.save();
-        res.status(201).send({
-          message: "Voucher created successfully!",
-          voucher: savedVoucher
+        return res.status(200).json({
+          vouchers: vouchers.map(voucher => ({
+            code: voucher.code,
+            description: voucher.description,
+            max_uses: voucher.max_uses,
+            status: voucher.status
+          }))
         });
       } catch (err) {
         res.status(500).send({
           message: err.message || "An error occurred while creating the voucher."
         });
       }
+};
+
+exports.getVoucherpage = async (req, res) => {
+  try {
+      const { id } = req.query;
+
+      // Check if voucher code already exists
+      const existingRetailer = await User.findOne({ id, role: "retailer" });
+      if (!existingRetailer) {
+        return res.status(400).send({ message: "Retailer is not exist." });
+      }
+      
+      const vouchers = await Voucher.find({ retailer_id: id });
+      if (!vouchers.length) {
+        return res.status(404).send({ message: "No vouchers found for this retailer." });
+      }
+
+      return res.status(200).json({ 
+        code: vouchers 
+
+      });
+
+    } catch (err) {
+      res.status(500).send({
+        message: err.message || "An error occurred while post voucher page."
+      });
+    }
 };
