@@ -48,6 +48,14 @@ const AppRoutes = () => {
        path: "product/:id", // Route for `/customer/product/:id`
        element: <CustomerProductDetail />,
       },
+      {
+       path: "search/keyword/:keyword", // Route for `/customer/product/:id`
+       element: <CustomerSearch />,
+      },
+      {
+       path: "search/category/:category", // Route for `/customer/product/:id`
+       element: <CustomerSearch />,
+      },
      ],
     },
    ],

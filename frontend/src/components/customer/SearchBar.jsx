@@ -9,12 +9,13 @@ const SearchBar = () => {
   e.preventDefault();
   const searchValue = e.target.search.value;
   console.log("Search for:", searchValue);
-  navigate(`/customer/search/${searchValue}`);
+  navigate(`/customer/search/keyword/${searchValue}`);
  };
  useEffect(() => {
   const fetchAndProcessCategories = async () => {
    try {
     const response = await categoryService.getAll();
+    console.log(response.data);
     const reducedCategories = response.data.reduce(
      (acc, { category, target }) => {
       if (!acc[target]) {
@@ -36,6 +37,9 @@ const SearchBar = () => {
 
   fetchAndProcessCategories();
  }, []);
+ const handleCategoryClick = (e) => {
+  console.log(e);
+ };
 
  return (
   <>
@@ -84,6 +88,7 @@ const SearchBar = () => {
            <li
             key={item}
             className="text-sm text-gray-800 font-medium hover:bg-gray-100 hover:text-green-500 px-3 py-2 rounded-md cursor-pointer"
+            onClick={handleCategoryClick}
            >
             {item}
            </li>
