@@ -13,9 +13,9 @@ const RetailersList = () => {
         <div className="p-4">
             <div className="overflow-hidden rounded-2xl shadow-lg">
                 <table className="min-w-full bg-white">
-                    <caption className="text-lg font-semibold py-4 bg-white">
+                    <caption className="text-lg font-semibold py-3 bg-white">
                         <div className="flex justify-begin items-center px-6">
-                            <p className="text-xl font-bold">List Products</p>
+                            <p className="text-lg font-bold">List Products</p>
                         </div>
                     </caption>
                     <thead className="bg-emerald-500 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white">
