@@ -35,6 +35,7 @@ const CustomerHeader = () => {
  const handleLogout = () => {
   console.log("Logging out...");
   logout();
+  navigate("/login");
  };
  const handleNavigateHome = () => {
   navigate("/customer");
