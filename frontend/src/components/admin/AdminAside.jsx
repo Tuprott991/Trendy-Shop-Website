@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { CgHome, CgCopy } from "react-icons/cg";
-import { RiCoupon2Line } from "react-icons/ri";
 import { IoLogOutOutline } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { BsPatchExclamation } from "react-icons/bs";
@@ -43,8 +42,7 @@ const RetailerAside = ({ onSelectComponent, selectedComponent }) => {
     };
 
     const DASHBOARD = 'dashboard';
-    const ORDERS = 'orders';
-    const VOUCHERS = 'vouchers';
+    const MANAGE_RETAILERS = 'manage-retailers';
     const PROFILE = 'profile';
 
     return (
@@ -97,25 +95,15 @@ const RetailerAside = ({ onSelectComponent, selectedComponent }) => {
                         <span className="text-sm font-semibold">Dashboard</span>
                     </div>
 
-                    {/* Orders */}
                     <div
                         className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all 
-        ${selectedComponent === ORDERS ? 'bg-emerald-500 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
-                        onClick={() => onSelectComponent(ORDERS)}
+        ${selectedComponent === MANAGE_RETAILERS ? 'bg-emerald-500 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+                        onClick={() => onSelectComponent(MANAGE_RETAILERS)}
                     >
                         <CgCopy size={24} />
-                        <span className="text-sm font-semibold">Order</span>
+                        <span className="text-sm font-semibold">Manage Retailer</span>
                     </div>
 
-                    {/* Vouchers */}
-                    <div
-                        className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all 
-        ${selectedComponent === VOUCHERS ? 'bg-emerald-500 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
-                        onClick={() => onSelectComponent(VOUCHERS)}
-                    >
-                        <RiCoupon2Line size={24} />
-                        <span className="text-sm font-semibold">Voucher</span>
-                    </div>
 
                     {/* Profile */}
                     <div

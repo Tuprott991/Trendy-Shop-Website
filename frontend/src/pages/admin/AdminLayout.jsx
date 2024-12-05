@@ -3,6 +3,8 @@ import RetailerAside from "../../components/admin/AdminAside";
 import DashboardHeader from "../../components/admin/DashboardView/DashboardHeader";
 import SummaryStatistics from "../../components/admin/DashboardView/SummaryStatistics";
 import ManageRetailers from "../../components/admin/DashboardView/ManageRetailers";
+import RetailerHeader from '../../components/admin/ManageRetailerView/RetailerHeader';
+import RetailersList from '../../components/admin/DashboardView/ManageRetailers';
 import ProfileHeader from "../../components/admin/ProfileView/ProfileHeader";
 import ProfileMain from "../../components/admin/ProfileView/ProfileMain";
 
@@ -19,18 +21,11 @@ const RetailerLayout = () => {
                         <ManageRetailers />
                     </>
                 );
-            case 'orders':
+            case 'manage-retailers':
                 return (
                     <>
-                        {/* <OrderHeader />
-                        <ManageOrders /> */}
-                    </>
-                );
-            case 'vouchers':
-                return (
-                    <>
-                        {/* <VoucherHeader />
-                        <ManageVouchers /> */}
+                        <RetailerHeader />
+                        <RetailersList />
                     </>
                 );
             case 'profile':
