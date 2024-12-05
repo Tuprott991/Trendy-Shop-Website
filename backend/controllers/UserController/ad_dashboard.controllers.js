@@ -48,3 +48,14 @@ exports.getRetailerInfor = async (req, res) =>{
     res.status(500).json({ message: 'Error fetching dashboard data' });
   }
 };
+
+exports.updateReInfo = async (req, res) =>{
+  try{
+    const userID = req.query
+
+    User.update(userID)
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching dashboard data' });
+  }
+};
