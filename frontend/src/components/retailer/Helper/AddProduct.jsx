@@ -24,8 +24,9 @@ const AddProduct = ({ isVisible, onClose, onAddProduct }) => {
             alert("Please fill out all fields.");
             return;
         }
-        onAddProduct(newProduct);
-        onClose();
+        onAddProduct(newProduct); // Gọi hàm thêm sản phẩm
+        setNewProduct({ name: "", category: "", size: "", cost: "", description: "" }); // Reset các trường
+        onClose(); // Đóng form sau khi thêm sản phẩm
     };
 
     if (!isVisible) return null;
@@ -95,13 +96,13 @@ const AddProduct = ({ isVisible, onClose, onAddProduct }) => {
                             <button
                                 type="button"
                                 onClick={onClose}
-                                className="py-2 px-4 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-200 transition duration-300"
+                                className="py-2 px-4 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-200 transition duration-300 font-bold"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
-                                className="py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
+                                className="py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300 font-bold"
                             >
                                 Ok
                             </button>
