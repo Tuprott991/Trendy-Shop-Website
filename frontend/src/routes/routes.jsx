@@ -25,38 +25,38 @@ import { AuthContext } from "../context/AuthContext.jsx";
 import CustomerSearch from "../pages/customer/CustomerSearch.jsx";
 
 const AppRoutes = () => {
- const { isAuthenticated } = useContext(AuthContext);
- const role = localStorage.getItem("role");
+    const { isAuthenticated } = useContext(AuthContext);
+    const role = localStorage.getItem("role");
 
- const routes = useRoutes([
-  {
-   path: "login",
-   element: isAuthenticated ? <Navigate to={`/${role}`} replace /> : <Login />,
-  },
-  {
-   path: "signup",
-   element: isAuthenticated ? <Navigate to={`/${role}`} replace /> : <Signup />,
-  },
+    const routes = useRoutes([
+        {
+            path: "login",
+            element: isAuthenticated ? <Navigate to={`/${role}`} replace /> : <Login />,
+        },
+        {
+            path: "signup",
+            element: isAuthenticated ? <Navigate to={`/${role}`} replace /> : <Signup />,
+        },
 
-  {
-   element: <Authorization allowedRoles={["customer"]} />,
-   children: [
-    {
-     path: "customer",
-     element: <CustomerLayout />,
-     children: [
-      {
-       index: true, // Default route for `/customer`
-       element: <CustomerHome />,
-      },
-      {
-       path: "product/:id", // Route for `/customer/product/:id`
-       element: <CustomerProductDetail />,
-      },
-     ],
-    },
-   ],
-  },
+        {
+            element: <Authorization allowedRoles={["customer"]} />,
+            children: [
+                {
+                    path: "customer",
+                    element: <CustomerLayout />,
+                    children: [
+                        {
+                            index: true, // Default route for `/customer`
+                            element: <CustomerHome />,
+                        },
+                        {
+                            path: "product/:id", // Route for `/customer/product/:id`
+                            element: <CustomerProductDetail />,
+                        },
+                    ],
+                },
+            ],
+        },
 
         // Retailer Routes
         {
@@ -68,7 +68,7 @@ const AppRoutes = () => {
                     children: [
                         {
                             index: true,
-                            element: <RetailerDashboard/>,
+                            element: <RetailerDashboard />,
                         },
                         {
                             path: "orders",
@@ -87,33 +87,33 @@ const AppRoutes = () => {
             ],
         },
 
-  // Admin Routes
-  {
-   element: <Authorization allowedRoles={["admin"]} />,
-   children: [
-    {
-     path: "admin",
-     element: <AdminLayout />,
-     children: [
-      {
-       index: true,
-       element: <AdminDashboard />,
-      },
-      {
-       path: "manage",
-       element: <AdminManage />,
-      },
-      {
-       path: "profile",
-       element: <AdminProfile />,
-      },
-     ],
-    },
-   ],
-  },
- ]);
+        // Admin Routes
+        {
+            element: <Authorization allowedRoles={["admin"]} />,
+            children: [
+                {
+                    path: "admin",
+                    element: <AdminLayout />,
+                    children: [
+                        {
+                            index: true,
+                            element: <AdminDashboard />,
+                        },
+                        {
+                            path: "manage",
+                            element: <AdminManage />,
+                        },
+                        {
+                            path: "profile",
+                            element: <AdminProfile />,
+                        },
+                    ],
+                },
+            ],
+        },
+    ]);
 
- return routes;
+    return routes;
 };
 
 export default AppRoutes;
