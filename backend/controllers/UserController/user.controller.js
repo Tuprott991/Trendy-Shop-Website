@@ -1,42 +1,73 @@
 const User = require("../../models/index").User;
+const Order = require("../../models/index").Order;
+const Product = require("../../models/index").Product;
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+// signup
+
 exports.postSignup = async (req, res) => {
-  User.create(req, res);
+  const { name, email, password, role } = req.body;
+
+  try {
+    if (!name || !email || !password || !role) {
+      return res.status(400).send({ message: "All fields are required!" });
+    }
+
+    if (!["retailer", "customer"].includes(role)) {
+      return res.status(400).send({ message: "Invalid role!" });
+    }
+
+    const userData = await User.create(name, email, password, role);
+
+    if (userData === 1) {
+      return res.status(400).send({ message: "Email already exists!" });
+    }
+
+    res.status(201).send({ message: "User registered successfully", user: userData });
+  } catch (err) {
+    res.status(500).send({ message: err.message || "Signup error." });
+  }
 };
+
+// login
 
 exports.postLogin = async (req, res) => {
- try {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  // Find the user by email
-  const user = await User.findOne({ email });
-  if (!user) {
-   return res.status(404).send({ message: "User not found" });
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    // Compare the password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).send({ message: "Invalid password" });
+    }
+
+    // Generate a JWT token
+    const token = jwt.sign({ id: user._id, role: user.role }, "secret_key", {
+      expiresIn: "1d",
+    });
+
+    res.status(200).send({ message: "Login successful", user, token });
+  } catch (err) {
+    res.status(500).send({ message: "Error during login", error: err.message });
   }
-
-  // Compare the password
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-  if (!isPasswordValid) {
-   return res.status(401).send({ message: "Invalid password" });
-  }
-
-  // Generate a JWT token
-  const token = jwt.sign({ id: user._id, role: user.role }, "secret_key", {
-   expiresIn: "1d",
-  });
-
-  res.status(200).send({ message: "Login successful", user, token });
- } catch (err) {
-  res.status(500).send({ message: "Error during login", error: err.message });
- }
 };
 
-exports.getProfile = async (req, res) => {
-  try{
 
-    const {userID} = req.query
+// Xem profile admin 
+// Xem profile retailer
+// Xem profile customer
+
+exports.getProfile = async (req, res) => {
+  try {
+
+    const { userID } = req.query
     // Validate userID format
 
     // Find user
@@ -50,6 +81,7 @@ exports.getProfile = async (req, res) => {
 
     // Return user info
     res.status(200).json({
+      id: userInfo._id,
       name: userInfo.name,
       email: userInfo.email,
       gender: userInfo.gender,
@@ -57,9 +89,74 @@ exports.getProfile = async (req, res) => {
       region: userInfo.region,
       avatar: userInfo.avatar
     });
-    } catch (err) {
-      res.status(500).send({ message: err.message || 'Internal server error' });
-    }
+  } catch (err) {
+    res.status(500).send({ message: err.message || 'Internal server error' });
+  }
+};
+
+// Update profile admin
+// Update profile retailer 
+// Update profile retailer
+
+exports.postUpdateProfile = (req, res) => {
+  console.log(req.body)
+  const { id, name, email } = req.body;
+
+
+  try {
+    User.update(id, name, email);
+    res.status(200).json({ message: "Update succesful!" })
+  }
+  catch {
+    console.error(error);
+    res.status(500).json({ message: 'Update Error' });
+  }
+};
+
+// Delete retailer
+
+exports.postDeleteUser = (req, res) => {
+  console.log(req.body)
+  const { id } = req.body;
+
+  try {
+    User.delete(id);
+    res.status(200).json({ message: "Delete succesful!" })
+  }
+  catch {
+    console.error(error);
+    res.status(500).json({ message: 'Delete Error' });
+  }
 };
 
 
+exports.getAdminDashboardData = async (req, res) => {
+  try {
+    // Fetch total products
+    const retailerCount = await User.countDocuments({ role: 'retailer' });
+
+    // Fetch total orders
+    const totalOrders = await Order.countDocuments(); // -> Total orders
+
+    // Fetch total delivered orders
+    const totalDelivered = await Order.countDocuments({ status: 'completed' }); // -> Delieved 
+
+    // Calculate total revenue
+
+    const orders = await Order.find({ status: 'completed' }); // ID  -> Mảng
+
+    // sum là giá trị tích lũy, order là currentValue khi lướt qua mảng, 0 là giá trị khởi tạo, đây là loop
+    const totalRevenue = orders.reduce((sum, order) => sum + order.total_amount, 0);
+
+    // Send the response
+    res.json({
+      retailerCount,
+      totalOrders,
+      totalDelivered,
+      totalRevenue,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message || 'Error fetching dashboard data' });
+  }
+};

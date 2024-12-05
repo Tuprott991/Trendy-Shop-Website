@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const { getRetailerInfor } = require('../controllers/UserController/ad_dashboard.controllers');
 const { Schema } = mongoose;
+const Order = require('./index').Order;
 
 // User Schema
 const userSchema = new Schema(
@@ -66,29 +66,38 @@ const userSchema = new Schema(
         }
       },
 
+      async getRevenue(userID){
+        try {
+          const totalRevenue = await Order.aggregate([
+            {
+              $match: {
+                retailer_id: mongoose.Types.ObjectId(userID),
+                status: 'completed',
+              }
+            },
+            {
+              $group: {
+                _id: null,
+                totalRevenue: { $sum: '$total_money' }
+              }
+            }
+          ]);
+      
+          return totalRevenue.length > 0 ? totalRevenue[0].totalRevenue : 0;
+        } catch (error) {
+          console.error('Error calculating revenue:', error);
+          throw new Error('Failed to calculate revenue');
+        }
+      },
       
 
       // Instance method for creating a new user (can be used directly from an instance)
-        async create(req, res) {
-        try {
-          const { name, email, password, role } = req.body;
-
-          // Validate request
-          if (!name || !email || !password || !role) {
-            return res.status(400).send({ message: "All fields are required!" });
-          }
-
-          // Validate role: Only 'retailer' or 'customer' allowed during signup
-          if (!["retailer", "customer"].includes(role)) {
-            return res
-              .status(400)
-              .send({ message: "Role must be either 'retailer' or 'customer'!" });
-          }
-
+        async create(name,email,password,role) {
           // Check if the user already exists
           const existingUser = await this.findOne({ email });
+          
           if (existingUser) {
-            return res.status(400).send({ message: "Email is already in use!" });
+            return 1
           }
 
           // Hash the password
@@ -108,15 +117,8 @@ const userSchema = new Schema(
 
           // Return the saved user details (excluding the password for security)
           const { password: _, ...userData } = savedUser.toObject();
-          res.status(200).send({
-            message: "User registered successfully",
-            user: userData,
-          });
-        } catch (err) {
-          res.status(500).send({
-            message: err.message || "Some error occurred while signing up.",
-          });
-        }
+
+          return userData
       }
     }
   }

@@ -2,7 +2,7 @@
 const express = require("express");
 
 module.exports = () => {
-  const re_dasController = require("../controllers/UserController/re_dashboard.controllers.js");
+  // const re_dasController = require("../controllers/UserController/re_dashboard.controllers.js");
   const router = express.Router();
 
   // Retailer Dashboard Routes
