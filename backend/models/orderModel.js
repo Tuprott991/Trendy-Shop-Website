@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 // Order Schema
 const orderSchema = new Schema({
   user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  total_number: { type: Number, required: true },
+  total_money: { type: Number, required: true },
   status: { type: String, enum: ['pending', 'completed'], default: 'pending' },
   address: { type: String },
   phone: { type: String },

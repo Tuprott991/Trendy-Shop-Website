@@ -20,6 +20,7 @@ module.exports = () => {
   // Route to filter products by category ID
   router.post("/filter", CategoryController.filterCategory);
 
-
-  return router;  // Return the router
+  router.get("/search/category/:id", CategoryController.filterCategory);
+  
+  return router;  
 };

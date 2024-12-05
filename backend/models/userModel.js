@@ -25,10 +25,48 @@ const userSchema = new Schema(
         return userInfo
       },
 
-      async getReInfo() {
-        const reInfo = await User.find({ role: 'retailer' });
-        return reInfo
+      async update(userID, name, email) {
+        const updateData = {};
+        if (name) updateData.name = name;
+        if (email) updateData.email = email;
+        // Tìm kiếm và cập nhật người dùng trong database
+
+        const updatedUser = await this.findByIdAndUpdate(
+          userID,
+          { $set: updateData },
+          { new: true, runValidators: true } // Trả về tài liệu đã được cập nhật và áp dụng validate
+        );
+
+         // Nếu không tìm thấy user, báo lỗi
+        if (!updatedUser) {
+          throw new Error("User not found");
+        }
+        return updatedUser
       },
+
+      async delete(userID){
+        try {
+          // Kiểm tra xem userID có được cung cấp không
+          if (!userID) {
+            throw new Error("UserID is required");
+          }
+      
+          // Tìm và xóa người dùng trong cơ sở dữ liệu
+          const deletedUser = await this.findByIdAndDelete(userID);
+      
+          // Nếu không tìm thấy user, báo lỗi
+          if (!deletedUser) {
+            throw new Error("User not found");
+          }
+      
+          // Trả về thông báo thành công hoặc dữ liệu user đã xóa
+          return { message: "User deleted successfully", user: deletedUser };
+        } catch (error) {
+          throw new Error(`Failed to delete user: ${error.message}`);
+        }
+      },
+
+      
 
       // Instance method for creating a new user (can be used directly from an instance)
         async create(req, res) {
