@@ -13,7 +13,22 @@ const productSchema = new Schema({
   stock_quantity: { type: Number, default: 0 },
   rating :{type: Number, default: 0.0, max: 5.0},
   image_url: { type: String }
-}, { timestamps: true });
+}, 
+{ 
+  timestamps: true,
+  statics: {
+    async SearchProduct(name) {
+      const regex = new RegExp('^' + name + '|' + name, 'i'); 
+      const productInfo = await Product.find({ name: { $regex: regex } });
+      return productInfo;
+    },
+    async GetProductInfo(productID) {
+      const productInfo = await Product.findById(productID);
+      return productInfo
+    }
+
+}
+});
 
 const Product = mongoose.model('Product', productSchema);
 
