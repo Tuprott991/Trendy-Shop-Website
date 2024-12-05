@@ -17,9 +17,9 @@ module.exports = () => {
   // Route to get all categories
   router.get("/all", CategoryController.getAllCategory);
 
-  // Route to filter products by category ID
-  router.post("/filter", CategoryController.filterCategory);
-
-
-  return router;  // Return the router
+  router.get("/search/category/:id", CategoryController.filterCategory);
+  
+  router.get("/product/detail/:id", ProductController.GetProductInfo);
+  
+  return router;  
 };

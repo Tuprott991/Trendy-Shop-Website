@@ -1,12 +1,15 @@
 import { AiOutlineSearch } from "react-icons/ai";
 import { categoryService } from "../../services/categoryService";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 const SearchBar = () => {
  const [categories, setCategories] = useState([]);
+ const navigate = useNavigate();
  const handleSubmit = (e) => {
   e.preventDefault();
   const searchValue = e.target.search.value;
   console.log("Search for:", searchValue);
+  navigate(`/customer/search/${searchValue}`);
  };
  useEffect(() => {
   const fetchAndProcessCategories = async () => {

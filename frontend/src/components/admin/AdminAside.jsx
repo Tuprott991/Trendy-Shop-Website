@@ -1,15 +1,15 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { CgHome, CgCopy } from "react-icons/cg";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { CgHome, CgCopy, CgProfile } from "react-icons/cg";
 import { IoLogOutOutline } from "react-icons/io5";
-import { CgProfile } from "react-icons/cg";
 import { BsPatchExclamation } from "react-icons/bs";
 import { DropdownContext } from "../../context/DropDownContext";
 import { AuthContext } from "../../context/AuthContext";
 
-const RetailerAside = ({ onSelectComponent, selectedComponent }) => {
+const RetailerAside = () => {
+    const navigate = useNavigate();
     const { isOpen, setIsOpen } = useContext(DropdownContext);
     const { isLoginSuccess, logout, setIsLoginSuccess } = useContext(AuthContext);
-    const divRef = useRef(null);
 
     const [showLogoutModal, setShowLogoutModal] = useState(false);
 
@@ -41,9 +41,12 @@ const RetailerAside = ({ onSelectComponent, selectedComponent }) => {
         setShowLogoutModal(false);
     };
 
-    const DASHBOARD = 'dashboard';
-    const MANAGE_RETAILERS = 'manage-retailers';
-    const PROFILE = 'profile';
+    const role = localStorage.getItem("role");
+
+    // Function to handle navigation when a button is clicked
+    const handleNavigation = (route) => {
+        navigate(route);
+    };
 
     return (
         <>
@@ -80,36 +83,33 @@ const RetailerAside = ({ onSelectComponent, selectedComponent }) => {
                     <h1 className="text-2xl font-bold text-green-600 cursor-pointer hover:opacity-90">
                         SoftWear
                     </h1>
-                    <p className="text-gray-500 text-sm mt-2">Adminstrator Dashboard</p>
+                    <p className="text-gray-500 text-sm mt-2">Retailer Dashboard</p>
                 </div>
 
-                {/* Buttons */}
+                {/* Navigation Buttons */}
                 <div className="flex-1 flex flex-col px-6 py-4 space-y-4">
                     {/* Dashboard */}
                     <div
-                        className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all 
-        ${selectedComponent === DASHBOARD ? 'bg-emerald-500 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
-                        onClick={() => onSelectComponent(DASHBOARD)}
+                        className="flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all"
+                        onClick={() => handleNavigation("/admin")}
                     >
                         <CgHome size={24} />
                         <span className="text-sm font-semibold">Dashboard</span>
                     </div>
 
+                    {/* Manage Retailers */}
                     <div
-                        className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all 
-        ${selectedComponent === MANAGE_RETAILERS ? 'bg-emerald-500 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
-                        onClick={() => onSelectComponent(MANAGE_RETAILERS)}
+                        className="flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all"
+                        onClick={() => handleNavigation("/admin/manage")}
                     >
                         <CgCopy size={24} />
                         <span className="text-sm font-semibold">Manage Retailer</span>
                     </div>
 
-
                     {/* Profile */}
                     <div
-                        className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all 
-        ${selectedComponent === PROFILE ? 'bg-emerald-500 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
-                        onClick={() => onSelectComponent(PROFILE)}
+                        className="flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all"
+                        onClick={() => handleNavigation("/admin/profile")}
                     >
                         <CgProfile size={24} />
                         <span className="text-sm font-semibold">Profile</span>
@@ -120,7 +120,7 @@ const RetailerAside = ({ onSelectComponent, selectedComponent }) => {
                         className="flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-red-100 text-gray-700 transition-all"
                         onClick={() => setShowLogoutModal(true)}
                     >
-                        <IoLogOutOutline size={24} color="red"/>
+                        <IoLogOutOutline size={24} color="red" />
                         <span className="text-sm font-semibold text-red-500">Logout</span>
                     </div>
                 </div>
