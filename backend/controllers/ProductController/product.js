@@ -29,7 +29,7 @@ exports.importProduct = async (req, res) => {
     }
 };
 
-exports.SearchProduct = async (req, res) => {
+exports.getSearchProduct = async (req, res) => {
     try {
         const {keyword} = req.params;
         const productInfo = await Product.SearchProduct(keyword);
@@ -43,10 +43,9 @@ exports.SearchProduct = async (req, res) => {
 }
 
 
-exports.GetProductInfo = async (req, res) => {
+exports.getProductInfo = async (req, res) => {
     try {
         const {id} = req.params;
-        console.log(id);
         const productInfo = await Product.GetProductInfo(id);
         res.status(200).json({ 
             productInfo

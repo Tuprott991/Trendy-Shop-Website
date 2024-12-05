@@ -2,7 +2,7 @@
 const Category = require("../../models/index").Category;
 const Product = require("../../models/index").Product;
 
-exports.createCate = async (req, res) => {
+exports.postcreateCate = async (req, res) => {
   try {
     const { category, target } = req.body; 
     
@@ -54,7 +54,7 @@ exports.getAllCategory = async (req, res) => {
 };
 
 
-exports.filterCategory = async (req, res) => {
+exports.getFilterCategory = async (req, res) => {
   try {
     
     const { id } = req.params; 

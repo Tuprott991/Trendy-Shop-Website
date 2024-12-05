@@ -29,6 +29,7 @@ const categorySchema = new Schema({
     filterCategories: async function() {
       const categories = await this.find();
       return categories.map(category => ({
+        id: category._id,
         category: category.category,
         target: category.target
       }));

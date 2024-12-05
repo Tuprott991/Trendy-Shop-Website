@@ -6,12 +6,17 @@ import Signup from "../pages/authentication/Signup.jsx";
 import CustomerLayout from "../pages/customer/CustomerLayout.jsx";
 import CustomerHome from "../pages/customer/CustomerHome.jsx";
 import CustomerProductDetail from "../pages/customer/CustomerProductDetail.jsx";
-import RetailerLayout from "../pages/retailer/RetailerLayout.jsx";
 
 import AdminLayout from "../pages/admin/AdminLayout.jsx";
 import AdminDashboard from "../pages/admin/AdminDashboard.jsx";
 import AdminManage from "../pages/admin/AdminManage.jsx";
 import AdminProfile from "../pages/admin/AdminProfile.jsx";
+
+import RetailerLayout from "../pages/retailer/RetailerLayout.jsx";
+import RetailerDashboard from "../pages/retailer/RetailerDashboard.jsx";
+import RetailerOrders from "../pages/retailer/RetailerOrders.jsx";
+import RetailerVouchers from "../pages/retailer/RetailerVouchers.jsx";
+import RetailerProfile from "../pages/retailer/RetailerProfile.jsx";
 
 import Authorization from "../auth/Authorization.jsx";
 
@@ -67,8 +72,25 @@ const AppRoutes = () => {
    children: [
     {
      path: "retailer",
-     index: true,
      element: <RetailerLayout />,
+     children: [
+      {
+       index: true,
+       element: <RetailerDashboard />,
+      },
+      {
+       path: "orders",
+       element: <RetailerOrders />,
+      },
+      {
+       path: "vouchers",
+       element: <RetailerVouchers />,
+      },
+      {
+       path: "profile",
+       element: <RetailerProfile />,
+      },
+     ],
     },
    ],
   },
