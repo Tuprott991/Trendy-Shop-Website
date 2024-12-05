@@ -58,7 +58,7 @@ const AppRoutes = () => {
      children: [
       {
        path: "retailer",
-       element: <RetailerHome />,
+       element: <RetailerLayout />,
       },
      ],
     },
@@ -67,7 +67,7 @@ const AppRoutes = () => {
      children: [
       {
        path: "admin",
-       element: <AdminHome />,
+       element: <AdminLayout />,
       },
      ],
     },
