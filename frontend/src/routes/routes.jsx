@@ -7,6 +7,7 @@ import CustomerProductDetail from "../pages/customer/CustomerProductDetail.jsx";
 import Authorization from "../auth/Authorization.jsx";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
+import CustomerSearch from "../pages/customer/CustomerSearch.jsx";
 
 const AppRoutes = () => {
  const { isAuthenticated } = useContext(AuthContext);
@@ -14,14 +15,17 @@ const AppRoutes = () => {
 
  const routes = useRoutes([
   {
-   path: "login",
+   path: "/",
+   element: <Navigate to="/login" replace />,
+  },
+  {
+   path: "/login",
    element: isAuthenticated ? <Navigate to={`/${role}`} replace /> : <Login />,
   },
   {
-   path: "signup",
+   path: "/signup",
    element: isAuthenticated ? <Navigate to={`/${role}`} replace /> : <Signup />,
   },
-
   {
    element: <Authorization allowedRoles={["customer"]} />,
    children: [
@@ -29,39 +33,34 @@ const AppRoutes = () => {
      path: "customer",
      element: <CustomerLayout />,
      children: [
-      {
-       index: true, // Default route for `/customer`
-       element: <CustomerHome />,
-      },
-      {
-       path: "product/:id", // Route for `/customer/product/:id`
-       element: <CustomerProductDetail />,
-      },
+      { index: true, element: <CustomerHome /> },
+      { path: "product/:id", element: <CustomerProductDetail /> },
+      { path: "search/:keyword", element: <CustomerSearch /> },
      ],
     },
    ],
   },
-
-  // Retailer Routes
   {
    element: <Authorization allowedRoles={["retailer"]} />,
    children: [
     {
      path: "retailer",
-     //  element: <RetailerLayout />,
+     element: <div>Coming Soon</div>, // Placeholder
     },
    ],
   },
-
-  // Admin Routes
   {
    element: <Authorization allowedRoles={["admin"]} />,
    children: [
     {
      path: "admin",
-     //  element: <AdminLayout />,
+     element: <div>Coming Soon</div>, // Placeholder
     },
    ],
+  },
+  {
+   path: "*",
+   element: <div>404 - Page Not Found</div>,
   },
  ]);
 
