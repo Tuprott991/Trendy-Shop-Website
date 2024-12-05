@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { AiOutlineUser, AiOutlineLock } from "react-icons/ai";
@@ -11,10 +11,6 @@ const Login = () => {
   password: "",
   error: "",
  });
-
- if (isAuthenticated) {
-  return <Navigate to="/" />;
- }
 
  const handleSubmit = async (e) => {
   e.preventDefault();
