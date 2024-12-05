@@ -1,10 +1,20 @@
 import { Navigate, useRoutes } from "react-router-dom";
+
 import Login from "../pages/authentication/Login.jsx";
 import Signup from "../pages/authentication/Signup.jsx";
+
 import CustomerLayout from "../pages/customer/CustomerLayout.jsx";
 import CustomerHome from "../pages/customer/CustomerHome.jsx";
 import CustomerProductDetail from "../pages/customer/CustomerProductDetail.jsx";
+import RetailerLayout from "../pages/retailer/RetailerLayout.jsx";
+
+import AdminLayout from "../pages/admin/AdminLayout.jsx";
+import AdminDashboard from "../pages/admin/AdminDashboard.jsx";
+import AdminManage from "../pages/admin/AdminManage.jsx";
+import AdminProfile from "../pages/admin/AdminProfile.jsx";
+
 import Authorization from "../auth/Authorization.jsx";
+
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
 import CustomerSearch from "../pages/customer/CustomerSearch.jsx";
@@ -15,17 +25,14 @@ const AppRoutes = () => {
 
  const routes = useRoutes([
   {
-   path: "/",
-   element: <Navigate to="/login" replace />,
-  },
-  {
-   path: "/login",
+   path: "login",
    element: isAuthenticated ? <Navigate to={`/${role}`} replace /> : <Login />,
   },
   {
-   path: "/signup",
+   path: "signup",
    element: isAuthenticated ? <Navigate to={`/${role}`} replace /> : <Signup />,
   },
+
   {
    element: <Authorization allowedRoles={["customer"]} />,
    children: [
@@ -33,34 +40,54 @@ const AppRoutes = () => {
      path: "customer",
      element: <CustomerLayout />,
      children: [
-      { index: true, element: <CustomerHome /> },
-      { path: "product/:id", element: <CustomerProductDetail /> },
-      { path: "search/:keyword", element: <CustomerSearch /> },
+      {
+       index: true, // Default route for `/customer`
+       element: <CustomerHome />,
+      },
+      {
+       path: "product/:id", // Route for `/customer/product/:id`
+       element: <CustomerProductDetail />,
+      },
      ],
     },
    ],
   },
+
+  // Retailer Routes
   {
    element: <Authorization allowedRoles={["retailer"]} />,
    children: [
     {
      path: "retailer",
-     element: <div>Coming Soon</div>, // Placeholder
+     index: true,
+     element: <RetailerLayout />,
     },
    ],
   },
+
+  // Admin Routes
   {
    element: <Authorization allowedRoles={["admin"]} />,
    children: [
     {
      path: "admin",
-     element: <div>Coming Soon</div>, // Placeholder
+     element: <AdminLayout />,
+     children: [
+      {
+       index: true,
+       element: <AdminDashboard />,
+      },
+      {
+       path: "manage",
+       element: <AdminManage />,
+      },
+      {
+       path: "profile",
+       element: <AdminProfile />,
+      },
+     ],
     },
    ],
-  },
-  {
-   path: "*",
-   element: <div>404 - Page Not Found</div>,
   },
  ]);
 

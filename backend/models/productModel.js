@@ -26,7 +26,6 @@ const productSchema = new Schema({
       const productInfo = await Product.findById(productID);
       return productInfo
     }
-
 }
 });
 
