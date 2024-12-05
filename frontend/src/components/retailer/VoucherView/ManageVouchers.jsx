@@ -1,18 +1,10 @@
 import React, { useState } from "react";
 import { FaEye, FaPen, FaTrash } from "react-icons/fa";
+import { BsPatchExclamation } from "react-icons/bs";
 import ReactPaginate from "react-paginate";
 
 const VoucherList = () => {
     const [vouchers, setVouchers] = useState([
-        { id: "01", name: "voucher01", description: "voucher01", discount: 50, upToDate: "30 Nov 2024", status: "Incomplete" },
-        { id: "02", name: "voucher02", description: "voucher02", discount: 10, upToDate: "30 Nov 2024", status: "Complete" },
-        { id: "03", name: "voucher03", description: "voucher03", discount: 20, upToDate: "30 Nov 2024", status: "Incomplete" },
-        { id: "01", name: "voucher01", description: "voucher01", discount: 50, upToDate: "30 Nov 2024", status: "Incomplete" },
-        { id: "02", name: "voucher02", description: "voucher02", discount: 10, upToDate: "30 Nov 2024", status: "Complete" },
-        { id: "03", name: "voucher03", description: "voucher03", discount: 20, upToDate: "30 Nov 2024", status: "Incomplete" },
-        { id: "01", name: "voucher01", description: "voucher01", discount: 50, upToDate: "30 Nov 2024", status: "Incomplete" },
-        { id: "02", name: "voucher02", description: "voucher02", discount: 10, upToDate: "30 Nov 2024", status: "Complete" },
-        { id: "03", name: "voucher03", description: "voucher03", discount: 20, upToDate: "30 Nov 2024", status: "Incomplete" },
         { id: "01", name: "voucher01", description: "voucher01", discount: 50, upToDate: "30 Nov 2024", status: "Incomplete" },
         { id: "02", name: "voucher02", description: "voucher02", discount: 10, upToDate: "30 Nov 2024", status: "Complete" },
         { id: "03", name: "voucher03", description: "voucher03", discount: 20, upToDate: "30 Nov 2024", status: "Incomplete" },
@@ -48,8 +40,25 @@ const VoucherList = () => {
         alert("Edit Button Clicked!");
     };
 
-    const handleDeleteClick = () => {
-        alert("Delete Button Clicked!");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedVoucher, setSelectedVoucher] = useState(null);
+
+    const handleDeleteClick = (id) => {
+        setSelectedVoucher(id);
+        setIsModalOpen(true);
+    };
+
+    const handleConfirmDelete = () => {
+        setVouchers((prevVouchers) =>
+            prevVouchers.filter((voucher) => voucher.id !== selectedVoucher)
+        );
+        setIsModalOpen(false);
+        setSelectedVoucher(null);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedVoucher(null);
     };
 
     return (
@@ -79,8 +88,8 @@ const VoucherList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentItems.map((voucher, index) => (
-                            <tr key={index} className="border-b hover:bg-gray-100 transition duration-300 ease-in-out">
+                        {currentItems.map((voucher) => (
+                            <tr key={voucher.id} className="border-b hover:bg-gray-100 transition duration-300 ease-in-out">
                                 <td className="px-6 py-4 text-center">{voucher.id}</td>
                                 <td className="px-6 py-4 text-center">{voucher.name}</td>
                                 <td className="px-6 py-4 text-center">{voucher.description}</td>
@@ -107,7 +116,10 @@ const VoucherList = () => {
                                         <button className="hover:text-blue-500 transition-all" onClick={handleEditClick}>
                                             <FaPen size={20} />
                                         </button>
-                                        <button className="hover:text-red-500 transition-all" onClick={handleDeleteClick}>
+                                        <button
+                                            className="hover:text-red-500 transition-all"
+                                            onClick={() => handleDeleteClick(voucher.id)}
+                                        >
                                             <FaTrash size={20} />
                                         </button>
                                     </div>
@@ -132,6 +144,31 @@ const VoucherList = () => {
                     disabledClassName={"cursor-not-allowed"}
                 />
             </div>
+
+            {isModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6">
+                        <div className="flex justify-center items-center mb-4">
+                            <BsPatchExclamation size={150} />
+                        </div>
+                        <p className="text-lg font-semibold mb-4">Are you sure want to delete this voucher?</p>
+                        <div className="flex justify-end space-x-4">
+                            <button
+                                className="bg-gray-300 text-black px-4 py-2 rounded font-bold"
+                                onClick={handleCloseModal}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="bg-red-500 text-white px-4 py-2 rounded font-bold"
+                                onClick={handleConfirmDelete}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

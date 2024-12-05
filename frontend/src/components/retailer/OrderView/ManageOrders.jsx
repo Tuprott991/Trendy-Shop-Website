@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaEye, FaPen, FaTrash } from "react-icons/fa";
+import { BsPatchExclamation } from "react-icons/bs";
 import ReactPaginate from "react-paginate";
 
 const OrdersTable = () => {
@@ -41,8 +42,25 @@ const OrdersTable = () => {
         alert("Edit Button Clicked!");
     };
 
-    const handleDeleteClick = () => {
-        alert("Delete Button Clicked!");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedVoucher, setSelectedVoucher] = useState(null);
+
+    const handleDeleteClick = (id) => {
+        setSelectedVoucher(id);
+        setIsModalOpen(true);
+    };
+
+    const handleConfirmDelete = () => {
+        setOrders((prevOrders) =>
+            prevOrders.filter((order) => order.id !== selectedVoucher)
+        );
+        setIsModalOpen(false);
+        setSelectedVoucher(null);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedVoucher(null);
     };
 
     return (
@@ -91,10 +109,15 @@ const OrdersTable = () => {
                                         <button className="hover:text-blue-500 transition-all" onClick={handleViewClick}>
                                             <FaEye size={20} />
                                         </button>
+
                                         <button className="hover:text-blue-500 transition-all" onClick={handleEditClick}>
                                             <FaPen size={20} />
                                         </button>
-                                        <button className="hover:text-red-500 transition-all" onClick={handleDeleteClick}>
+
+                                        <button
+                                            className="hover:text-red-500 transition-all"
+                                            onClick={() => handleDeleteClick(order.id)}
+                                        >
                                             <FaTrash size={20} />
                                         </button>
                                     </div>
@@ -118,6 +141,30 @@ const OrdersTable = () => {
                     disabledClassName={"cursor-not-allowed"}
                 />
             </div>
+            {isModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6">
+                        <div className="flex justify-center items-center mb-4">
+                            <BsPatchExclamation size={150} />
+                        </div>
+                        <p className="text-lg font-semibold mb-4">Are you sure want to delete this order?</p>
+                        <div className="flex justify-end space-x-4">
+                            <button
+                                className="bg-gray-300 text-black px-4 py-2 rounded font-bold"
+                                onClick={handleCloseModal}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="bg-red-500 text-white px-4 py-2 rounded font-bold"
+                                onClick={handleConfirmDelete}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

@@ -142,11 +142,11 @@ const RetailerAside = ({ onSelectComponent, selectedComponent }) => {
             {showLogoutModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg w-96">
-                        <div className="flex justify-center items-center mb-3">
+                        <div className="flex justify-center items-center mb-4">
                             <BsPatchExclamation size={150} />
                         </div>
-                        <h2 className="text-xl font-semibold text-gray-700 text-center">Are you sure?</h2>
-                        <p className="text-gray-600 mt-2 text-center">You will be returned to the login screen.</p>
+                        <h2 className="text-xl font-semibold text-gray-700 text-center mb-2">Are you sure?</h2>
+                        <p className="text-gray-600 mt-2 mb-2 text-center">You will be returned to the login screen.</p>
                         <div className="mt-4 flex justify-end gap-4">
                             <button
                                 className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg font-bold"
