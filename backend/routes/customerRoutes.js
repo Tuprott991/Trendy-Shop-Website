@@ -7,19 +7,17 @@ module.exports = () => {
   const router = express.Router();
 
 
-  router.get("/search/:keyword", ProductController.SearchProduct);
-  // Route to create a new category
-  router.post("/create", CategoryController.createCate);
+  router.get("/search/:keyword", ProductController.getSearchProduct);
+  
+  router.post("/create", CategoryController.postcreateCate);
 
-  // Route to get category ID by category and target
   router.post("/getId", CategoryController.getId);
 
-  // Route to get all categories
-  router.get("/all", CategoryController.getAllCategory);
+  router.get("/category/all", CategoryController.getAllCategory);
 
-  router.get("/search/category/:id", CategoryController.filterCategory);
+  router.get("/search/category/:id", CategoryController.getFilterCategory);
   
-  router.get("/product/detail/:id", ProductController.GetProductInfo);
+  router.get("/product/detail/:id", ProductController.getProductInfo);
   
   return router;  
 };
