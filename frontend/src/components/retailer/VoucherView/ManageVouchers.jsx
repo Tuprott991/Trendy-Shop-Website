@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaEye, FaPen, FaTrash } from "react-icons/fa";
-import { BsPatchExclamation } from "react-icons/bs";
+import { TiDeleteOutline } from "react-icons/ti";
 import Pagination from "../Helper/pagination.jsx";
 
 const OrdersTable = () => {
@@ -121,8 +121,8 @@ const OrdersTable = () => {
             {isModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-50">
                     <div className="bg-white rounded-lg shadow-lg p-6">
-                        <div className="flex justify-center items-center mb-4">
-                            <BsPatchExclamation size={150} />
+                        <div className="flex justify-center items-center">
+                            <TiDeleteOutline size={150} color="red"/>
                         </div>
                         <p className="text-lg font-semibold mb-4">Are you sure you want to delete this order?</p>
                         <div className="flex justify-end space-x-4">

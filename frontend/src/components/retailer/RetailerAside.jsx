@@ -132,8 +132,8 @@ const RetailerAside = ({ onSelectComponent, selectedComponent }) => {
                         className="flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-red-100 text-gray-700 transition-all"
                         onClick={() => setShowLogoutModal(true)}
                     >
-                        <IoLogOutOutline size={24} />
-                        <span className="text-sm font-semibold">Logout</span>
+                        <IoLogOutOutline size={24} color="red"/>
+                        <span className="text-sm font-semibold text-red-500">Logout</span>
                     </div>
                 </div>
             </div>
@@ -143,7 +143,7 @@ const RetailerAside = ({ onSelectComponent, selectedComponent }) => {
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg w-96">
                         <div className="flex justify-center items-center mb-4">
-                            <BsPatchExclamation size={150} />
+                            <BsPatchExclamation size={150} color="red" />
                         </div>
                         <h2 className="text-xl font-semibold text-gray-700 text-center mb-2">Are you sure?</h2>
                         <p className="text-gray-600 mt-2 mb-2 text-center">You will be returned to the login screen.</p>
