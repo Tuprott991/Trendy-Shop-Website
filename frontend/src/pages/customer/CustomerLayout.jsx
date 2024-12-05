@@ -5,9 +5,7 @@ const CustomerLayout = () => {
  return (
   <>
    <CustomerHeader>Header</CustomerHeader>
-   <main>
-    <Outlet />
-   </main>
+   <Outlet />
    <footer>Footer</footer>
   </>
  );

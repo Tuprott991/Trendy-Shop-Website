@@ -43,7 +43,19 @@ exports.SearchProduct = async (req, res) => {
 }
 
 
-
+exports.GetProductInfo = async (req, res) => {
+    try {
+        const {id} = req.params;
+        console.log(id);
+        const productInfo = await Product.GetProductInfo(id);
+        res.status(200).json({ 
+            productInfo
+        });
+    } catch (error) {
+        console.error("Error getting product info:", error);
+        res.status(500).json({ message: 'Error getting product info', error });
+    }
+}
 
 
 
