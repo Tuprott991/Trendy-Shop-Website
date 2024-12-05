@@ -25,8 +25,7 @@ const productSchema = new Schema({
     async GetProductInfo(productID) {
       const productInfo = await Product.findById(productID);
       return productInfo
-    }
-
+    },
 }
 });
 
