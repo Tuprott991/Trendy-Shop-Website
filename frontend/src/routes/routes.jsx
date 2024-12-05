@@ -1,12 +1,20 @@
 import { Navigate, useRoutes } from "react-router-dom";
+
 import Login from "../pages/authentication/Login.jsx";
 import Signup from "../pages/authentication/Signup.jsx";
+
 import CustomerLayout from "../pages/customer/CustomerLayout.jsx";
 import CustomerHome from "../pages/customer/CustomerHome.jsx";
 import CustomerProductDetail from "../pages/customer/CustomerProductDetail.jsx";
 import RetailerLayout from "../pages/retailer/RetailerLayout.jsx";
+
 import AdminLayout from "../pages/admin/AdminLayout.jsx";
+import AdminDashboard from "../pages/admin/AdminDashboard.jsx";
+import AdminManage from "../pages/admin/AdminManage.jsx";
+import AdminProfile from "../pages/admin/AdminProfile.jsx";
+
 import Authorization from "../auth/Authorization.jsx";
+
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
 
@@ -63,7 +71,20 @@ const AppRoutes = () => {
                 {
                     path: "admin",
                     element: <AdminLayout />,
-                    index: true,
+                    children: [
+                        {
+                            index: true,
+                            element: <AdminDashboard />,
+                        },
+                        {
+                            path: "manage",
+                            element: <AdminManage />,
+                        },
+                        {
+                            path: "profile",
+                            element: <AdminProfile />,
+                        },
+                    ],
                 },
             ],
         },
