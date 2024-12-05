@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const { getRetailerInfor } = require('../controllers/UserController/ad_dashboard.controllers');
 const { Schema } = mongoose;
 
 // User Schema
@@ -17,11 +18,16 @@ const userSchema = new Schema(
   },
   {
     timestamps: true,
-    statics: {
+    statics: { 
       // Instance method to get user information (you can directly call this on an instance of User)
       async getInfo(userID) {
         const userInfo = await User.findById(userID);
         return userInfo
+      },
+
+      async getReInfo() {
+        const reInfo = await User.find({ role: 'retailer' });
+        return reInfo
       },
 
       // Instance method for creating a new user (can be used directly from an instance)

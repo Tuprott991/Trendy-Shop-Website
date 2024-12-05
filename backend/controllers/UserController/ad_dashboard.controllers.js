@@ -1,5 +1,5 @@
 const User = require('../../models/index').User;
-const Order = require('../../models/index');
+const Order = require('../../models/index').Order;
 
 exports.getDashboardData = async (req, res) => {
     try {
@@ -35,9 +35,16 @@ exports.getDashboardData = async (req, res) => {
 exports.getRetailerInfor = async (req, res) =>{
   try{
     const retailerInfo = await User.find({ role: 'retailer' });
+    
 
+
+    
     res.json({
-      retailerInfo
+      id: retailerInfo._id,
+      name: retailerInfo.name,
+      email: retailer.email,
+      
+
     });
   } catch (error) {
     console.error(error);
