@@ -27,15 +27,31 @@ import CustomerSearch from "../pages/customer/CustomerSearch.jsx";
 const AppRoutes = () => {
  const { isAuthenticated } = useContext(AuthContext);
  const role = localStorage.getItem("role");
-
  const routes = useRoutes([
   {
-   path: "login",
-   element: isAuthenticated ? <Navigate to={`/${role}`} replace /> : <Login />,
-  },
-  {
-   path: "signup",
-   element: isAuthenticated ? <Navigate to={`/${role}`} replace /> : <Signup />,
+   path: "/",
+   children: [
+    {
+     index: true, // The default route for `/`
+     element: <Navigate to="/login" replace />,
+    },
+    {
+     path: "login",
+     element: isAuthenticated ? (
+      <Navigate to={`/${role}`} replace />
+     ) : (
+      <Login />
+     ),
+    },
+    {
+     path: "signup",
+     element: isAuthenticated ? (
+      <Navigate to={`/${role}`} replace />
+     ) : (
+      <Signup />
+     ),
+    },
+   ],
   },
 
   {

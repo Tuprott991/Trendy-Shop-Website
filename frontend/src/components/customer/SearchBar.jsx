@@ -15,30 +15,27 @@ const SearchBar = () => {
   const fetchAndProcessCategories = async () => {
    try {
     const response = await categoryService.getAll();
-    console.log(response.data);
-    const reducedCategories = response.data.reduce(
-     (acc, { category, target }) => {
+    const groupedCategories = response.data.reduce(
+     (acc, { id, category, target }) => {
       if (!acc[target]) {
        acc[target] = [];
       }
-      if (!acc[target].includes(category)) {
-       acc[target].push(category);
-      }
+      acc[target].push({ id, category });
       return acc;
      },
      {}
     );
-
-    setCategories(reducedCategories);
+    setCategories(groupedCategories);
    } catch (error) {
-    console.error("Failed to fetch categories:", error);
+    console.error("Error fetching categories:", error);
    }
   };
 
   fetchAndProcessCategories();
  }, []);
- const handleCategoryClick = (e) => {
-  console.log(e);
+ const handleCategoryClick = (id) => {
+  console.log("Category ID:", id);
+  navigate(`/customer/search/category/${id}`);
  };
 
  return (
@@ -76,7 +73,7 @@ const SearchBar = () => {
        {Object.keys(categories).map((category, index) => (
         <div
          key={category}
-         className={`space-y-2 px-6 py-4  ${
+         className={`space-y-2 px-6 py-4 ${
           index !== Object.keys(categories).length - 1
            ? "border-r border-green-100 pr-8"
            : ""
@@ -86,11 +83,11 @@ const SearchBar = () => {
          <ul className="pt-2 space-y-1 flex flex-col gap-2">
           {categories[category].map((item) => (
            <li
-            key={item}
+            key={item.id}
             className="text-sm text-gray-800 font-medium hover:bg-gray-100 hover:text-green-500 px-3 py-2 rounded-md cursor-pointer"
-            onClick={handleCategoryClick}
+            onClick={() => handleCategoryClick(item.id)} // Pass `item.id` directly
            >
-            {item}
+            {item.category}
            </li>
           ))}
          </ul>

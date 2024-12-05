@@ -5,15 +5,15 @@ import { CgBox } from "react-icons/cg";
 import { CgUserList } from "react-icons/cg";
 import { DropdownContext } from "../../context/DropDownContext";
 import { AuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const CustomerHeader = () => {
  const { isOpen, setIsOpen } = useContext(DropdownContext);
  const { isLoginSuccess, logout, setIsLoginSuccess } = useContext(AuthContext);
  const divRef = useRef(null);
  const logoutRef = useRef(null);
-
+ const navigate = useNavigate();
  useEffect(() => {
-  console.log(isLoginSuccess);
   if (isLoginSuccess) {
    const timer = setTimeout(() => setIsLoginSuccess(false), 3500);
    return () => clearTimeout(timer);
@@ -35,6 +35,9 @@ const CustomerHeader = () => {
  const handleLogout = () => {
   console.log("Logging out...");
   logout();
+ };
+ const handleNavigateHome = () => {
+  navigate("/customer");
  };
 
  return (
@@ -69,7 +72,10 @@ const CustomerHeader = () => {
 
    {/* Header */}
    <div className="px-[48px] py-[16px] flex justify-between items-center">
-    <h1 className="cursor-pointer hover:text-green-600 text-[32px] font-bold text-green-500 opacity-95">
+    <h1
+     className="cursor-pointer hover:text-green-600 text-[32px] font-bold text-green-500 opacity-95"
+     onClick={handleNavigateHome}
+    >
      SoftWear
     </h1>
     <SearchBar />
