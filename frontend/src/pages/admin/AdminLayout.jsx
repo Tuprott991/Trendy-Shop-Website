@@ -4,7 +4,7 @@ import DashboardHeader from "../../components/admin/DashboardView/DashboardHeade
 import SummaryStatistics from "../../components/admin/DashboardView/SummaryStatistics";
 import ManageRetailers from "../../components/admin/DashboardView/ManageRetailers";
 import RetailerHeader from '../../components/admin/ManageRetailerView/RetailerHeader';
-import RetailersList from '../../components/admin/DashboardView/ManageRetailers';
+import RetailersList from '../../components/admin/ManageRetailerView/RetailersList';
 import ProfileHeader from "../../components/admin/ProfileView/ProfileHeader";
 import ProfileMain from "../../components/admin/ProfileView/ProfileMain";
 
