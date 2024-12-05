@@ -35,10 +35,7 @@ exports.getDashboardData = async (req, res) => {
 exports.getRetailerInfor = async (req, res) =>{
   try{
     const retailerInfo = await User.find({ role: 'retailer' });
-    
 
-
-    
     res.json({
       id: retailerInfo._id,
       name: retailerInfo.name,
