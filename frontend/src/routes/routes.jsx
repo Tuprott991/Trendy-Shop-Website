@@ -3,7 +3,7 @@ import PrivateRoute from "../auth/PrivateRoute.jsx";
 import Login from "../pages/authentication/Login.jsx";
 import CustomerLayout from "../pages/customer/CustomerLayout.jsx";
 import Signup from "../pages/authentication/Signup.jsx";
-import AdminHome from "../pages/admin/AdminHome.jsx";
+import AdminLayout from "../pages/admin/AdminLayout.jsx";
 import RetailerLayout from "../pages/retailer/RetailerLayout.jsx";
 import Authorization from "../auth/Authorization.jsx";
 import CustomerHome from "../pages/customer/CustomerHome.jsx";
@@ -42,7 +42,7 @@ const AppRoutes = () => {
                 },
                 {
                     path: "admin",
-                    element: <AdminHome />,
+                    element: <AdminLayout />,
                 },
             ],
         },
