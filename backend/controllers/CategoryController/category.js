@@ -1,33 +1,20 @@
 // controllers/CategoryController/category.js
 const Category = require("../../models/index").Category;
 const Product = require("../../models/index").Product;
+
 exports.createCate = async (req, res) => {
   try {
-    // Extract category and target from the request body (or params, if needed)
-    const { category, target } = req.body; // assuming these are sent in the request body
-
-    // Check if category and target are provided in the request
+    const { category, target } = req.body; 
+    
     if (!category || !target) {
       return res.status(400).json({ message: 'Category and target are required' });
     }
 
-    // Check if category already exists in the database for the given target
-    const existingCategory = await Category.findOne({ category, target });
-
-    if (!existingCategory) {
-      // Create a new category if it doesn't exist
-      const newCategory = new Category({
-        category,
-        target
-      });
-
-      // Save the category into MongoDB
-      await newCategory.save();
-      console.log(`Added category: ${category} with target: ${target}`);
-
+    try {
+      const newCategory = await Category.createCategory(category, target);
       return res.status(201).json({ message: 'Category created successfully', category: newCategory });
-    } else {
-      return res.status(400).json({ message: 'Category already exists for this target' });
+    } catch (error) {
+      return res.status(400).json({ message: error.message });
     }
   } catch (error) {
     console.error('Error creating category:', error);
@@ -59,23 +46,12 @@ exports.getId = async (req, res) => {
 
 exports.getAllCategory = async (req, res) => {
   try {
-    const categories = await Category.find();
-
-    const filteredCategories = categories.map(category => ({
-      category: category.category,
-      target: category.target
-    }));
-
-    res.status(200).send(
-      filteredCategories
-    );
+    const filteredCategories = await Category.filterCategories();
+    res.status(200).send(filteredCategories);
   } catch (error) {
-    res.status(500).send(
-      'Error retrieving categories'
-    );
+    res.status(500).send('Error retrieving categories');
   }
 };
-
 
 
 exports.filterCategory = async (req, res) => {
