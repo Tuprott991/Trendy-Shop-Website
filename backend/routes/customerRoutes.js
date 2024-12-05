@@ -3,8 +3,11 @@ const express = require("express");
 
 module.exports = () => {
   const CategoryController = require("../controllers/CategoryController/category.js");
+  const ProductController = require("../controllers/ProductController/product.js");
   const router = express.Router();
 
+
+  router.get("/search/:keyword", ProductController.SearchProduct);
   // Route to create a new category
   router.post("/create", CategoryController.createCate);
 

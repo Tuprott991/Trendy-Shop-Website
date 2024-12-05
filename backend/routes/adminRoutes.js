@@ -7,6 +7,7 @@ module.exports = () => {
 
   // Retailer Dashboard Routes
   router.get("/dashboard", ad_dasController.getDashboardData);
+  // router.get("/getRetailerInfo",ad_dasController.getRetailerInfo);
   
 
   return router;  // Return the router

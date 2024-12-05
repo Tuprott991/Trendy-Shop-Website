@@ -1,6 +1,6 @@
 // controllers/ProductController/product.js
 const mongoose = require('mongoose'); // Import mongoose
-const Product = require("../../models/models").Product;
+const Product = require("../../models/index").Product;
 
 exports.importProduct = async (req, res) => {
     try {
@@ -28,6 +28,19 @@ exports.importProduct = async (req, res) => {
         res.status(500).json({ message: 'Error importing products', error });
     }
 };
+
+exports.SearchProduct = async (req, res) => {
+    try {
+        const {keyword} = req.params;
+        const productInfo = await Product.SearchProduct(keyword);
+        res.status(200).json({ 
+            productInfo
+        });
+    } catch (error) {
+        console.error("Error searching products:", error);
+        res.status(500).json({ message: 'Error searching products', error });
+    }
+}
 
 
 
