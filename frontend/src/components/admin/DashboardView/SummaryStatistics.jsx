@@ -30,8 +30,8 @@ const Dashboard = () => {
             {
                 label: "Revenue ($)",
                 data: stats.map((stat) => stat.revenue),
-                backgroundColor: "rgba(234, 88, 12, 0.5)",
-                borderColor: "rgba(234, 88, 12, 1)",
+                backgroundColor: "rgba(138, 43, 226, 0.5)",
+                borderColor: "rgba(138, 43, 226, 1)",
                 borderWidth: 1,
                 yAxisID: "y1",
             },
@@ -87,13 +87,13 @@ const Dashboard = () => {
                 title: {
                     display: true,
                     text: "Revenue ($)",
-                    color: "#EA580C",
+                    color: "#8A2BE2",
                 },
                 grid: {
                     drawOnChartArea: false,
                 },
                 ticks: {
-                    color: "#EA580C",
+                    color: "#8A2BE2",
                     beginAtZero: true,
                 },
             },
