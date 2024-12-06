@@ -6,7 +6,8 @@ module.exports = () => {
   const router = express.Router();
 
   // Retailer Dashboard Routes
-  router.get("/voucherpage", voucherPage.getVoucherpage);
+  router.post("/addvoucher", voucherPage.postCreateVoucher);  
+  router.get("/voucherpage", voucherPage.getVoucherPage);
 
 
   return router;  // Return the router

@@ -29,6 +29,12 @@ voucherSchema.statics = {
     // Return the filtered categories
     return filteredVouchers
   },
+  async getAllRetailVoucher(){
+    const vouchers = await Voucher.find();
+    const filteredVouchers = vouchers.filter((voucher) => voucher.isActive);
+    // Return the filtered categories
+    return filteredVouchers
+  },
   async isActive() {
     const now = new Date();
   
