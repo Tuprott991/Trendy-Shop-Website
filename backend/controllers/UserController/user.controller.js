@@ -66,18 +66,19 @@ exports.postLogin = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
   try {
-
-    const { userID } = req.query
+    const { id } = req.query
     // Validate userID format
 
     // Find user
 
-    userInfo = await User.getInfo(userID)
+    userInfo = await User.getInfo(id)
 
     // Handle user not found
     if (!userInfo) {
       return res.status(404).send({ message: 'User not found' });
     }
+
+    console.log(userInfo)
 
     // Return user info
     res.status(200).json({
@@ -100,7 +101,7 @@ exports.getProfile = async (req, res) => {
 
 exports.postUpdateProfile = (req, res) => {
   console.log(req.body)
-  const { id, name, email } = req.body;
+  const { id, name, email, birthday, gender,region } = req.body;
 
 
   try {

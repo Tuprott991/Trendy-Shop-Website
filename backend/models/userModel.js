@@ -11,7 +11,7 @@ const userSchema = new Schema(
     password: { type: String, required: true },
     order_list: [{ type: Schema.Types.ObjectId, ref: 'Order' }],
     role: { type: String, enum: ['admin', 'customer', 'retailer'], default: 'customer' },
-    birthday: { type: Date, required: false },
+    birthday: { type: String, required: false },
     gender: { type: String, required: false },
     avatar: { type: String, default: 1 },
     region: { type: String, required: false }
@@ -25,10 +25,13 @@ const userSchema = new Schema(
         return userInfo
       },
 
-      async update(userID, name, email) {
+      async update(userID, name, email, birthday, gender, region) {
         const updateData = {};
         if (name) updateData.name = name;
         if (email) updateData.email = email;
+        if (birthday) updateData.birthday = birthday;
+        if (gender) updateData.gender = gender;
+        if (region) updateData.region = region;
         // Tìm kiếm và cập nhật người dùng trong database
 
         const updatedUser = await this.findByIdAndUpdate(
@@ -127,3 +130,4 @@ const userSchema = new Schema(
 const User = mongoose.model('User', userSchema);
 
 module.exports = User
+     
