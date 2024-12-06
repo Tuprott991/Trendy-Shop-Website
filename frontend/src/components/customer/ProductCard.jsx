@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
+ const navigate = useNavigate();
  const renderStars = (rating) => {
   const maxStars = 5; // Maximum stars to display
   return [...Array(maxStars)].map((_, i) => (
@@ -14,8 +16,14 @@ const ProductCard = ({ product }) => {
    </span>
   ));
  };
+ const handleOnClick = () => {
+  navigate(`/customer/product/${product._id}`);
+ };
  return (
-  <div className="cursor-pointer flex border-2 flex-col gap-2 bg-white rounded-lg pb-4 border-slate-200 hover:border-green-600 shadow-lg">
+  <div
+   className="cursor-pointer flex border-2 flex-col gap-2 bg-white rounded-lg pb-4 border-slate-200 hover:border-green-600 shadow-lg"
+   onClick={handleOnClick}
+  >
    <div className="overflow-hidden rounded-md flex justify-center items-center">
     <img
      className="w-[70%] h-[70%] object-cover  "

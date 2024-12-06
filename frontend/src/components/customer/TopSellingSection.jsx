@@ -27,7 +27,7 @@ const TopSellingSection = () => {
      ))}
     </div>
     <div
-     className="mt-20 border border-gray-400 rounded-3xl font-semibold text-gray-800 px-16 py-4 text-lg cursor-pointer hover:text-white ring ring-green-50 hover:bg-green-500 transition-colors"
+     className="mt-12 border border-gray-400 rounded-3xl font-semibold text-gray-800 px-16 py-2 text-lg cursor-pointer hover:text-white ring ring-green-50 hover:bg-green-500 transition-colors"
      onClick={handleViewAll}
     >
      View all
