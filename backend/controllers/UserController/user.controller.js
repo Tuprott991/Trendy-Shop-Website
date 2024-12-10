@@ -85,6 +85,7 @@ exports.getProfile = async (req, res) => {
       id: userInfo._id,
       name: userInfo.name,
       email: userInfo.email,
+      role: userInfo.role,
       gender: userInfo.gender,
       birthday: userInfo.birthday,
       region: userInfo.region,
