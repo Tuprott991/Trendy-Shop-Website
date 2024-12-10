@@ -2,7 +2,7 @@ import axios from "axios";
 
 const getAdminProfile = async (token) => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/user/getprofile&token=${token}`);
+        const response = await axios.get(`http://localhost:8080/api/user/getprofile`);
         return response;
     } catch (e) {
         console.log(e.response);
@@ -12,7 +12,7 @@ const getAdminProfile = async (token) => {
 
 const getAdminDashboard = async () => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/user/addashboard`);
+        const response = await axios.get(`http://localhost:8080/api/user/admindashboard`);
         return response;
     } catch (e) {
         console.log(e.response);
