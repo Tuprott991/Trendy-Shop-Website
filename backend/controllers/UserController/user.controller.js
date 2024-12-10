@@ -66,12 +66,12 @@ exports.postLogin = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
   try {
-    const { id } = req.query
+    const userID  = req.user.id
     // Validate userID format
 
     // Find user
 
-    userInfo = await User.getInfo(id)
+    userInfo = await User.getInfo(userID)
 
     // Handle user not found
     if (!userInfo) {
@@ -101,7 +101,8 @@ exports.getProfile = async (req, res) => {
 
 exports.postUpdateProfile = (req, res) => {
   console.log(req.body)
-  const { id, name, email, birthday, gender, region } = req.body;
+  const {id} = req.user;
+  const { name, email, birthday, gender, region } = req.body;
 
 
   try {
@@ -117,8 +118,7 @@ exports.postUpdateProfile = (req, res) => {
 // Delete retailer
 
 exports.postDeleteUser = (req, res) => {
-  console.log(req.body)
-  const { id } = req.body;
+  const { id } = req.user;
 
   try {
     User.delete(id);

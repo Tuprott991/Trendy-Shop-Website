@@ -1,4 +1,5 @@
 const express = require("express");
+const authenticateToken = require("../middleware")
 
 
 module.exports =  () =>{ 
@@ -8,10 +9,9 @@ module.exports =  () =>{
     // Retailer Dashboard Routes
     router.post("/signup", user.postSignup);
     router.post("/login", user.postLogin);  
-    router.get("/getprofile", user.getProfile);
-    router.post("/updateprofile", user.postUpdateProfile);
-    router.post("/deleteuser", user.postDeleteUser);
-    router.get("/addashboard", user.getAdminDashboardData);
-
-    return router;
-};
+    router.get("/getprofile", authenticateToken, user.getProfile);
+    router.post("/updateprofile", authenticateToken, user.postUpdateProfile);
+    router.post("/deleteuser", authenticateToken, user.postDeleteUser);
+    router.get("/admindashboard", authenticateToken, user.getAdminDashboardData); 
+    return router;  
+};  
