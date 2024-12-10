@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaUser, FaEnvelope, FaCalendarAlt, FaVenusMars, FaGlobe } from 'react-icons/fa';
+import { adminService } from "../../../services/adminService";
 
 export default function ProfileHeader() {
     const icon = {
@@ -10,17 +11,26 @@ export default function ProfileHeader() {
         region: <FaGlobe size={24} />,
     };
 
-    const [profile, setProfile] = useState({
-        name: "John Doe",
-        email: "john.doe@example.com",
-        role: "Adminstrator",
-        dob: "01/01/1990",
-        gender: "Male",
-        region: "New York, USA"
-    });
-
+    const [profile, setProfile] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
-    const [editProfile, setEditProfile] = useState(profile);
+    const [editProfile, setEditProfile] = useState(null);
+
+    const token = localStorage.getItem("token");
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            if (token) {
+                const data = await adminService.getAdminProfile(token);
+                console.log(data);
+                if (data) {
+                    setProfile(data);
+                    setEditProfile(data);
+                }
+            }
+        };
+
+        fetchProfile();
+    }, [token]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -31,6 +41,10 @@ export default function ProfileHeader() {
         setProfile(editProfile);
         setIsEditing(false);
     };
+
+    if (!profile) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="bg-gradient-to-r from-emerald-500 to-blue-500 p-8 rounded-xl shadow-xl max-w-2xl mx-auto">
@@ -60,7 +74,6 @@ export default function ProfileHeader() {
                 </div>
             </div>
 
-            {/* Edit Modal */}
             {isEditing && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full mx-4">
