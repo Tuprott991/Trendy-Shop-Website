@@ -166,7 +166,7 @@ exports.getAdminDashboardData = async (req, res) => {
 // retailer dashboard
 exports.getRetailerDashboardData = async (req, res) => {
   try {
-    const {id} = req.query;
+    const {id} = req.user;  
     console.log(id)
 
     if (!id) {
