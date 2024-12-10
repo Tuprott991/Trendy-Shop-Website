@@ -3,7 +3,7 @@ import DashboardHeader from "../../components/admin/DashboardView/DashboardHeade
 import SummaryStatistics from "../../components/admin/DashboardView/SummaryStatistics";
 import ManageRetailers from "../../components/admin/DashboardView/ManageRetailers";
 
-const AdminDashboard = () => {
+const AdminDashboard = () => {    
     return (
         <div className="">
             <DashboardHeader />

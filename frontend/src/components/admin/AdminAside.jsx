@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CgHome, CgCopy, CgProfile } from "react-icons/cg";
 import { IoLogOutOutline } from "react-icons/io5";
@@ -12,6 +12,7 @@ const RetailerAside = () => {
     const { isLoginSuccess, logout, setIsLoginSuccess } = useContext(AuthContext);
 
     const [showLogoutModal, setShowLogoutModal] = useState(false);
+    const divRef = useRef(null);
 
     useEffect(() => {
         if (isLoginSuccess) {
@@ -41,9 +42,6 @@ const RetailerAside = () => {
         setShowLogoutModal(false);
     };
 
-    const role = localStorage.getItem("role");
-
-    // Function to handle navigation when a button is clicked
     const handleNavigation = (route) => {
         navigate(route);
     };
@@ -77,7 +75,7 @@ const RetailerAside = () => {
                 ></div>
             )}
 
-            <div className="h-screen w-64 bg-white flex flex-col justify-between">
+            <div className="h-screen w-64 bg-white flex flex-col justify-between" ref={divRef}>
                 {/* Title */}
                 <div className="px-6 py-4 mb-10">
                     <h1 className="text-2xl font-bold text-green-600 cursor-pointer hover:opacity-90">
@@ -86,9 +84,7 @@ const RetailerAside = () => {
                     <p className="text-gray-500 text-sm mt-2">Retailer Dashboard</p>
                 </div>
 
-                {/* Navigation Buttons */}
                 <div className="flex-1 flex flex-col px-6 py-4 space-y-4">
-                    {/* Dashboard */}
                     <div
                         className="flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all"
                         onClick={() => handleNavigation("/admin")}

@@ -1,27 +1,55 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
-
 import { BsPersonCheck } from "react-icons/bs";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdOutlinePriceChange, MdReceiptLong } from "react-icons/md";
+import { adminService } from "../../../services/adminService";
+import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 
+// Register necessary components for Chart.js
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const Dashboard = () => {
-    const stats = [
-        { id: 1, label: "Total Retailers", counts: 15, revenue: 0, icon: <BsPersonCheck size={30} /> },
-        { id: 2, label: "Total Orders", counts: 357, revenue: 0, icon: <MdReceiptLong size={30} /> },
-        { id: 3, label: "Total Delivered", counts: 75, revenue: 0, icon: <TbTruckDelivery size={30} /> },
-        { id: 4, label: "Total Revenue", counts: 0, revenue: 128, icon: <MdOutlinePriceChange size={30} /> },
-    ];
+    const [stats, setStats] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await adminService.getAdminDashboard();
+                if (data?.data) { // Check if data is present
+                    const new_stats = [
+                        { id: 1, label: "Total Retailers", counts: data.data.retailerCount, revenue: 0, icon: <BsPersonCheck size={30} /> },
+                        { id: 2, label: "Total Orders", counts: data.data.totalOrders, revenue: 0, icon: <MdReceiptLong size={30} /> },
+                        { id: 3, label: "Total Delivered", counts: data.data.totalDelivered, revenue: 0, icon: <TbTruckDelivery size={30} /> },
+                        { id: 4, label: "Total Revenue", counts: 0, revenue: data.data.totalRevenue, icon: <MdOutlinePriceChange size={30} /> },
+                    ];
+
+                    setStats(new_stats);
+                } else {
+                    setError("Invalid data format.");
+                }
+                setLoading(false);
+            } catch (err) {
+                console.error("Error fetching data:", err);
+                setError('Failed to load data');
+                setLoading(false);
+            }
+        };
+        
+        fetchData();
+    }, []);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
 
     const chartData = {
         labels: stats.map((stat) => stat.label),
         datasets: [
             {
                 label: "Counts",
-                data: stats.map((stat) => stat.counts),
+                data: stats.map((stat) => stat.counts || 0), // Fallback to 0 if counts are missing
                 backgroundColor: "rgba(59, 130, 246, 0.5)",
                 borderColor: "rgba(59, 130, 246, 1)",
                 borderWidth: 1,
@@ -29,7 +57,7 @@ const Dashboard = () => {
             },
             {
                 label: "Revenue ($)",
-                data: stats.map((stat) => stat.revenue),
+                data: stats.map((stat) => stat.revenue || 0), // Fallback to 0 if revenue is missing
                 backgroundColor: "rgba(138, 43, 226, 0.5)",
                 borderColor: "rgba(138, 43, 226, 1)",
                 borderWidth: 1,
@@ -55,6 +83,7 @@ const Dashboard = () => {
         },
         scales: {
             x: {
+                type: 'category', // Ensure x-axis is using 'category' scale
                 grid: {
                     display: false,
                 },
@@ -110,7 +139,7 @@ const Dashboard = () => {
                     >
                         <div className="flex items-center gap-4">
                             <div className="flex items-center justify-center w-12 h-12 text-2xl text-white bg-emerald-400 rounded-full">
-                                {stat.icon}
+                                {stat.icon || <span>No Icon</span>} {/* Fallback in case icon is missing */}
                             </div>
                             <div>
                                 <h3 className="text-2xl font-bold text-emerald-400">
