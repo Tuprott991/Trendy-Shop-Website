@@ -10,7 +10,7 @@ const getAdminProfile = async (token) => {
     }
 }
 
-const getAdminDashboard = async (token) => {
+const getAdminDashboard = async () => {
     try {
         const response = await axios.get(`http://localhost:8080/api/user/addashboard`);
         return response;

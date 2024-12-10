@@ -6,7 +6,6 @@ import { MdOutlinePriceChange, MdReceiptLong } from "react-icons/md";
 import { adminService } from "../../../services/adminService";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 
-// Register necessary components for Chart.js
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const Dashboard = () => {
@@ -18,7 +17,7 @@ const Dashboard = () => {
         const fetchData = async () => {
             try {
                 const data = await adminService.getAdminDashboard();
-                if (data?.data) { // Check if data is present
+                if (data?.data) {
                     const new_stats = [
                         { id: 1, label: "Total Retailers", counts: data.data.retailerCount, revenue: 0, icon: <BsPersonCheck size={30} /> },
                         { id: 2, label: "Total Orders", counts: data.data.totalOrders, revenue: 0, icon: <MdReceiptLong size={30} /> },

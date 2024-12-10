@@ -1,12 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { retailerService } from "../../../services/retailerService";
 
 const Dashboard = () => {
-    const stats = [
-        { id: 1, label: "Total Products", value: 5, icon: "📋" },
-        { id: 2, label: "Total Orders", value: 357, icon: "📦" },
-        { id: 3, label: "Total Delivered", value: 75, icon: "📮" },
-        { id: 4, label: "Total Revenue", value: "$128", icon: "💰" },
-    ];
+    const [stats, setStats] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await retailerService.getDashboard();
+                if (data?.data) {
+                    const new_stats = [
+                        { id: 1, label: "Total Products", value: 5, icon: "📋" },
+                        { id: 2, label: "Total Orders", value: 357, icon: "📦" },
+                        { id: 3, label: "Total Delivered", value: 75, icon: "📮" },
+                        { id: 4, label: "Total Revenue", value: "$128", icon: "💰" },
+                    ];
+
+                    setStats(new_stats);
+                } else {
+                    setError("Invalid data format.");
+                }
+                setLoading(false);
+            } catch (err) {
+                console.error("Error fetching data:", err);
+                setError("Failed to load data");
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
 
     return (
         <div className="flex flex-nowrap justify-center gap-6 p-6 bg-gray-100 w-full max-w-full">
