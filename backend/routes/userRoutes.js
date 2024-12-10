@@ -12,6 +12,6 @@ module.exports =  () =>{
     router.get("/getprofile", authenticateToken, user.getProfile);
     router.post("/updateprofile", authenticateToken, user.postUpdateProfile);
     router.post("/deleteuser", authenticateToken, user.postDeleteUser);
-    router.get("/admindashboard", authenticateToken, user.getAdminDashboardData); 
+    router.get("/admindashboard", user.getAdminDashboardData); 
     return router;  
 };  
