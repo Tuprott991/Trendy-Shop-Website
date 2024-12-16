@@ -32,9 +32,19 @@ export const CartProvider = ({ children }) => {
    localStorage.setItem("cart", JSON.stringify(updatedCart));
   }
  };
+ const changeCart = async (cart) => {
+  setCart(cart);
+  localStorage.setItem("cart", JSON.stringify(cart));
+ };
  return (
   <CartContext.Provider
-   value={{ cart, addToCart, isAddCartSuccessful, setIsAddCartSuccessful }}
+   value={{
+    cart,
+    addToCart,
+    isAddCartSuccessful,
+    setIsAddCartSuccessful,
+    changeCart,
+   }}
   >
    {children}
   </CartContext.Provider>
