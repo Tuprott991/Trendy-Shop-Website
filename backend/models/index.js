@@ -15,6 +15,7 @@ const Category = require("./categoryModel.js");
 const Product = require("./productModel.js");
 const Order = require("./orderModel.js");
 const Voucher = require("./voucherModel.js");
+const Feedback = require("./feedbackModel.js");
 
 // Assign models to the `db` object
 db.User = User;
@@ -22,5 +23,6 @@ db.Category = Category;
 db.Product = Product;
 db.Order = Order;
 db.Voucher = Voucher;
+db.Feedback = Feedback;
 
 module.exports = db;

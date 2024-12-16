@@ -4,6 +4,7 @@ const express = require("express");
 module.exports = () => {
   const CategoryController = require("../controllers/CategoryController/category.js");
   const ProductController = require("../controllers/ProductController/product.js");
+  const OrderController = require("../controllers/OrderController/order.controller.js")
   const router = express.Router();
 
 
@@ -18,6 +19,8 @@ module.exports = () => {
   router.get("/search/category/:id", CategoryController.getFilterCategory);
   
   router.get("/product/detail/:id", ProductController.getProductInfo);
+
+  router.post("/cart/:id", OrderController.postAddOrder)
   
   return router;  
 };
