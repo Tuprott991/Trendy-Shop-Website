@@ -23,6 +23,7 @@ import Authorization from "../auth/Authorization.jsx";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
 import CustomerSearch from "../pages/customer/CustomerSearch.jsx";
+import CustomerCart from "../pages/customer/CustomerCart.jsx";
 
 const AppRoutes = () => {
  const { isAuthenticated } = useContext(AuthContext);
@@ -32,7 +33,7 @@ const AppRoutes = () => {
    path: "/",
    children: [
     {
-     index: true, // The default route for `/`
+     index: true,
      element: <Navigate to="/login" replace />,
     },
     {
@@ -76,6 +77,10 @@ const AppRoutes = () => {
       {
        path: "search/category/:category", // Route for `/customer/product/:id`
        element: <CustomerSearch />,
+      },
+      {
+       path: "cart", // Route for `/customer/product/:id`
+       element: <CustomerCart />,
       },
      ],
     },

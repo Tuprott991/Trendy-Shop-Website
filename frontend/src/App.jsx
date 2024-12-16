@@ -4,15 +4,18 @@ import "./App.css";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import AppRoutes from "./routes/routes.jsx";
 import { DropdownProvider } from "./context/DropDownContext.jsx";
+import { CartProvider } from "./context/CartContext.jsx";
 
 const App = () => {
  return (
   <AuthProvider>
-   <DropdownProvider>
-    <BrowserRouter>
-     <AppRoutes />
-    </BrowserRouter>
-   </DropdownProvider>
+   <CartProvider>
+    <DropdownProvider>
+     <BrowserRouter>
+      <AppRoutes />
+     </BrowserRouter>
+    </DropdownProvider>
+   </CartProvider>
   </AuthProvider>
  );
 };
