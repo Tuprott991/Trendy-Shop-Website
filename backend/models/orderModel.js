@@ -23,7 +23,7 @@ const orderSchema = new Schema({
 }, { 
   timestamps: true,
   statics: {
-    async creatOrder(retailer_id, total_money, status, address, phone, payment_method, items,vouchers ){
+    async creatOrder(retailer_id, total_money, status, address, phone, payment_method, items,vouchers){
       try{
         const order = new this ({
           retailer_id: retailer_id,

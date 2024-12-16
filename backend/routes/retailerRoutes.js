@@ -1,5 +1,6 @@
 // routes/re_dashboard.routes.js
 const express = require("express");
+const authenticateToken = require("../middleware")
 
 module.exports = () => {
   const voucherPage = require("../controllers/VoucherController/voucher.Controller");
@@ -8,7 +9,7 @@ module.exports = () => {
   const router = express.Router();
 
   // Retailer Dashboard Routes
-  router.get("/dashboard", retailerDashboard.getRetailerDashboardData);
+  router.get("/dashboard",authenticateToken, retailerDashboard.getRetailerDashboardData);
   router.post("/addproduct", productPage.importProduct);
   router.post("/addvoucher", voucherPage.postCreateVoucher);  
   router.get("/voucherpage", voucherPage.getVoucherPage);
