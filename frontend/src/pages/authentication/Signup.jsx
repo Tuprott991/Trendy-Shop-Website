@@ -61,7 +61,7 @@ const Signup = () => {
    await new Promise((resolve) => {
     setTimeout(resolve, 3000);
    });
-   if (response.status === 200) {
+   if (response.status === 200 || response.status === 201) {
     console.log("Signup successful:", response.data);
     const { token, user } = response.data;
     await login(token, user.email, user.name, user.role);

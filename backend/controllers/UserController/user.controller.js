@@ -24,7 +24,7 @@ exports.postSignup = async (req, res) => {
       return res.status(400).send({ message: "Email already exists!" });
     }
 
-    res.status(201).send({ message: "User registered successfully", user: userData });
+    res.status(200).send({ message: "User registered successfully", user: userData });
   } catch (err) {
     res.status(500).send({ message: err.message || "Signup error." });
   }
