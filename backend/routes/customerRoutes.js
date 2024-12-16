@@ -20,7 +20,7 @@ module.exports = () => {
   
   router.get("/product/detail/:id", ProductController.getProductInfo);
 
-  router.post("/cart/:id", OrderController.postAddOrder)
+  router.post("/order", OrderController.postAddOrder)
   
   return router;  
 };

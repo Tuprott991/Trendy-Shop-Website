@@ -20,13 +20,29 @@ exports.getReDashBoard = async (req, res) => {
 };
 
 exports.postAddOrder = async (req, res) => {
-  const { retailer_id, total_money, status_order, address, phone, payment_method, items, vouchers } = req.body;
+  const { id, retailer_id, total_money, status_order, address, phone, payment_method, items, vouchers } = req.body;
+  
   try {
-    const savedOrder = await Order.creatOrder(retailer_id, total_money, status_order, address, phone, payment_method, items, vouchers);
-    return res.status(201).json(savedOrder); // Trả lại kết quả
+    // Step 1: Create the order using the custom createOrder method
+    const savedOrder = await Order.createOrder(retailer_id, total_money, status_order, address, phone, payment_method, items, vouchers);
+    
+    // Step 2: Find the user by their id and add the saved order _id to the order_list
+    const updatedUser = await User.findByIdAndUpdate(
+      id, // Use the `id` from the request body to find the user
+      { $push: { order_list: savedOrder._id } }, // Add the saved order _id to the order_list array
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' }); // If user not found, return an error
+    }
+
+    // Step 3: Return the saved order details
+    return res.status(201).json(savedOrder); // Return the saved order
+
   } catch (error) {
     console.error('Error creating order:', error);
-    return res.status(500).json({ error: 'Failed to create order' }); // Trả về lỗi
+    return res.status(500).json({ error: 'Failed to create order' }); // Return error message
   }
 };
 

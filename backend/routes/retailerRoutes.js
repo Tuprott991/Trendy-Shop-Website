@@ -10,11 +10,11 @@ module.exports = () => {
   const router = express.Router();
 
   // Retailer Dashboard Routes
-  router.get("/dashboard/:id",authenticateToken, retailerDashboard.getRetailerDashboardData);
+  router.get("/dashboard",authenticateToken, retailerDashboard.getRetailerDashboardData);
   router.post("/addproduct", productPage.importProduct);
   router.post("/addvoucher", voucherPage.postCreateVoucher);  
-  router.get("/voucherpage/:id", voucherPage.getVoucherPage);
-  router.get("/orderpage/:id",orderPage.getOrderPage);
+  router.get("/voucherpage", voucherPage.getVoucherPage);
+  router.get("/orderpage",orderPage.getOrderPage);
 
 
   return router;  // Return the router
