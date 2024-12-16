@@ -11,10 +11,12 @@ module.exports = () => {
 
   // Retailer Dashboard Routes
   router.get("/dashboard",authenticateToken, retailerDashboard.getRetailerDashboardData);
-  router.post("/addproduct", productPage.importProduct);
-  router.post("/addvoucher", voucherPage.postCreateVoucher);  
-  router.get("/voucherpage", voucherPage.getVoucherPage);
-  router.get("/orderpage",orderPage.getOrderPage);
+  router.post("/addproduct",authenticateToken, productPage.importProduct);
+
+  router.post("/addvoucher", authenticateToken,voucherPage.postCreateVoucher);  
+  router.get("/voucher",authenticateToken ,voucherPage.getVoucherPage);
+
+  router.get("/order",authenticateToken,orderPage.getOrderPage);
 
 
   return router;  // Return the router
