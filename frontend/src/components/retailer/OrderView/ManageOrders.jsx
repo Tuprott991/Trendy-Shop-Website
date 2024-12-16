@@ -2,19 +2,24 @@ import React, { useState } from "react";
 import { FaEye, FaPen, FaTrash } from "react-icons/fa";
 import { TiDeleteOutline } from "react-icons/ti";
 import Pagination from "../Helper/pagination.jsx";
+import { retailerService } from "../../../services/retailerService";
 
 const OrdersTable = () => {
-    const [orders, setOrders] = useState([
-        { id: "01", name: "Tu", email: "tu@gmail.com", address: "123 Nguyen Van Cu", phone: "0987776789", status: "Pending" },
-        { id: "02", name: "Tu", email: "tu@gmail.com", address: "123 Nguyen Van Cu", phone: "0987776789", status: "Pending" },
-        { id: "03", name: "Tu", email: "tu@gmail.com", address: "123 Nguyen Van Cu", phone: "0987776789", status: "Pending" },
-        { id: "04", name: "Van Tu", email: "vantu@gmail.com", address: "123 Nguyen Van Cu", phone: "0987776781", status: "Completed" },
-        { id: "05", name: "Van Tu", email: "vantu@gmail.com", address: "123 Nguyen Van Cu", phone: "0987776781", status: "Completed" },
-        { id: "06", name: "Van Tu", email: "vantu@gmail.com", address: "123 Nguyen Van Cu", phone: "0987776781", status: "Completed" },
-        { id: "07", name: "Tu Nguyen", email: "tunguyen@gmail.com", address: "123 Nguyen Van Cu", phone: "0987776782", status: "Pending" },
-        { id: "08", name: "Tu Nguyen", email: "tunguyen@gmail.com", address: "123 Nguyen Van Cu", phone: "0987776782", status: "Pending" },
-        { id: "09", name: "Tu Nguyen", email: "tunguyen@gmail.com", address: "123 Nguyen Van Cu", phone: "0987776782", status: "Pending" },
-    ]);
+    const token = localStorage.getItem("token");
+    const [orders, setOrders] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await retailerService.getOrders(token);
+                setOrders(data);
+            } catch (err) {
+                console.error("Error fetching data:", err);
+            }
+        };
+
+        fetchData();
+    }, [orders]);
 
     const handleStatusChange = (id, newStatus) => {
         setOrders((prevOrders) =>

@@ -7,7 +7,6 @@ const getAdminProfile = async (token) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log(response.data);
         return response.data;
     } catch (e) {
         console.log(e.response);
@@ -39,6 +38,8 @@ const getAdminDashboard = async () => {
         return e.response;
     }
 }
+
+
 
 export const adminService = { 
     getAdminProfile,

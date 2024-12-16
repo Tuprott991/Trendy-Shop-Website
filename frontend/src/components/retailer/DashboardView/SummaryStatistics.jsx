@@ -1,23 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { retailerService } from "../../../services/retailerService";
 
-const Dashboard = () => {
+const Dashboard = ({ products }) => {
     const [stats, setStats] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await retailerService.getDashboard();
+                const data = await retailerService.getDashboard(token);
                 if (data?.data) {
                     const new_stats = [
-                        { id: 1, label: "Total Products", value: 5, icon: "📋" },
-                        { id: 2, label: "Total Orders", value: 357, icon: "📦" },
-                        { id: 3, label: "Total Delivered", value: 75, icon: "📮" },
-                        { id: 4, label: "Total Revenue", value: "$128", icon: "💰" },
+                        {
+                            id: 1,
+                            label: "Total Products",
+                            value: products?.length || 0, // Lấy dữ liệu từ props
+                            icon: "📋",
+                        },
+                        {
+                            id: 2,
+                            label: "Total Orders",
+                            value: data.data.totalOrders,
+                            icon: "📦",
+                        },
+                        {
+                            id: 3,
+                            label: "Total Delivered",
+                            value: data.data.totalDelivered,
+                            icon: "📮",
+                        },
+                        {
+                            id: 4,
+                            label: "Total Revenue",
+                            value: data.data.totalRevenue,
+                            icon: "💰",
+                        },
                     ];
-
                     setStats(new_stats);
                 } else {
                     setError("Invalid data format.");
@@ -31,7 +51,7 @@ const Dashboard = () => {
         };
 
         fetchData();
-    }, []);
+    }, [products]); // Thêm products vào dependencies để cập nhật khi products thay đổi
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;

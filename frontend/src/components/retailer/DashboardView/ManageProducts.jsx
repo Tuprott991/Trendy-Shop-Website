@@ -3,21 +3,7 @@ import { FaEye, FaPen, FaTrash } from "react-icons/fa";
 import Pagination from "../Helper/pagination.jsx";
 import AddProduct from "../Helper/AddProduct.jsx";
 
-const App = () => {
-    const [products, setProducts] = useState([
-        { name: "Gradient Graphic T-shirt", category: "Shirt", cost: "$128", size: "x" },
-        { name: "Polo with Tipping Details", category: "Shirt", cost: "$128", size: "x" },
-        { name: "Polo with ", category: "Shirt", cost: "$128", size: "x" },
-        { name: "Polo Details", category: "Shirt", cost: "$128", size: "x" },
-        { name: "Details", category: "Shirt", cost: "$128", size: "x" },
-        { name: "Polo", category: "Shirt", cost: "$128", size: "x" },
-        { name: "Polo hello Details", category: "Shirt", cost: "$128", size: "x" },
-        { name: "Polo with Tipping Details", category: "Shirt", cost: "$128", size: "x" },
-        { name: "Polo with Tipping Details", category: "Shirt", cost: "$128", size: "x" },
-        { name: "Polo with Tipping Details", category: "Shirt", cost: "$128", size: "x" },
-        { name: "Polo with Tipping Details", category: "Shirt", cost: "$128", size: "x" },
-    ]);
-
+const ManageProducts = ({ products, onProductsChange }) => {
     const [isAddVisible, setIsAddVisible] = useState(false);
 
     const handleViewClick = () => alert("View Button Clicked!");
@@ -28,7 +14,8 @@ const App = () => {
     const handleCloseAdd = () => setIsAddVisible(false);
 
     const handleAddProduct = (newProduct) => {
-        setProducts((prevProducts) => [...prevProducts, newProduct]);
+        const updatedProducts = [...products, newProduct];
+        onProductsChange(updatedProducts); 
     };
 
     const renderItems = (currentItems) => (
@@ -101,4 +88,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default ManageProducts;
