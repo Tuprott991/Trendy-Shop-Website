@@ -37,9 +37,20 @@ export default function ProfileHeader() {
         setEditProfile({ ...editProfile, [name]: value });
     };
 
-    const handleSave = () => {
-        setProfile(editProfile);
-        setIsEditing(false);
+    const handleSave = async () => {
+        try {
+            console.log(editProfile)
+            const updatedProfile = await adminService.updateAdminProfile(token, editProfile);
+            if (updatedProfile) {
+                setProfile(updatedProfile);
+                setIsEditing(false);
+            } else {
+                alert("Failed to update profile. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            alert("An error occurred while saving the profile. Please try again later.");
+        }
     };
 
     if (!profile) {
