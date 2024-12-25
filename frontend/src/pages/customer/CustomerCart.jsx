@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { CartContext } from "../../context/CartContext";
 import { CgTrash } from "react-icons/cg";
 import { DropdownContext } from "../../context/DropDownContext";
-import CartCheckOut from "./CartCheckOut";
+import CartBill from "./CartBill";
 const CustomerCart = () => {
  const { cart, changeCart } = useContext(CartContext);
  const { isQuantity, setIsQuantity } = useContext(DropdownContext);
@@ -179,7 +179,7 @@ const CustomerCart = () => {
         ))}
        </div>
       </div>
-      <CartCheckOut></CartCheckOut>
+      <CartBill></CartBill>
      </div>
     </div>
    </div>

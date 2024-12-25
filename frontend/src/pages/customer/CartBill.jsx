@@ -1,9 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CgArrowRight } from "react-icons/cg";
 import { CartContext } from "../../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
-const CartCheckOut = () => {
+const CartBill = () => {
  const { cart } = useContext(CartContext);
+ const navigate = useNavigate();
  const [summary, setSummary] = useState({
   subTotal: 0,
   discount: 0,
@@ -24,7 +26,9 @@ const CartCheckOut = () => {
 
   setSummary({ subTotal, discount, deliveryFee, total });
  }, [cart]);
-
+ const handleCheckout = () => {
+  navigate("/customer/checkout");
+ };
  if (!cart || cart.length === 0) {
   return <div>Your cart is empty.</div>;
  }
@@ -56,7 +60,10 @@ const CartCheckOut = () => {
    <div className="flex justify-start bg-gray-200 text-gray-500 w-full pl-6 py-2 rounded-full text-left mt-2 hover:cursor-pointer hover:bg-gray-300">
     Add code
    </div>
-   <div className="flex  items-center justify-center  gap-2 bg-green-500 text-white text-center rounded-full w-full px-20 py-4 font-semibold hover:bg-green-600 hover:cursor-pointer mt-4">
+   <div
+    className="flex  items-center justify-center  gap-2 bg-green-500 text-white text-center rounded-full w-full px-20 py-4 font-semibold hover:bg-green-600 hover:cursor-pointer mt-4"
+    onClick={handleCheckout}
+   >
     Go to checkout
     <CgArrowRight />
    </div>
@@ -64,4 +71,4 @@ const CartCheckOut = () => {
  );
 };
 
-export default CartCheckOut;
+export default CartBill;
