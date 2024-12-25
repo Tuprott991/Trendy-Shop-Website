@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import ProfileHeader from "../../components/admin/ProfileView/ProfileHeader";
 import ProfileMain from "../../components/admin/ProfileView/ProfileMain";
 import { adminService } from "../../services/adminService";

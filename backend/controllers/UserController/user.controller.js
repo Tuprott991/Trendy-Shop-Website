@@ -188,6 +188,8 @@ exports.getRetailerDashboardData = async (req, res) => {
     // Tính tổng doanh thu
     const totalRevenue = orders.reduce((sum, order) => sum + order.total_amount, 0);
 
+    const allCategory = Category.filterCategories();
+
     // Fetch product list và populate category
     const productList = await Product.find({ user_id: id })
       .select("name size price category_id") // Chỉ chọn các trường cần thiết
@@ -203,6 +205,7 @@ exports.getRetailerDashboardData = async (req, res) => {
       totalDelivered,
       totalRevenue,
       productList,
+      allCategory
     });
   } catch (error) {
     console.error(error);
