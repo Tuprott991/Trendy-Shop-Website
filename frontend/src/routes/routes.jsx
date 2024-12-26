@@ -24,6 +24,7 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
 import CustomerSearch from "../pages/customer/CustomerSearch.jsx";
 import CustomerCart from "../pages/customer/CustomerCart.jsx";
+import CustomerCheckout from "../pages/customer/CustomerCheckout.jsx";
 
 const AppRoutes = () => {
  const { isAuthenticated } = useContext(AuthContext);
@@ -71,16 +72,20 @@ const AppRoutes = () => {
        element: <CustomerProductDetail />,
       },
       {
-       path: "search/keyword/:keyword", // Route for `/customer/product/:id`
+       path: "search/keyword/:keyword",
        element: <CustomerSearch />,
       },
       {
-       path: "search/category/:category", // Route for `/customer/product/:id`
+       path: "search/category/:category",
        element: <CustomerSearch />,
       },
       {
-       path: "cart", // Route for `/customer/product/:id`
+       path: "cart",
        element: <CustomerCart />,
+      },
+      {
+       path: "checkout",
+       element: <CustomerCheckout />,
       },
      ],
     },
