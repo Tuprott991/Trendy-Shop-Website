@@ -10,9 +10,7 @@ module.exports = () => {
 
   router.get("/search/:keyword", ProductController.getSearchProduct);
   
-  router.post("/create", CategoryController.postcreateCate);
-
-  router.post("/getId", CategoryController.getId);
+  //router.post("/getId", CategoryController.getId); cái này không xài
 
   router.get("/category/all", CategoryController.getAllCategory);
 

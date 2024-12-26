@@ -4,22 +4,22 @@ const Order = require("../../models/index").Order;
 const Product = require("../../models/index").Product;
 
 
-exports.getReDashBoard = async (req, res) => {
-    const { id } = req.query;
+// exports.getReDashBoard = async (req, res) => {
+//     const { id } = req.query;
   
-    try {
-        orders = User.countOrders(id);
-        delivered = User.countDeliveredOrders(id);        
-        revenue = User.calculateRevenue(id);
+//     try {
+//         orders = User.countOrders(id);
+//         delivered = User.countDeliveredOrders(id);        
+//         revenue = User.calculateRevenue(id);
 
-      res.status(201).send({ message: "User registered successfully", numOrders: orders, numDelivered: delivered, totalRevenue: revenue});
-    } catch (err) {
-      res.status(500).send({ message: err.message || "Signup error." });
-    }
-};
+//       res.status(201).send({ message: "User registered successfully", numOrders: orders, numDelivered: delivered, totalRevenue: revenue});
+//     } catch (err) {
+//       res.status(500).send({ message: err.message || "Signup error." });
+//     }
+// };
 
 exports.postAddOrder = async (req, res) => {
-  const { id, total_money, status_order, address, phone, payment_method, items, vouchers } = req.body;
+  const { id, status_order, address, phone, payment_method, items, voucher } = req.body;
 
   try {
     // Step 1: Initialize an object to group items by retailer (user_id)
@@ -28,13 +28,24 @@ exports.postAddOrder = async (req, res) => {
     // Step 2: Iterate over items and fetch the user_id for each product
     for (let item of items) {
       // Look up the product by its product_id to get the user_id (retailer)
-      const product = await Product.findOne({ _id: item.product_id }).select('user_id'); // Get user_id of the product
+      const product = await Product.findOne({ _id: item.product_id }).select('user_id stock_quantity'); // Get user_id and stock_quantity of the product
 
       if (!product) {
         return res.status(404).json({ error: `Product with ID ${item.product_id} not found` });
       }
 
       const retailer_id = product.user_id;
+
+      // Ensure stock is available for the order
+      if (product.stock_quantity < item.quantity) {
+        return res.status(400).json({ error: `Not enough stock for product ${item.product_id}` });
+      }
+
+      // Subtract the ordered quantity from stock_quantity
+      product.stock_quantity -= item.quantity;
+
+      // Save the updated product with the new stock_quantity
+      await product.save();
 
       // Group items by retailer_id
       if (!retailerItemsMap[retailer_id]) {
@@ -90,9 +101,6 @@ exports.postAddOrder = async (req, res) => {
     return res.status(500).json({ error: 'Failed to create orders' }); // Return error message
   }
 };
-
-
-
 
 exports.getOrderPage = async (req, res) => {
   const { id } = req.query;  // Assuming 'id' is a query parameter for retailer_id
