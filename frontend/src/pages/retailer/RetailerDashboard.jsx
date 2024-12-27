@@ -5,7 +5,12 @@ import ManageProducts from "../../components/retailer/DashboardView/ManageProduc
 import { retailerService } from "../../services/retailerService";
 
 const RetailerDashboard = () => {
-    const [stats, setStats] = useState([]);
+    const [stats, setStats] = useState({
+        totalOrders: 0,
+        totalDelivered: 0,
+        totalRevenue: 0,
+        totalProducts: 0, // Thêm số lượng sản phẩm vào thống kê
+    });
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -20,6 +25,7 @@ const RetailerDashboard = () => {
                         totalOrders: data.data.totalOrders,
                         totalDelivered: data.data.totalDelivered,
                         totalRevenue: data.data.totalRevenue,
+                        totalProducts: data.data.productList.length, // Cập nhật số lượng sản phẩm
                     });
                     setProducts(data.data.productList || []);
                 } else {
@@ -36,6 +42,15 @@ const RetailerDashboard = () => {
         fetchData();
     }, [token]);
 
+    const handleProductsChange = (updatedProducts) => {
+        // Cập nhật lại sản phẩm và số lượng sản phẩm
+        setProducts(updatedProducts);
+        setStats((prevStats) => ({
+            ...prevStats,
+            totalProducts: updatedProducts.length, // Cập nhật lại số lượng sản phẩm
+        }));
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 
@@ -43,7 +58,10 @@ const RetailerDashboard = () => {
         <div>
             <DashboardHeader />
             <SummaryStatistics stats={stats} products={products}/>
-            <ManageProducts products={products} onProductsChange={setProducts} />
+            <ManageProducts 
+                products={products} 
+                onProductsChange={handleProductsChange} // Truyền callback để cập nhật sản phẩm
+            />
         </div>
     );
 };

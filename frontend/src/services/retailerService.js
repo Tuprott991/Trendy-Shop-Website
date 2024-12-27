@@ -42,6 +42,17 @@ const addProduct = async (token, product) => {
     }
 }
 
+const deleteProduct = async (id) => {
+    try {
+        const response = await axios.post(`http://localhost:8080/api/retailer/deleteproduct`, { id });
+        return response;
+    } catch (e) {
+        console.log(e.response);
+        return e.response;
+    }
+}
+
 export const retailerService = {
     getDashboard,
+    deleteProduct,
 };

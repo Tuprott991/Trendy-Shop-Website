@@ -55,7 +55,7 @@ exports.getProductInfo = async (req, res) => {
 }
 
 exports.postDeleteProduct = (req, res) => {
-  const { id } = req.user;
+  const { id } = req.body;
 
   try {
     Product.delete(id);

@@ -78,8 +78,6 @@ exports.getProfile = async (req, res) => {
       return res.status(404).send({ message: 'User not found' });
     }
 
-    console.log(userInfo)
-
     // Return user info
     res.status(200).json({
       id: userInfo._id,
@@ -101,7 +99,6 @@ exports.getProfile = async (req, res) => {
 // Update profile retailer
 
 exports.postUpdateProfile = (req, res) => {
-  console.log(req.body)
   const {id} = req.user;
   const { name, email, birthday, gender, region } = req.body;
 
@@ -181,7 +178,6 @@ exports.getRetailerDashboardData = async (req, res) => {
         path: 'category_id',
         select: 'category target',
       });
-    console.log(productList);
     res.json({
       productCount,
       totalOrders,
