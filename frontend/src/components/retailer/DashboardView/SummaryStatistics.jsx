@@ -11,7 +11,6 @@ const Dashboard = ({ products }) => {
         const fetchData = async () => {
             try {
                 const data = await retailerService.getDashboard(token);
-                console.log(token);
                 if (data?.data) {
                     const new_stats = [
                         {
@@ -52,7 +51,7 @@ const Dashboard = ({ products }) => {
         };
 
         fetchData();
-    }, [products]); // Thêm products vào dependencies để cập nhật khi products thay đổi
+    }, [products]);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;

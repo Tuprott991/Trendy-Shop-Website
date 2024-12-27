@@ -21,7 +21,7 @@ const RetailerDashboard = () => {
                         totalDelivered: data.data.totalDelivered,
                         totalRevenue: data.data.totalRevenue,
                     });
-                    setProducts(data.data.products || []); // Lưu danh sách sản phẩm
+                    setProducts(data.data.productList || []);
                 } else {
                     setError("Invalid data format.");
                 }
