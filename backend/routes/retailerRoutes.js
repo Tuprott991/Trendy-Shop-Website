@@ -15,6 +15,7 @@ module.exports = () => {
   retailerDashboard.getRetailerDashboardData
  );
  router.post("/addproduct", authenticateToken, productPage.importProduct);
+ router.post("/deleteproduct", authenticateToken, productPage.postDeleteProduct);
 
  router.post("/addvoucher", authenticateToken, voucherPage.postCreateVoucher);
  router.get("/voucher", authenticateToken, voucherPage.getVoucherPage);

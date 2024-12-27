@@ -26,7 +26,24 @@ const productSchema = new Schema({
       },
       async SaveProduct(product) {
         await product.save();
-      }
+      },
+      async delete(productID){
+        try {
+          if (!productID) {
+            throw new Error("ProductID is required");
+          }
+      
+          const deletedProduct = await this.findByIdAndDelete(productID);
+      
+          if (!deletedProduct) {
+            throw new Error("Product not found");
+          }
+      
+          return { message: "Product deleted successfully", product: deletedProduct };
+        } catch (error) {
+          throw new Error(`Failed to delete product: ${error.message}`);
+        }
+      },
     }
   });
 

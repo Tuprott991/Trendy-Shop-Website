@@ -54,5 +54,18 @@ exports.getProductInfo = async (req, res) => {
   }
 }
 
+exports.postDeleteProduct = (req, res) => {
+  const { id } = req.user;
+
+  try {
+    Product.delete(id);
+    res.status(200).json({ message: "Delete succesful!" })
+  }
+  catch {
+    console.error(error);
+    res.status(500).json({ message: 'Delete Error' });
+  }
+};
+
 
 
