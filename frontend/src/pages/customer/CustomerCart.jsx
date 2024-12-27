@@ -7,6 +7,7 @@ const CustomerCart = () => {
  const { cart, changeCart } = useContext(CartContext);
  const { isQuantity, setIsQuantity } = useContext(DropdownContext);
  const [chosenItem, setChosenItem] = useState();
+ const [message, setMessage] = useState();
  const divRef = useRef(null);
  const notiRef = useRef(null);
  useEffect(() => {
@@ -31,11 +32,19 @@ const CustomerCart = () => {
  }
  const setSelectQuantity = async (item, type) => {
   if (type === "increment") {
-   item.quantity += 1;
+   if (item.quantity + 1 == item.stock_quantity) {
+    console.log("over stock");
+    setChosenItem(item);
+    setIsQuantity(true);
+    setMessage("increment");
+   } else {
+    item.quantity += 1;
+   }
   } else {
    if (item.quantity === 1) {
     setChosenItem(item);
     setIsQuantity(true);
+    setMessage("decrement");
    } else {
     item.quantity -= 1;
    }
@@ -49,11 +58,14 @@ const CustomerCart = () => {
   changeCart(updatedCart);
  };
  const handleRemoveItem = () => {
+  if (message == "increment") {
+   setIsQuantity(false);
+   return;
+  }
   const updatedCart = cart.filter(
    (cartItem) =>
     cartItem._id !== chosenItem._id || cartItem.size !== chosenItem.size
   );
-  console.log(updatedCart);
   setIsQuantity(false);
   changeCart(updatedCart);
  };
@@ -74,20 +86,26 @@ const CustomerCart = () => {
    <div className="bg-gray-100 ">
     {isQuantity && (
      <div className="shadow-lg ring-1 ring-black/5 rounded-lg absolute z-[100]  top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2  w-fit border pr-8 pl-4 py-2 space-y-2 bg-white text-left font-medium text-sm">
-      <div className="text-left pr-16 pt-3 pb-2">Remove item</div>
+      <div className="text-left pr-16 pt-3 pb-2">
+       {message == "decrement" ? "Remove item" : "Over available stock"}
+      </div>
       <div className="border border-gray-200 w-[100%]"></div>
       <div className="text-left pr-16 pt-3 pb-2">
-       The item will be removed from your cart
+       {message == "decrement"
+        ? "The item will be removed from your cart"
+        : "Your item quantity is over available stock"}
       </div>
 
       <div className="flex justify-end items-center pb-2">
-       <div
-        ref={notiRef}
-        className="text-gray-400 hover:text-red-500 mr-4 cursor-pointer"
-        onClick={() => setIsQuantity(false)}
-       >
-        Cancel
-       </div>
+       {message == "decrement" && (
+        <div
+         ref={notiRef}
+         className="text-gray-400 hover:text-red-500 mr-4 cursor-pointer"
+         onClick={() => setIsQuantity(false)}
+        >
+         Cancel
+        </div>
+       )}
        <div
         className="text-white bg-green-500 px-12 py-2 rounded-lg cursor-pointer hover:bg-green-700"
         onClick={handleRemoveItem}
