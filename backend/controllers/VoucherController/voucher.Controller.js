@@ -60,28 +60,19 @@ exports.postCreateVoucher = async (req, res) => {
 
 exports.getVoucherPage = async (req, res) => {
   try {
-    const { id } = req.query;
-
-    // Check if ID is provided
+    const { id } = req.user;
     if (!id) {
       return res.status(400).send({ message: "Retailer ID is required." });
     }
-
-    // Check if retailer exists
     const existingRetailer = await User.findOne({ id, role: "retailer" });
     if (!existingRetailer) {
       return res.status(400).send({ message: "Retailer does not exist." });
     }
-
-    // Fetch vouchers for the retailer
     const vouchers = await Voucher.find({ retailer_id: id })
-      .select("code description discount_value max_uses status"); // Chỉ lấy các trường cần thiết
-
+      .select("code description discount_value max_uses status");
     if (!vouchers.length) {
       return res.status(404).send({ message: "No vouchers found for this retailer." });
     }
-
-    // Return list of vouchers
     return res.status(200).json(vouchers);
   } catch (err) {
     res.status(500).send({

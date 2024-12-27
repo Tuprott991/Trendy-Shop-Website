@@ -52,7 +52,22 @@ const deleteProduct = async (id) => {
     }
 }
 
+const getVoucher = async (token) => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/retailer/voucher`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response;
+    } catch (e) {
+        console.log(e.response);
+        return e.response;
+    }
+}
+
 export const retailerService = {
     getDashboard,
     deleteProduct,
+    getVoucher,
 };

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function OrderHeader() {
+export default function VoucherHeader() {
   return (
     <div className="border-gray-300 flex items-center justify-between p-4">
       <div className="flex justify-between items-center w-full pl-6">
