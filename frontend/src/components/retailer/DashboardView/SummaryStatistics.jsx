@@ -17,7 +17,7 @@ const Dashboard = ({ products }) => {
                         {
                             id: 1,
                             label: "Total Products",
-                            value: products?.length || 0, // Lấy dữ liệu từ props
+                            value: products?.length,
                             icon: "📋",
                         },
                         {

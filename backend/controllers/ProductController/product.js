@@ -1,35 +1,27 @@
-// controllers/ProductController/product.js
-const mongoose = require('mongoose'); // Import mongoose
+const mongoose = require('mongoose');
 const Product = require("../../models/index").Product;
-const Category = require("../../models/categoryModel").Category;
+const Category = require("../../models/index").Category;
 
 exports.importProduct = async (req, res) => {
     try {
-      const { name_pro, description_pro, price_pro, size_pro, stock_quantity_pro, rating_pro, link_img, user_id_pro, category, target } = req.body;
-      
-      // Step 1: Fetch the category ID based on category and target
-      const categoryDoc = await Category.findOne({ category: category, target: target }).select('_id');  // Use findOne to get a single category document
-  
+      const {id} = req.user;
+      const { name, description, price, size, stock_quantity, image_url, category, target } = req.body;
+      const categoryDoc = await Category.getCategoryID(category, target);
+      console.log(categoryDoc);
       if (!categoryDoc) {
-        return res.status(404).json({ message: 'Category not found' });  // If no category found, return error
+        return res.status(404).json({ message: 'Category not found' });
       }
-  
-      // Step 2: Create the new product object
       const product = new Product({
-        name: name_pro,
-        description: description_pro,
-        price: price_pro,
-        size: size_pro,
-        stock_quantity: stock_quantity_pro,
-        rating: rating_pro,
-        image_url: link_img,  // Assuming 'link' is the image URL
-        user_id: mongoose.Types.ObjectId(user_id_pro),  // Convert user_id to ObjectId
-        category_id: mongoose.Types.ObjectId(categoryDoc._id)  // Use the category _id from the document
+        name,
+        description,
+        price,
+        size,
+        stock_quantity,
+        image_url,
+        user_id: mongoose.Types.ObjectId(id),
+        category_id: mongoose.Types.ObjectId(categoryDoc._id)
       });
-  
-      // Step 3: Save the product to the database
       await product.save();
-  
       res.status(200).json({ message: 'Products imported successfully!' });
     } catch (error) {
       console.error("Error importing products:", error);
@@ -37,7 +29,6 @@ exports.importProduct = async (req, res) => {
     }
   };
   
-
 exports.getSearchProduct = async (req, res) => {
     try {
         const {keyword} = req.params;
@@ -50,7 +41,6 @@ exports.getSearchProduct = async (req, res) => {
         res.status(500).json({ message: 'Error searching products', error });
     }
 }
-
 
 exports.getProductInfo = async (req, res) => {
     try {

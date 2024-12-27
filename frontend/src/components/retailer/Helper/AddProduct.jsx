@@ -1,12 +1,31 @@
 import React, { useState } from "react";
+import axios from "axios";
 
-const AddProduct = ({ isVisible, onClose, onAddProduct }) => {
+const addProduct = async (token, product) => {
+    try {
+        const response = await axios.post(`http://localhost:8080/api/retailer/addproduct`, product, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response;
+    } catch (e) {
+        console.log(e.response);
+        return e.response;
+    }
+};
+
+const AddProduct = ({ isVisible, onClose }) => {
     const [newProduct, setNewProduct] = useState({
         name: "",
-        category: "",
+        description: "",
+        price: "",
         size: "",
-        cost: "",
-        description: ""
+        stock_quantity: "",
+        rating: "",
+        image_url: "",
+        target: "",
+        category: ""
     });
 
     const handleInputChange = (e) => {
@@ -17,16 +36,39 @@ const AddProduct = ({ isVisible, onClose, onAddProduct }) => {
         }));
     };
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
-        const { name, category, size, cost, description } = newProduct;
-        if (!name || !category || !size || !cost || !description) {
+        const { name, description, price, size, stock_quantity, rating, image_url, target, category } = newProduct;
+        if (!name || !description || !price || !size || !stock_quantity || !rating || !image_url || !target || !category) {
             alert("Please fill out all fields.");
             return;
         }
-        onAddProduct(newProduct); // Gọi hàm thêm sản phẩm
-        setNewProduct({ name: "", category: "", size: "", cost: "", description: "" }); // Reset các trường
-        onClose(); // Đóng form sau khi thêm sản phẩm
+
+        try {
+            const token = localStorage.getItem("token"); 
+            const response = await addProduct(token, newProduct);
+
+            if (response.status === 200) {
+                alert("Product added successfully!");
+                setNewProduct({
+                    name: "",
+                    description: "",
+                    price: "",
+                    size: "",
+                    stock_quantity: "",
+                    rating: "",
+                    image_url: "",
+                    target: "",
+                    category: ""
+                });
+                onClose();
+            } else {
+                alert("Failed to add product. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error adding product:", error);
+            alert("An error occurred. Please try again later.");
+        }
     };
 
     if (!isVisible) return null;
@@ -52,11 +94,21 @@ const AddProduct = ({ isVisible, onClose, onAddProduct }) => {
                                 />
                             </div>
                             <div className="col-span-1">
-                                <label className="block text-sm font-medium text-gray-700">Category<span className="text-red-500">*</span></label>
+                                <label className="block text-sm font-medium text-gray-700">Description<span className="text-red-500">*</span></label>
                                 <input
                                     type="text"
-                                    id="category"
-                                    value={newProduct.category}
+                                    id="description"
+                                    value={newProduct.description}
+                                    onChange={handleInputChange}
+                                    className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
+                                />
+                            </div>
+                            <div className="col-span-1">
+                                <label className="block text-sm font-medium text-gray-700">Price<span className="text-red-500">*</span></label>
+                                <input
+                                    type="text"
+                                    id="price"
+                                    value={newProduct.price}
                                     onChange={handleInputChange}
                                     className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
                                 />
@@ -72,23 +124,53 @@ const AddProduct = ({ isVisible, onClose, onAddProduct }) => {
                                 />
                             </div>
                             <div className="col-span-1">
-                                <label className="block text-sm font-medium text-gray-700">Cost<span className="text-red-500">*</span></label>
+                                <label className="block text-sm font-medium text-gray-700">Stock Quantity<span className="text-red-500">*</span></label>
                                 <input
                                     type="text"
-                                    id="cost"
-                                    value={newProduct.cost}
+                                    id="stock_quantity"
+                                    value={newProduct.stock_quantity}
+                                    onChange={handleInputChange}
+                                    className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
+                                />
+                            </div>
+                            <div className="col-span-1">
+                                <label className="block text-sm font-medium text-gray-700">Rating<span className="text-red-500">*</span></label>
+                                <input
+                                    type="text"
+                                    id="rating"
+                                    value={newProduct.rating}
                                     onChange={handleInputChange}
                                     className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
                                 />
                             </div>
                             <div className="col-span-2">
-                                <label className="block text-sm font-medium text-gray-700">Description<span className="text-red-500">*</span></label>
-                                <textarea
-                                    id="description"
-                                    value={newProduct.description}
+                                <label className="block text-sm font-medium text-gray-700">Image URL<span className="text-red-500">*</span></label>
+                                <input
+                                    type="text"
+                                    id="image_url"
+                                    value={newProduct.image_url}
                                     onChange={handleInputChange}
                                     className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
-                                    rows="3"
+                                />
+                            </div>
+                            <div className="col-span-1">
+                                <label className="block text-sm font-medium text-gray-700">Target<span className="text-red-500">*</span></label>
+                                <input
+                                    type="text"
+                                    id="target"
+                                    value={newProduct.target}
+                                    onChange={handleInputChange}
+                                    className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
+                                />
+                            </div>
+                            <div className="col-span-1">
+                                <label className="block text-sm font-medium text-gray-700">Category ID<span className="text-red-500">*</span></label>
+                                <input
+                                    type="text"
+                                    id="category"
+                                    value={newProduct.category}
+                                    onChange={handleInputChange}
+                                    className="mt-1 p-2 w-full border border-gray-300 rounded-lg"
                                 />
                             </div>
                         </div>

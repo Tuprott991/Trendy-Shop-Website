@@ -42,6 +42,6 @@ const addProduct = async (token, product) => {
     }
 }
 
-export const retailerService = { 
+export const retailerService = {
     getDashboard,
 };
