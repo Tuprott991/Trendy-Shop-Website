@@ -8,7 +8,7 @@ const CustomerCheckout = () => {
   setIsFormComplete(status);
  };
  return (
-  <div className="bg-gray-100 h-screen">
+  <div className="bg-gray-100 h-full">
    <div className="px-14 pt-6">
     <div className="text-2xl font-bold ">Checkout</div>
 
