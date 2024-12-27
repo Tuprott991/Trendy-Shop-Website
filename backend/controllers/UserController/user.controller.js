@@ -181,6 +181,7 @@ exports.getRetailerDashboardData = async (req, res) => {
         path: 'category_id',
         select: 'category target',
       });
+    console.log(productList);
     res.json({
       productCount,
       totalOrders,

@@ -32,16 +32,16 @@ const ManageProducts = ({ products, onProductsChange }) => {
                         <th className="px-6 py-3 text-left font-medium">Name</th>
                         <th className="px-6 py-3 text-left font-medium text-center">Category</th>
                         <th className="px-6 py-3 text-left font-medium text-center">Size</th>
-                        <th className="px-6 py-3 text-left font-medium text-center">Cost</th>
+                        <th className="px-6 py-3 text-left font-medium text-center">Price</th>
                     </tr>
                 </thead>
                 <tbody>
                     {currentItems.map((product, index) => (
                         <tr key={index} className="border-b">
                             <td className="px-6 py-4">{product.name}</td>
-                            <td className="px-6 py-4 text-center">{product.category}</td>
+                            <td className="px-6 py-4 text-center">{product.category_id.category}</td>
                             <td className="px-6 py-4 text-center">{product.size}</td>
-                            <td className="px-6 py-4 text-center">{product.cost}</td>
+                            <td className="px-6 py-4 text-center">{product.price}</td>
                         </tr>
                     ))}
                 </tbody>

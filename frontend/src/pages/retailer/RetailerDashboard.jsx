@@ -42,7 +42,7 @@ const RetailerDashboard = () => {
     return (
         <div>
             <DashboardHeader />
-            <SummaryStatistics stats={stats} products={products} />
+            <SummaryStatistics stats={stats} products={products}/>
             <ManageProducts products={products} onProductsChange={setProducts} />
         </div>
     );
