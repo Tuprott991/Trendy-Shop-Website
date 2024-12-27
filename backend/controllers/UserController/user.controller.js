@@ -167,45 +167,26 @@ exports.getAdminDashboardData = async (req, res) => {
 exports.getRetailerDashboardData = async (req, res) => {
   try {
     const {id} = req.user;  
-    console.log(id)
-
     if (!id) {
       return res.status(400).send({ message: "Retailer ID is required." });
     }
-
-    // Fetch total products
     const productCount = await Product.countDocuments({ user_id: id });
-
-    // Fetch total orders
-    const totalOrders = await Order.countDocuments({ retailer_id: id }); // Tổng số orders của retailer
-
-    // Fetch total delivered orders
-    const totalDelivered = await Order.countDocuments({ retailer_id: id, status: 'completed' }); // Số đơn đã giao
-
-    // Calculate total revenue
-    const orders = await Order.find({ retailer_id: id, status: 'completed' }); // Fetch orders đã hoàn thành
-
-    // Tính tổng doanh thu
+    const totalOrders = await Order.countDocuments({ retailer_id: id });
+    const totalDelivered = await Order.countDocuments({ retailer_id: id, status: 'completed' });
+    const orders = await Order.find({ retailer_id: id, status: 'completed' });
     const totalRevenue = orders.reduce((sum, order) => sum + order.total_amount, 0);
-
-    const allCategory = Category.filterCategories();
-
-    // Fetch product list và populate category
     const productList = await Product.find({ user_id: id })
-      .select("name size price category_id") // Chỉ chọn các trường cần thiết
+      .select("name size price category_id")
       .populate({
-        path: 'category_id', // Trường để populate
-        select: 'category target', // Các trường muốn lấy từ Category
+        path: 'category_id',
+        select: 'category target',
       });
-
-    // Tạo response JSON
     res.json({
       productCount,
       totalOrders,
       totalDelivered,
       totalRevenue,
       productList,
-      allCategory
     });
   } catch (error) {
     console.error(error);

@@ -11,6 +11,7 @@ const Dashboard = ({ products }) => {
         const fetchData = async () => {
             try {
                 const data = await retailerService.getDashboard(token);
+                console.log(token);
                 if (data?.data) {
                     const new_stats = [
                         {
