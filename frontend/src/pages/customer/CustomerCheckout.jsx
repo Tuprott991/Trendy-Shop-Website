@@ -8,8 +8,8 @@ const CustomerCheckout = () => {
   setIsFormComplete(status);
  };
  return (
-  <div className="bg-gray-100 h-full">
-   <div className="px-14 pt-6">
+  <div className="bg-gray-100 pb-6">
+   <div className="px-14 pt-6 h-full">
     <div className="text-2xl font-bold ">Checkout</div>
 
     <div className="flex items-start justify-between gap-8">

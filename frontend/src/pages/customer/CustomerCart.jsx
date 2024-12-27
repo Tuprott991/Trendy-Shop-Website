@@ -83,7 +83,7 @@ const CustomerCart = () => {
      onClick={() => setIsQuantity((prev) => !prev)}
     ></div>
    )}
-   <div className="bg-gray-100 ">
+   <div className="bg-gray-100 h-full">
     {isQuantity && (
      <div className="shadow-lg ring-1 ring-black/5 rounded-lg absolute z-[100]  top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2  w-fit border pr-8 pl-4 py-2 space-y-2 bg-white text-left font-medium text-sm">
       <div className="text-left pr-16 pt-3 pb-2">
@@ -119,7 +119,7 @@ const CustomerCart = () => {
      <div className="text-2xl font-bold ">Your cart</div>
 
      <div className="flex items-start justify-between ">
-      <div className="bg-white w-2/3 mt-4 rounded-lg">
+      <div className="bg-white w-2/3 mt-4 mb-12 rounded-lg">
        <div className="px-12 py-2">
         {cart.map((item) => (
          <div
