@@ -150,18 +150,29 @@ exports.postCreateOrders = async(req,res) =>{
           quantity: item.quantity,
         }));
 
+
+      
       // Tính tổng tiền của order
       const total_money = itemsForRetailer.reduce((sum, item) => {
         const product = product_list.find((p) => p.product_id === item.product_id);
         return sum + product.price * item.quantity;
       }, 0);
 
+      itemsForRetailer.forEach(item => {
+        stock_quantity = Product.find({product_id: item.product_id})[0].stock_quantity
+        Product.updateStockQuantity(item.product_id, stock_quantity - item.quantity)
+      });	
       // Gán voucher nếu có
       let vouchers = [];
       if (voucher) {
         const validVoucher = await Voucher.findOne({ code: voucher, retailer_id });
         if (validVoucher) {
-          vouchers.push({ voucher_code: validVoucher.code });
+          vouchers.push({ voucher_code: validVoucher.code});
+          Voucher.update(validVoucher.voucherID, 
+            validVoucher.max_uses-1, 
+            validVoucher.minimum_order_value, valid_from,
+            validVoucher.valid_to, 
+            validVoucher.description);
         }
       }
       
@@ -216,5 +227,35 @@ exports.getOrderviewPage = async (req, res) => {
     });
   }
 };
+
+exports.getRetailerOrder= async (req, res) => {
+  const {id} = req.params;
+  try{
+    const orderData = await Order.getRetailerOrder(id);
+    res.status(200).json({
+      orderData,
+    });
+  }
+  catch (error){
+    console.error('Error get orders information:', error);
+    res.status(500).json({ message: 'Error getting orders information', error });
+  }
+};
+
+exports.getCustomerOrder = async (req, res) => {
+  const { id } = req.params;
+  try {
+    customerOrder = Order.getCustomerOrder(id)
+
+    res.status(200).json({
+      customerOrder,
+    });
+  }
+  catch (error) {
+    console.error('Error get orders information:', error);
+    res.status(500).json({ message: 'Error getting orders information', error });
+  }
+}
+
 
 
