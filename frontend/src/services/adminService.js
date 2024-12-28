@@ -42,7 +42,6 @@ const getAdminDashboard = async () => {
 const getManageRetailer = async () => {
     try {
         const response = await axios.get(`http://localhost:8080/api/user/manageretailer`);
-        console.log(response);
         return response;
     } catch (e) {
         console.log(e.response);
