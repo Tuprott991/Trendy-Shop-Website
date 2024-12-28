@@ -17,7 +17,7 @@ const CustomerSearch = () => {
    setProducts(data);
   };
   fecthProducts();
- }, [params.keyword, params.catewgory]);
+ }, [params.keyword, params.category]);
  console.log(products);
  return (
   <div className="flex flex-col px-40 bg-slate-100 h-screen">
