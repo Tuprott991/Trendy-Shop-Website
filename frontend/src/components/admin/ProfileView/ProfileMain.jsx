@@ -6,7 +6,7 @@ export default function ProfileHeader() {
     const icon = {
         name: <FaUser size={24} />,
         email: <FaEnvelope size={24} />,
-        dob: <FaCalendarAlt size={24} />,
+        birthday: <FaCalendarAlt size={24} />,
         gender: <FaVenusMars size={24} />,
         region: <FaGlobe size={24} />,
     };
@@ -17,18 +17,17 @@ export default function ProfileHeader() {
 
     const token = localStorage.getItem("token");
 
-    useEffect(() => {
-        const fetchProfile = async () => {
-            if (token) {
-                const data = await adminService.getAdminProfile(token);
-                console.log(data);
-                if (data) {
-                    setProfile(data);
-                    setEditProfile(data);
-                }
+    const fetchProfile = async () => {
+        if (token) {
+            const data = await adminService.getAdminProfile(token);
+            if (data) {
+                setProfile(data);
+                setEditProfile(data);
             }
-        };
+        }
+    };
 
+    useEffect(() => {
         fetchProfile();
     }, [token]);
 
@@ -39,11 +38,12 @@ export default function ProfileHeader() {
 
     const handleSave = async () => {
         try {
-            console.log(editProfile)
             const updatedProfile = await adminService.updateAdminProfile(token, editProfile);
             if (updatedProfile) {
                 setProfile(updatedProfile);
                 setIsEditing(false);
+                alert("Update successfully");
+                fetchProfile();
             } else {
                 alert("Failed to update profile. Please try again.");
             }
@@ -65,14 +65,14 @@ export default function ProfileHeader() {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-lg">
-                {Object.keys(profile).map((key) => (
+                {Object.keys(profile).map((key) => ( key !== "id" && (
                     <div
                         className="flex justify-between py-3 border-b last:border-b-0 "
                         key={key}
                     >
                         <span className="text-gray-500 font-medium capitalize">{key}</span>
                         <span className="text-gray-900 font-semibold">{profile[key]}</span>
-                    </div>
+                    </div>)
                 ))}
 
                 <div className="flex justify-end mt-6">
@@ -90,7 +90,7 @@ export default function ProfileHeader() {
                     <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full mx-4">
                         <h3 className="text-2xl font-bold text-center mb-5">Edit Profile</h3>
                         {Object.keys(editProfile).map((key) => (
-                            key !== "role" && (
+                            key !== "role" && key !== "id" && key !== "avatar" && key !== "email" && (
                                 <div className="mb-5 flex items-center" key={key}>
                                     <div className="flex-shrink-0 flex items-center gap-2">
                                         <span className="text-gray-700 font-medium capitalize" style={{ minWidth: "40px" }}>

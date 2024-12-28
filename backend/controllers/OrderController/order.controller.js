@@ -1,22 +1,6 @@
 const { User } = require("../../models/index");
-
 const Order = require("../../models/index").Order;
 const Product = require("../../models/index").Product;
-
-
-// exports.getReDashBoard = async (req, res) => {
-//     const { id } = req.query;
-  
-//     try {
-//         orders = User.countOrders(id);
-//         delivered = User.countDeliveredOrders(id);        
-//         revenue = User.calculateRevenue(id);
-
-//       res.status(201).send({ message: "User registered successfully", numOrders: orders, numDelivered: delivered, totalRevenue: revenue});
-//     } catch (err) {
-//       res.status(500).send({ message: err.message || "Signup error." });
-//     }
-// };
 
 exports.postAddOrder = async (req, res) => {
   const { id, status_order, address, phone, payment_method, items, voucher } = req.body;
@@ -128,5 +112,17 @@ exports.getOrderPage = async (req, res) => {
 };
 
 
-
+exports.getUserOrder= async (req, res) => {
+  const {id}=req.params;
+  try{
+    const orderData = await Order.getOrderUser(id);
+    res.status(200).json({
+      orderData,
+    });
+  }
+  catch (error){
+    console.error('Error get orders information:', error);
+    res.status(500).json({ message: 'Error getting orders information', error });
+  }
+};
 

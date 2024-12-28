@@ -4,83 +4,55 @@ const Product = require("../../models/index").Product;
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// signup
-
 exports.postSignup = async (req, res) => {
-  const { name, email, password, role } = req.body;
-
+  const { name, email, password, role, birthday, gender, avatar, region } = req.body;
   try {
-    if (!name || !email || !password || !role) {
+    if (!name || !email || !password || !role || !birthday ||  !gender || !region) {
       return res.status(400).send({ message: "All fields are required!" });
     }
-
     if (!["retailer", "customer"].includes(role)) {
       return res.status(400).send({ message: "Invalid role!" });
     }
-
-    const userData = await User.create(name, email, password, role);
-
+    const userData = await User.create(name, email, password, role, birthday, gender, avatar, region);
     if (userData === 1) {
       return res.status(400).send({ message: "Email already exists!" });
     }
-
     res.status(200).send({ message: "User registered successfully", user: userData });
   } catch (err) {
     res.status(500).send({ message: err.message || "Signup error." });
   }
 };
 
-// login
-
 exports.postLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    // Find the user by email
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).send({ message: "User not found" });
     }
-
-    // Compare the password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).send({ message: "Invalid password" });
     }
-
-    // Generate a JWT token
     const token = jwt.sign({ id: user._id, role: user.role }, "secret_key", {
       expiresIn: "1d",
     });
-
     res.status(200).send({ message: "Login successful", user, token });
   } catch (err) {
     res.status(500).send({ message: "Error during login", error: err.message });
   }
 };
 
-
-// Xem profile admin 
-// Xem profile retailer
-// Xem profile customer
-
 exports.getProfile = async (req, res) => {
   try {
-    const userID  = req.user.id
-    // Validate userID format
-
-    // Find user
-
+    const userID = req.user.id
     userInfo = await User.getInfo(userID)
-
-    // Handle user not found
     if (!userInfo) {
       return res.status(404).send({ message: 'User not found' });
     }
-
-    console.log(userInfo)
-
-    // Return user info
+    if (!userInfo.gender) userInfo.gender = "N/A";
+    if (!userInfo.birthday) userInfo.birthday = "N/A";
+    if (!userInfo.region) userInfo.region = "N/A";
     res.status(200).json({
       id: userInfo._id,
       name: userInfo.name,
@@ -96,15 +68,9 @@ exports.getProfile = async (req, res) => {
   }
 };
 
-// Update profile admin
-// Update profile retailer 
-// Update profile retailer
-
 exports.postUpdateProfile = (req, res) => {
-  console.log(req.body)
-  const {id} = req.user;
+  const { id } = req.user;
   const { name, email, birthday, gender, region } = req.body;
-
 
   try {
     User.update(id, name, email, birthday, gender, region);
@@ -119,7 +85,7 @@ exports.postUpdateProfile = (req, res) => {
 // Delete retailer
 
 exports.postDeleteUser = (req, res) => {
-  const { id } = req.user;
+  const { id } = req.body;
 
   try {
     User.delete(id);
@@ -166,7 +132,7 @@ exports.getAdminDashboardData = async (req, res) => {
 // retailer dashboard
 exports.getRetailerDashboardData = async (req, res) => {
   try {
-    const {id} = req.user;  
+    const { id } = req.user;
     if (!id) {
       return res.status(400).send({ message: "Retailer ID is required." });
     }
@@ -181,7 +147,6 @@ exports.getRetailerDashboardData = async (req, res) => {
         path: 'category_id',
         select: 'category target',
       });
-    console.log(productList);
     res.json({
       productCount,
       totalOrders,
@@ -192,5 +157,15 @@ exports.getRetailerDashboardData = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message || 'Error fetching dashboard data' });
+  }
+};
+
+exports.manageRetailer = async (req, res) => {
+  try {
+    const retailers = await User.getAllRetailer();
+    res.status(200).json({ message: "Retailers fetched successfully", retailers });
+  } catch (error) {
+    console.error('Error managing retailers:', error);
+    res.status(500).json({ message: error.message || 'Error fetching retailer data' });
   }
 };

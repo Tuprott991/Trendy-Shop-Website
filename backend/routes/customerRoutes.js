@@ -5,10 +5,12 @@ module.exports = () => {
   const CategoryController = require("../controllers/CategoryController/category.js");
   const ProductController = require("../controllers/ProductController/product.js");
   const OrderController = require("../controllers/OrderController/order.controller.js")
+  const FeedbackController = require("../controllers/FeedbackController/feedbackController.js")
   const router = express.Router();
 
 
   router.get("/search/:keyword", ProductController.getSearchProduct);
+  
   
   //router.post("/getId", CategoryController.getId); cái này không xài
 
@@ -20,5 +22,12 @@ module.exports = () => {
 
   router.post("/order", OrderController.postAddOrder)
   
+  router.get("/product/review/:id", FeedbackController.getProductFeedback);
+  
+  router.post("/product/review", FeedbackController.postProductFeedback);
+  
+  router.get("/order/:id", OrderController.getUserOrder);
+
+
   return router;  
 };

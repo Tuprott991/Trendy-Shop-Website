@@ -17,11 +17,11 @@ const CustomerSearch = () => {
    setProducts(data);
   };
   fecthProducts();
- }, [params.keyword, params.catewgory]);
+ }, [params.keyword, params.category]);
  console.log(products);
  return (
-  <div className="flex flex-col px-40 bg-slate-100">
-   <div className="justify-end items-left text-right text-xl mt-8">
+  <div className="flex flex-col px-40 bg-slate-100 h-screen">
+   <div className="justify-end items-left text-right text-xl mt-8 ">
     <span className="bg-slate-100 font-semibold">Sort by </span>
     <select className="bg-white " name="" id="">
      <option value="highestPrice">Highest price</option>

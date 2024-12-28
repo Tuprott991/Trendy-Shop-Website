@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ProfileHeader from "../../components/admin/ProfileView/ProfileHeader";
+import ProfileHeader from "../../components/partials/ProfileHeader";
 import ProfileMain from "../../components/admin/ProfileView/ProfileMain";
 import { adminService } from "../../services/adminService";
 
