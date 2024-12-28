@@ -51,7 +51,7 @@ exports.getProfile = async (req, res) => {
       return res.status(404).send({ message: 'User not found' });
     }
     if (!userInfo.gender) userInfo.gender = "N/A";
-    if (!userInfo.birthday) userInfo.gender = "N/A";
+    if (!userInfo.birthday) userInfo.birthday = "N/A";
     if (!userInfo.region) userInfo.region = "N/A";
     res.status(200).json({
       id: userInfo._id,
@@ -71,7 +71,6 @@ exports.getProfile = async (req, res) => {
 exports.postUpdateProfile = (req, res) => {
   const { id } = req.user;
   const { name, email, birthday, gender, region } = req.body;
-
 
   try {
     User.update(id, name, email, birthday, gender, region);
