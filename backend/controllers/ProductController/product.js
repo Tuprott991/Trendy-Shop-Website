@@ -104,7 +104,7 @@ exports.GetProductReview = async (req, res) => {
   }
 };
 
-exports.postDeleteProduct = (req, res) => {
+exports.postDeleteProduct = async (req, res) => {
   const { id } = req.body;
 
   try {
@@ -115,3 +115,19 @@ exports.postDeleteProduct = (req, res) => {
     res.status(500).json({ message: "Delete Error" });
   }
 };
+
+exports.postUpdateProduct = async (req, res) => {
+  const {
+    name, description, price, user_id, category_id, size, stock_quantity, rating, image_url
+  } = req.body;
+  try {
+    console.log(req.body.id);
+    const update = await Product.updateProduct(req.body.id, name, description, price, user_id, category_id, size, stock_quantity, rating, image_url);
+    res.status(200).json({ message: "Update successful!" });
+  } catch (error) { // Capture the error here
+    console.error(error); // Log the error for debugging
+    res.status(500).json({ message: "Update Error" });
+  }
+};
+
+ 

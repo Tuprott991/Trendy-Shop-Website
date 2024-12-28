@@ -44,19 +44,18 @@ const productSchema = new Schema({
           throw new Error(`Failed to delete product: ${error.message}`);
         }
       },
-      async getAllProduct(){
-        try{
+      async getAllProduct() {
+        try {
           const product = await this.find();
           return product;
         }
-        catch(error){
+        catch (error) {
           console.error('Error get all product:', error);
           throw new Error('failed to get all product');
         }
-      }
-    },
+      },
 
-    async updateProduct(productID, name, description, price,user_id,category_id, size, stock_quantity,rating,image_url) {
+    async updateProduct(productID, name, description, price, user_id, category_id, size, stock_quantity, rating, image_url) {
       const updateData = {};
       if (name) updateData.name = name;
       if (description) updateData.description = description;
@@ -84,19 +83,19 @@ const productSchema = new Schema({
       if (typeof stock_quantity === "undefined") {
         throw new Error("Stock quantity is required");
       }
-    
+
       const updatedProduct = await this.findByIdAndUpdate(
         productID,
         { $set: { stock_quantity } },
         { new: true, runValidators: true }
       );
-    
+
       if (!updatedProduct) {
         throw new Error("Product not found");
       }
       return updatedProduct;
     }
-});
+  }});
 
 const Product = mongoose.model('Product', productSchema);
 
