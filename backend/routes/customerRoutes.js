@@ -9,7 +9,7 @@ module.exports = () => {
   const router = express.Router();
 
 
-  router.get("/search/:keyword", ProductController.getSearchProduct);
+  router.get("/search/:keyword?", ProductController.getSearchProduct);
   
   
   //router.post("/getId", CategoryController.getId); cái này không xài
@@ -28,6 +28,7 @@ module.exports = () => {
   
   router.get("/order/:id", OrderController.getUserOrder);
 
+  router.get("/createorders", OrderController.postCreateOrders);
 
   return router;  
 };

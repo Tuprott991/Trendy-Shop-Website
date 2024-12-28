@@ -4,43 +4,54 @@ import { TiDeleteOutline } from "react-icons/ti";
 import Pagination from "../Helper/pagination.jsx";
 import { adminService } from "../../../services/adminService";
 
-const OrdersTable = () => {
-    const [orders, setOrders] = useState([]);
+const RetailersTable = () => {
+    const [retailers, setRetailers] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedVoucher, setSelectedVoucher] = useState(null);
+    const [selectedRetailer, setSelectedRetailer] = useState(null);
 
     useEffect(() => {
-        const fetchOrders = async () => {
+        const fetchRetailers = async () => {
             try {
                 const response = await adminService.getManageRetailer();
-                console.log(response);
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                const data = await response.json();
-                setOrders(data);
+                const data = response.data.retailers;
+                setRetailers(data || []);
             } catch (error) {
-                console.error("Failed to fetch orders:", error);
+                console.error("Failed to fetch retailers:", error);
             }
         };
 
-        fetchOrders();
+        fetchRetailers();
     }, []);
 
     const handleDeleteClick = (id) => {
-        setSelectedVoucher(id);
+        setSelectedRetailer(id);
         setIsModalOpen(true);
     };
 
-    const handleConfirmDelete = () => {
-        setOrders((prevOrders) => prevOrders.filter((order) => order.id !== selectedVoucher));
-        setIsModalOpen(false);
-        setSelectedVoucher(null);
+    const handleConfirmDelete = async () => {
+        if (!selectedRetailer) return;
+        try {
+            const response = await adminService.deleteRetailer(selectedRetailer);
+            console.log(response);
+            if (response.status === 200) {
+                alert("Retailer has been successfully deleted.");
+            } else {
+                const errorData = await response.json();
+                console.error("Error when deleting:", errorData);
+                alert("Unable to delete retailer. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error when sending request:", error);
+            alert("An error occurred. Please check your network connection.");
+        } finally {
+            setIsModalOpen(false);
+            setSelectedRetailer(null);
+        }
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
-        setSelectedVoucher(null);
+        setSelectedRetailer(null);
     };
 
     const renderItems = (currentItems) => (
@@ -54,15 +65,18 @@ const OrdersTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentItems.map((order) => (
-                        <tr key={order.id} className="border-b hover:bg-gray-100 transition duration-300 ease-in-out">
-                            <td className="px-6 py-4 text-center">{order.name}</td>
-                            <td className="px-6 py-4 text-center">{order.email}</td>
+                    {currentItems.map((retailer) => (
+                        <tr
+                            key={retailer.id}
+                            className="border-b hover:bg-gray-100 transition duration-300 ease-in-out"
+                        >
+                            <td className="px-6 py-4 text-center">{retailer.name}</td>
+                            <td className="px-6 py-4 text-center">{retailer.email}</td>
                             <td className="px-6 py-4 text-center">
                                 <div className="flex space-x-4 justify-center">
                                     <button
                                         className="hover:text-red-500 transition-all"
-                                        onClick={() => handleDeleteClick(order.id)}
+                                        onClick={() => handleDeleteClick(retailer._id)}
                                     >
                                         <CgTrash size={25} color="red" />
                                     </button>
@@ -77,14 +91,14 @@ const OrdersTable = () => {
 
     return (
         <div className="px-6 py-5">
-            <Pagination data={orders} itemsPerPage={5} renderItems={renderItems} />
+            <Pagination data={retailers} itemsPerPage={5} renderItems={renderItems} />
             {isModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-50">
                     <div className="bg-white rounded-lg shadow-lg p-6">
                         <div className="flex justify-center items-center">
                             <TiDeleteOutline size={150} color="red" />
                         </div>
-                        <p className="text-lg font-semibold mb-4">Are you sure you want to delete this order?</p>
+                        <p className="text-lg font-semibold mb-4">Are you sure you want to delete this retailer?</p>
                         <div className="flex justify-end space-x-4">
                             <button
                                 className="bg-gray-300 text-black px-4 py-2 rounded font-bold"
@@ -106,4 +120,4 @@ const OrdersTable = () => {
     );
 };
 
-export default OrdersTable;
+export default RetailersTable;
