@@ -1,61 +1,55 @@
-import React, { useState } from "react";
-import { FaEye, FaPen, FaTrash } from "react-icons/fa";
-import { TiDeleteOutline } from "react-icons/ti";
+import React, { useState, useEffect } from "react";
+import { FaEye } from "react-icons/fa";
 import Pagination from "../Helper/pagination.jsx";
 import { retailerService } from "../../../services/retailerService";
 
 const OrdersTable = () => {
     const token = localStorage.getItem("token");
     const [orders, setOrders] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await retailerService.getOrders(token);
-                setOrders(data);
+                const response = await retailerService.getOrders(token);
+                setOrders(response.data);
             } catch (err) {
                 console.error("Error fetching data:", err);
             }
         };
-
         fetchData();
-    }, [orders]);
+    }, []);
 
-    const handleStatusChange = (id, newStatus) => {
-        setOrders((prevOrders) =>
-            prevOrders.map((order) =>
-                order.id === id ? { ...order, status: newStatus } : order
-            )
-        );
+    const handleStatusChange = async (id, newStatus) => {
+        setLoading(true);
+        try {
+            const response = await retailerService.updateOrderStatus(id, newStatus);
+            if (response.status === 200) {
+                setOrders((prevOrders) =>
+                    prevOrders.map((order) =>
+                        order.id === id ? { ...order, status: newStatus } : order
+                    )
+                );
+            } else {
+                console.error("Cập nhật trạng thái không thành công.");
+            }
+        } catch (err) {
+            console.error("Error updating status:", err);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const handleViewClick = () => {
-        alert("View Button Clicked!");
-    };
-
-    const handleEditClick = () => {
-        alert("Edit Button Clicked!");
-    };
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedVoucher, setSelectedVoucher] = useState(null);
-
-    const handleDeleteClick = (id) => {
-        setSelectedVoucher(id);
+    const handleViewClick = (order) => {
+        setSelectedOrder(order);
         setIsModalOpen(true);
     };
 
-    const handleConfirmDelete = () => {
-        setOrders((prevOrders) =>
-            prevOrders.filter((order) => order.id !== selectedVoucher)
-        );
+    const closeModal = () => {
         setIsModalOpen(false);
-        setSelectedVoucher(null);
-    };
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-        setSelectedVoucher(null);
+        setSelectedOrder(null);
     };
 
     const renderItems = (currentItems) => (
@@ -63,9 +57,7 @@ const OrdersTable = () => {
             <table className="min-w-full table-auto">
                 <thead className="bg-gradient-to-r from-green-500 to-blue-500 text-white">
                     <tr>
-                        <th className="px-6 py-3 text-center font-semibold">ID</th>
                         <th className="px-6 py-3 text-center font-semibold">Name</th>
-                        <th className="px-6 py-3 text-center font-semibold">Email</th>
                         <th className="px-6 py-3 text-center font-semibold">Address</th>
                         <th className="px-6 py-3 text-center font-semibold">Phone</th>
                         <th className="px-6 py-3 text-center font-semibold">Status</th>
@@ -75,39 +67,27 @@ const OrdersTable = () => {
                 <tbody>
                     {currentItems.map((order, index) => (
                         <tr key={index} className="border-b hover:bg-gray-100 transition duration-300 ease-in-out">
-                            <td className="px-6 py-4 text-center">{order.id}</td>
                             <td className="px-6 py-4 text-center">{order.name}</td>
-                            <td className="px-6 py-4 text-center">{order.email}</td>
                             <td className="px-6 py-4 text-center">{order.address}</td>
                             <td className="px-6 py-4 text-center">{order.phone}</td>
                             <td className="px-6 py-4 text-center">
                                 <select
                                     value={order.status}
-                                    onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                                    onChange={(e) => handleStatusChange(order._id, e.target.value)}
                                     className={`rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${order.status === "Pending"
                                         ? "bg-gray-200 text-black"
                                         : "bg-amber-200 text-black"
                                         }`}
+                                    disabled={loading}
                                 >
-                                    <option value="Pending" className="text-center">Pending</option>
-                                    <option value="Completed" className="text-center">Completed</option>
+                                    <option value="pending" className="text-center">Pending</option>
+                                    <option value="deliveried" className="text-center">Deliveried</option>
                                 </select>
                             </td>
                             <td className="px-6 py-4 text-center">
                                 <div className="flex space-x-4 justify-center">
-                                    <button className="hover:text-blue-500 transition-all" onClick={handleViewClick}>
+                                    <button className="hover:text-blue-500 transition-all" onClick={() => handleViewClick(order)}>
                                         <FaEye size={20} />
-                                    </button>
-
-                                    <button className="hover:text-blue-500 transition-all" onClick={handleEditClick}>
-                                        <FaPen size={20} />
-                                    </button>
-
-                                    <button
-                                        className="hover:text-red-500 transition-all"
-                                        onClick={() => handleDeleteClick(order.id)}
-                                    >
-                                        <FaTrash size={20} />
                                     </button>
                                 </div>
                             </td>
@@ -125,25 +105,47 @@ const OrdersTable = () => {
                 itemsPerPage={5}
                 renderItems={renderItems}
             />
-            {isModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-50">
-                    <div className="bg-white rounded-lg shadow-lg p-6">
-                        <div className="flex justify-center items-center">
-                            <TiDeleteOutline size={150} color="red"/>
+
+            {isModalOpen && selectedOrder && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-70 z-50">
+                    <div className="bg-white p-8 rounded-lg shadow-2xl max-w-lg w-full space-y-6">
+                        <h2 className="text-4xl font-semibold text-gray-900 mb-6">Order Details</h2>
+                        <div className="space-y-4">
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="flex flex-col gap-y-2">
+                                    <p className="text-gray-700 font-medium">Name</p>
+                                    <p className="text-gray-800 border-[1px] border-gray-300 py-2 px-4 rounded-xl">{selectedOrder.name}</p>
+                                </div>
+                                <div className="flex flex-col gap-y-2">
+                                    <p className="text-gray-700 font-medium">Phone</p>
+                                    <p className="text-gray-800 border-[1px] border-gray-300 py-2 px-4 rounded-xl">{selectedOrder.phone}</p>
+                                </div>
+                            </div>
+                            <div className="flex flex-col gap-y-2">
+                                <p className="text-gray-700 font-medium">Address</p>
+                                <p className="text-gray-800 border-[1px] border-gray-300 py-2 px-4 rounded-xl">{selectedOrder.address}</p>
+                            </div>
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="flex flex-col gap-y-2">
+                                    <p className="text-gray-700 font-medium">Total Money</p>
+                                    <p className="text-gray-800 border-[1px] border-gray-300 py-2 px-4 rounded-xl">{selectedOrder.total_money}</p>
+                                </div>
+                                <div className="flex flex-col gap-y-2">
+                                    <p className="text-gray-700 font-medium">Payment Method</p>
+                                    <p className="text-gray-800 border-[1px] border-gray-300 py-2 px-4 rounded-xl">{selectedOrder.payment_method}</p>
+                                </div>
+                            </div>
+                            <div className="flex flex-col">
+                                <p className="text-gray-700 font-medium">Status</p>
+                                <p className="text-gray-800 border-[1px] border-gray-300 py-2 px-4 rounded-xl">{selectedOrder.status}</p>
+                            </div>
                         </div>
-                        <p className="text-lg font-semibold mb-4">Are you sure want to delete this order?</p>
-                        <div className="flex justify-end space-x-4">
+                        <div className="flex justify-end">
                             <button
-                                className="bg-gray-300 text-black px-4 py-2 rounded font-bold"
-                                onClick={handleCloseModal}
+                                onClick={closeModal}
+                                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105"
                             >
-                                Cancel
-                            </button>
-                            <button
-                                className="bg-red-500 text-white px-4 py-2 rounded font-bold"
-                                onClick={handleConfirmDelete}
-                            >
-                                Delete
+                                Close
                             </button>
                         </div>
                     </div>

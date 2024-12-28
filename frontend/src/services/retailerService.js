@@ -1,19 +1,5 @@
 import axios from "axios";
 
-const getOrders = async (token) => {
-    try {
-        const response = await axios.get(`http://localhost:8080/api/retailer/order`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        return response;
-    } catch (e) {
-        console.log(e.response);
-        return e.response;
-    }
-}
-
 const getDashboard = async (token) => {
     try {
         const response = await axios.get(`http://localhost:8080/api/retailer/dashboard`, {
@@ -28,13 +14,9 @@ const getDashboard = async (token) => {
     }
 }
 
-const addProduct = async (token, product) => {
+const deleteProduct = async (id) => {
     try {
-        const response = await axios.post(`http://localhost:8080/api/retailer/addproduct`, product, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await axios.post(`http://localhost:8080/api/retailer/deleteproduct`, { id });
         return response;
     } catch (e) {
         console.log(e.response);
@@ -42,9 +24,13 @@ const addProduct = async (token, product) => {
     }
 }
 
-const deleteProduct = async (id) => {
+const getOrders = async (token) => {
     try {
-        const response = await axios.post(`http://localhost:8080/api/retailer/deleteproduct`, { id });
+        const response = await axios.get(`http://localhost:8080/api/retailer/order`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         return response;
     } catch (e) {
         console.log(e.response);
@@ -119,9 +105,22 @@ const updateVoucher = async (id, voucher) => {
     }
 };
 
+const updateOrderStatus = async (id, newStatus) => {
+    try {
+        const response = await axios.post(`http://localhost:8080/api/retailer/updatestatus`, { id, newStatus });
+        return response;
+    } catch (e) {
+        console.log(e.response);
+        return e.response;
+    }
+
+}
+
 export const retailerService = {
     getDashboard,
     deleteProduct,
+    getOrders,
+    updateOrderStatus,
     getVoucher,
     addVoucher,
     deleteVoucher,

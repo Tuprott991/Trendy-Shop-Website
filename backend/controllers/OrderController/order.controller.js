@@ -89,7 +89,7 @@ exports.postAddOrder = async (req, res) => {
 
 exports.getOrderPage = async (req, res) => {
   const { id } = req.query;  // Assuming 'id' is a query parameter for retailer_id
-  
+
   try {
     const orders = await Order.find({ retailer_id: id })  // Fetch orders for a specific retailer
       .populate('retailer_id', 'name email');  // Populate retailer details (name, email)
@@ -113,22 +113,22 @@ exports.getOrderPage = async (req, res) => {
 };
 
 
-exports.getUserOrder= async (req, res) => {
-  const {id}=req.params;
-  try{
+exports.getUserOrder = async (req, res) => {
+  const { id } = req.params;
+  try {
     const orderData = await Order.getOrderUser(id);
     res.status(200).json({
       orderData,
     });
   }
-  catch (error){
+  catch (error) {
     console.error('Error get orders information:', error);
     res.status(500).json({ message: 'Error getting orders information', error });
   }
 };
 
-exports.postCreateOrders = async(req,res) =>{
-  const {customer_id, product_list, voucher, name, address, city, phone, email, payment_method} = req.body
+exports.postCreateOrders = async (req, res) => {
+  const { customer_id, product_list, voucher, name, address, city, phone, email, payment_method } = req.body
 
   try {
     // Lấy danh sách unique retailer_id
@@ -151,7 +151,7 @@ exports.postCreateOrders = async(req,res) =>{
         }));
 
 
-      
+
       // Tính tổng tiền của order
       const total_money = itemsForRetailer.reduce((sum, item) => {
         const product = product_list.find((p) => p.product_id === item.product_id);
@@ -159,23 +159,23 @@ exports.postCreateOrders = async(req,res) =>{
       }, 0);
 
       itemsForRetailer.forEach(item => {
-        stock_quantity = Product.find({product_id: item.product_id})[0].stock_quantity
+        stock_quantity = Product.find({ product_id: item.product_id })[0].stock_quantity
         Product.updateStockQuantity(item.product_id, stock_quantity - item.quantity)
-      });	
+      });
       // Gán voucher nếu có
       let vouchers = [];
       if (voucher) {
         const validVoucher = await Voucher.findOne({ code: voucher, retailer_id });
         if (validVoucher) {
-          vouchers.push({ voucher_code: validVoucher.code});
-          Voucher.update(validVoucher.voucherID, 
-            validVoucher.max_uses-1, 
+          vouchers.push({ voucher_code: validVoucher.code });
+          Voucher.update(validVoucher.voucherID,
+            validVoucher.max_uses - 1,
             validVoucher.minimum_order_value, valid_from,
-            validVoucher.valid_to, 
+            validVoucher.valid_to,
             validVoucher.description);
         }
       }
-      
+
       const order = await Order.createOrder(
         customer_id,
         retailer_id,
@@ -192,13 +192,13 @@ exports.postCreateOrders = async(req,res) =>{
         unique_code
       );
       createdOrders.push(order);
+    }
+    res.status(201).json({
+      message: "Orders created successfully",
+      orders: createdOrders,
+    })
   }
-  res.status(201).json({
-    message: "Orders created successfully",
-    orders: createdOrders,
-  })
-}
-  catch (error){
+  catch (error) {
     console.error("Error creating orders:", error);
     res.status(500).json({
       message: error.message || "Internal server error",
@@ -243,16 +243,15 @@ exports.getCustomerOrder = async (req, res) => {
   }
 }
 
-exports.updateOrderStatus = async(req,res) =>{
-  const {id , status} = req.body
-
-  try{
+exports.updateOrderStatus = async (req, res) => {
+  const id = req.body.id, status = req.body.newStatus;
+  try {
     updateOrderStatus = Order.updateStatus(id, status);
     res.status(200).json({
       updateOrderStatus,
     })
   }
-  catch (error){
+  catch (error) {
     console.error('Error update status:', error);
     res.status(500).json({ message: 'Error  update status', error });
   }
