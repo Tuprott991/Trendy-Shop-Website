@@ -243,9 +243,8 @@ exports.getCustomerOrder = async (req, res) => {
   }
 }
 
-
 exports.updateOrderStatus = async(req,res) =>{
-  const {id, status} = req.params
+  const {id , status} = req.body
 
   try{
     updateOrderStatus = Order.updateStatus(id, status);
