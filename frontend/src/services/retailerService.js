@@ -78,7 +78,6 @@ const addVoucher = async (token, voucher) => {
                 },
             }
         );
-        console.log("Voucher added successfully:", response.data);
         return response;
     } catch (e) {
         if (e.response) {

@@ -25,9 +25,11 @@ const VouchersTable = () => {
     useEffect(() => {
         const fetchVouchers = async () => {
             try {
-                const response = retailerService.getVoucher(token);
-                const data = await response.json();
-                setVouchers(data);
+                const response = await retailerService.getVoucher(token);
+                if (response?.data) {
+                    const data = response.data;
+                    setVouchers(data);
+                }
             } catch (error) {
                 console.error("Lỗi khi tải dữ liệu:", error);
             }
@@ -43,7 +45,7 @@ const VouchersTable = () => {
         const voucherData = { ...newVoucher };
         try {
             const response = await retailerService.addVoucher(token, voucherData);
-            console.log('Response: ',response)
+            console.log(response)
         } catch {
             console.error("Lỗi khi tải dữ liệu:", error);
         }
@@ -104,7 +106,6 @@ const VouchersTable = () => {
             <table className="min-w-full table-auto">
                 <thead className="bg-gradient-to-r from-green-500 to-blue-500 text-white">
                     <tr>
-                        <th className="px-6 py-3 text-center font-semibold">ID</th>
                         <th className="px-6 py-3 text-center font-semibold">Code</th>
                         <th className="px-6 py-3 text-center font-semibold">Description</th>
                         <th className="px-6 py-3 text-center font-semibold">Discount Value</th>
@@ -116,7 +117,6 @@ const VouchersTable = () => {
                 <tbody>
                     {currentItems.map((voucher) => (
                         <tr key={voucher.id} className="border-b hover:bg-gray-100 transition duration-300 ease-in-out">
-                            <td className="px-6 py-4 text-center">{voucher.id}</td>
                             <td className="px-6 py-4 text-center">{voucher.code}</td>
                             <td className="px-6 py-4 text-center">{voucher.description}</td>
                             <td className="px-6 py-4 text-center">{voucher.discount_value}</td>

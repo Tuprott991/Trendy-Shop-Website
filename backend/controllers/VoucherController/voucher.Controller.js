@@ -1,11 +1,9 @@
-// controllers/CategoryController/category.js
 const Voucher = require("../../models/index").Voucher;
 const User = require("../../models/index").User;
 
 exports.postCreateVoucher = async (req, res) => {
   try {
     const retailer_id = req.user.id;
-    console.log(retailer_id);
     const { code, description, discount_value, valid_from, valid_to, minimum_order_value, max_uses } = req.body;
     if (!code || !discount_value ||!retailer_id || !description || !valid_from || !valid_to)
       return res.status(400).send({ message: "All required fields must be provided!" });
@@ -68,29 +66,19 @@ exports.getVoucherPage = async (req, res) => {
 exports.getVouchersByRetailersID = async (req, res) => {
   try {
     const { retailerIDs } = req.body;
-
-    // Validate input
     if (!Array.isArray(retailerIDs) || retailerIDs.length === 0) {
       return res.status(400).send({ message: "A list of retailer IDs is required." });
     }
-
-    // Check if all retailer IDs exist
     const retailers = await User.find({ _id: { $in: retailerIDs }, role: "retailer"});
     const validRetailerIDs = retailers.map((retailer) => retailer._id.toString());
-
     if (validRetailerIDs.length === 0) {
       return res.status(404).send({ message: "No valid retailers found for the provided IDs." });
     }
-
-    // Fetch vouchers for the valid retailers
     const vouchers = await Voucher.find({ retailer_id: { $in: validRetailerIDs } })
       .select("code discount_value");
-
     if (!vouchers.length) {
       return res.status(404).send({ message: "No vouchers found for the provided retailers." });
     }
-
-    // Return list of vouchers
     return res.status(200).json({ vouchers });
   } catch (err) {
     res.status(500).send({
@@ -102,25 +90,17 @@ exports.getVouchersByRetailersID = async (req, res) => {
 exports.applyVoucherToProduct = async (req, res) => {
   try {
     const { products, voucherCode } = req.body;
-
-    // Validate input
     if (!Array.isArray(products) || products.length === 0 || !voucherCode) {
       return res.status(400).send({ message: "products and voucher code are required." });
     }
-
-    // Find the voucher
     const voucher = await Voucher.findOne({ code: voucherCode });
     if (!voucher) {
       return res.status(404).send({ message: "Voucher not found." });
     }
-
-    // Check voucher validity
     const now = new Date();
     if (now < new Date(voucher.valid_from) || now > new Date(voucher.valid_to)) {
       return res.status(400).send({ message: "Voucher is not valid at this time." });
     }
-
-    // Apply discount to applicable products
     const updatedCart = products.map((product) => {
       if (product.retailer_id === voucher.retailer_id) {
         const discount = (voucher.discount_value / 100) * product.price;
@@ -128,8 +108,6 @@ exports.applyVoucherToProduct = async (req, res) => {
       }
       return product;
     });
-
-    // Return updated cart
     return res.status(200).json({ products: updatedCart });
   } catch (err) {
     res.status(500).send({
