@@ -228,20 +228,6 @@ exports.getOrderviewPage = async (req, res) => {
   }
 };
 
-exports.getRetailerOrder= async (req, res) => {
-  const {id} = req.params;
-  try{
-    const orderData = await Order.getRetailerOrder(id);
-    res.status(200).json({
-      orderData,
-    });
-  }
-  catch (error){
-    console.error('Error get orders information:', error);
-    res.status(500).json({ message: 'Error getting orders information', error });
-  }
-};
-
 exports.getCustomerOrder = async (req, res) => {
   const { id } = req.params;
   try {
