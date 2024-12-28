@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { adminService } from "../../../services/adminService";
 
 const RetailersList = () => {
     const [retailers] = useState([

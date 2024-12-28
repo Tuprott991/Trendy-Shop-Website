@@ -162,7 +162,6 @@ exports.getRetailerDashboardData = async (req, res) => {
 
 exports.manageRetailer = async (req, res) => {
   try {
-    
     const retailers = await User.getAllRetailer();
     res.status(200).json({ message: "Retailers fetched successfully", retailers });
   } catch (error) {
