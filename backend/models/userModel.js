@@ -96,32 +96,48 @@ const userSchema = new Schema(
 
       // Instance method for creating a new user (can be used directly from an instance)
         async create(name,email,password,role) {
-          // Check if the user already exists
-          const existingUser = await this.findOne({ email });
-          
-          if (existingUser) {
-            return 1
-          }
+          try{
+            // Check if the user already exists
+            const existingUser = await this.findOne({ email });
 
-          // Hash the password
-          const hashedPassword = await bcrypt.hash(password, 10);
+            if (existingUser) {
+              return 1
+            }
 
-          // Create a new User
-          const user = new this({
-            name,
-            email,
-            password: hashedPassword,
-            role, // Assign the role selected by the user
-            order_list: [], // Ensure order_list is empty
-          });
+            // Hash the password
+            const hashedPassword = await bcrypt.hash(password, 10);
 
-          // Save User to the database
-          const savedUser = await user.save();
+            // Create a new User
+            const user = new this({
+              name,
+              email,
+              password: hashedPassword,
+              role, // Assign the role selected by the user
+              order_list: [], // Ensure order_list is empty
+            });
 
-          // Return the saved user details (excluding the password for security)
-          const { password: _, ...userData } = savedUser.toObject();
+            // Save User to the database
+            const savedUser = await user.save();
 
-          return userData
+            // Return the saved user details (excluding the password for security)
+            const { password: _, ...userData } = savedUser.toObject();
+
+            return userData
+        }
+        catch (error){
+          throw new Error('Failed to create account');
+        }
+      },
+
+      async getAllRetailer(){
+        try {
+          // Tìm kiếm tất cả người dùng có vai trò là 'retailer'
+          const retailers = await this.find({ role: 'retailer' });
+          return retailers;
+        } catch (error) {
+          console.error('Error fetching retailers:', error);
+          throw new Error('Failed to fetch retailers');
+        }
       }
     }
   }

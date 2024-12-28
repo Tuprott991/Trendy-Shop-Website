@@ -3,16 +3,13 @@ const { Schema } = mongoose;
 
 const orderSchema = new Schema(
  {
+  customer_id: { type: Schema.Types.ObjectId, ref: "User", required: true },
   retailer_id: { type: Schema.Types.ObjectId, ref: "User", required: true },
   total_money: { type: Number, required: true },
   status: { type: String, enum: ["pending", "deliveried"], default: "pending" },
   address: { type: String },
   phone: { type: String },
-  payment_method: {
-   type: String,
-   enum: ["bank", "cash"],
-   required: true,
-  },
+  payment_method: { type: String, enum: ["bank", "cash"], required: true },
   items: [
    {
     product_id: { type: Schema.Types.ObjectId, ref: "Product", required: true },
@@ -137,6 +134,17 @@ const orderSchema = new Schema(
     } catch (error) {
      console.error("Error calculating revenue:", error);
      throw new Error("Failed to calculate revenue");
+    }
+   },
+   async getOrderUser(userID) {
+    try {
+     const orderData = await this.find({
+      customer_id: mongoose.Types.ObjectId(userID),
+     });
+     return orderData;
+    } catch (error) {
+     console.error("Error get orders information:", error);
+     throw new Error("failed to get orders information");
     }
    },
   },

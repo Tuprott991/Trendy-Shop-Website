@@ -11,6 +11,7 @@ module.exports = () => {
 
   router.get("/search/:keyword", ProductController.getSearchProduct);
   
+  
   //router.post("/getId", CategoryController.getId); cái này không xài
 
   router.get("/category/all", CategoryController.getAllCategory);
@@ -25,5 +26,8 @@ module.exports = () => {
   
   router.post("/product/review", FeedbackController.postProductFeedback);
   
+  router.get("/order/:id", OrderController.getUserOrder);
+
+
   return router;  
 };
