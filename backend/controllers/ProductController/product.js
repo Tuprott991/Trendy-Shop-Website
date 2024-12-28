@@ -55,18 +55,22 @@ exports.getProductInfo = async (req, res) => {
 }
 
 exports.GetProductReview = async (req, res) => {
-    try {
-        const {id} = req.params;
-        console.log(id);
-        const productReview = await Product.GetProductReview(id);
-        res.status(200).json({ 
-            productReview
-        });
-    } catch (error) {
-        console.error("Error getting product review:", error);
-        res.status(500).json({ message: 'Error getting product review', error });
-    }
+  try {
+      const {id} = req.params;
+      console.log(id);
+      const productReview = await Product.GetProductReview(id);
+      res.status(200).json({ 
+          productReview
+      });
+  } catch (error) {
+      console.error("Error getting product review:", error);
+      res.status(500).json({ message: 'Error getting product review', error });
+  }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 55be547e049f7fae5fc7b011754ac5a2b85c7a3e
 exports.postDeleteProduct = (req, res) => {
   const { id } = req.body;
 
@@ -79,6 +83,9 @@ exports.postDeleteProduct = (req, res) => {
     res.status(500).json({ message: 'Delete Error' });
   }
 };
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 55be547e049f7fae5fc7b011754ac5a2b85c7a3e

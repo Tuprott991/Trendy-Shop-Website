@@ -1,36 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaUser, FaEnvelope, FaCalendarAlt, FaVenusMars, FaGlobe } from 'react-icons/fa';
+import { retailerService } from "../../../services/retailerService";
 
 export default function ProfileHeader() {
     const icon = {
         name: <FaUser size={24} />,
         email: <FaEnvelope size={24} />,
-        dob: <FaCalendarAlt size={24} />,
+        birthday: <FaCalendarAlt size={24} />,
         gender: <FaVenusMars size={24} />,
         region: <FaGlobe size={24} />,
     };
 
-    const [profile, setProfile] = useState({
-        name: "John Doe",
-        email: "john.doe@example.com",
-        role: "Retailer",
-        dob: "01/01/1990",
-        gender: "Male",
-        region: "New York, USA"
-    });
-
+    const [profile, setProfile] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
-    const [editProfile, setEditProfile] = useState(profile);
+    const [editProfile, setEditProfile] = useState(null);
+
+    const token = localStorage.getItem("token");
+
+    const fetchProfile = async () => {
+        if (token) {
+            const data = await retailerService.getRetailerProfile(token);
+            if (data) {
+                setProfile(data);
+                setEditProfile(data);
+            }
+        }
+    };
+
+    useEffect(() => {
+        fetchProfile();
+    }, [token]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setEditProfile({ ...editProfile, [name]: value });
     };
 
-    const handleSave = () => {
-        setProfile(editProfile);
-        setIsEditing(false);
+    const handleSave = async () => {
+        try {
+            const updatedProfile = await retailerService.updateRetailerProfile(token, editProfile);
+            if (updatedProfile) {
+                setProfile(updatedProfile);
+                setIsEditing(false);
+                alert("Update successfully");
+                fetchProfile();
+            } else {
+                alert("Failed to update profile. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            alert("An error occurred while saving the profile. Please try again later.");
+        }
     };
+
+    if (!profile) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="bg-gradient-to-r from-emerald-500 to-blue-500 p-8 rounded-xl shadow-xl max-w-2xl mx-auto">
@@ -40,14 +65,14 @@ export default function ProfileHeader() {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-lg">
-                {Object.keys(profile).map((key) => (
+                {Object.keys(profile).map((key) => ( key !== "id" && (
                     <div
                         className="flex justify-between py-3 border-b last:border-b-0 "
                         key={key}
                     >
                         <span className="text-gray-500 font-medium capitalize">{key}</span>
                         <span className="text-gray-900 font-semibold">{profile[key]}</span>
-                    </div>
+                    </div>)
                 ))}
 
                 <div className="flex justify-end mt-6">
@@ -60,13 +85,12 @@ export default function ProfileHeader() {
                 </div>
             </div>
 
-            {/* Edit Modal */}
             {isEditing && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full mx-4">
                         <h3 className="text-2xl font-bold text-center mb-5">Edit Profile</h3>
                         {Object.keys(editProfile).map((key) => (
-                            key !== "role" && (
+                            key !== "role" && key !== "id" && key !== "avatar" && key !== "email" && (
                                 <div className="mb-5 flex items-center" key={key}>
                                     <div className="flex-shrink-0 flex items-center gap-2">
                                         <span className="text-gray-700 font-medium capitalize" style={{ minWidth: "40px" }}>
