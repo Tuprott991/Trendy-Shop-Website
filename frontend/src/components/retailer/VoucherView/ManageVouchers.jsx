@@ -81,11 +81,12 @@ const VouchersTable = () => {
     };
 
     const handleViewClick = (id) => {
-        const selectedVoucher = vouchers.find(voucher => voucher.id === id);
-        console.log(selectedVoucher);
-        setNewVoucher(selectedVoucher);
-        setSelectedVoucherId(id);
-        setIsViewModalOpen(true);
+        const selectedVoucher = vouchers.find(voucher => voucher._id === id);
+        if (selectedVoucher) {
+            setNewVoucher(selectedVoucher); 
+            setSelectedVoucherId(id);
+            setIsViewModalOpen(true);
+        }
     };
 
     const handleDeleteClick = (id) => {
@@ -106,11 +107,30 @@ const VouchersTable = () => {
         } catch (error) {
             console.error("Lỗi khi xóa voucher:", error);
         }
-    };    
+    };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setSelectedVoucherId(null);
+    };
+
+    const handleSaveVoucher = async () => {
+        if (!selectedVoucherId) {
+            console.error("Voucher ID is missing");
+            return;
+        }
+        const id = selectedVoucherId;
+        try {
+            const response = await retailerService.updateVoucher(id, newVoucher);
+            if (response) {
+                const updatedVouchers = await retailerService.getVoucher(token);
+                setVouchers(updatedVouchers.data);
+            }
+            setIsViewModalOpen(false);
+            setSelectedVoucherId(null);
+        } catch (error) {
+            console.error("Lỗi khi cập nhật voucher:", error);
+        }
     };
 
     const renderItems = (currentItems) => (
@@ -148,12 +168,12 @@ const VouchersTable = () => {
                             </td>
                             <td className="px-6 py-4 text-center">
                                 <div className="flex space-x-4 justify-center">
-                                    <button className="hover:text-blue-500 transition-all" onClick={() => handleViewClick(voucher.id)}>
+                                    <button className="hover:text-blue-500 transition-all" onClick={() => handleViewClick(voucher._id)}>
                                         <FaPen size={20} />
                                     </button>
                                     <button
                                         className="hover:text-red-500 transition-all"
-                                        onClick={() => handleDeleteClick(voucher._id)}
+                                        onClick={() => handleDeleteClick(voucher.id)}
                                     >
                                         <FaTrash size={20} />
                                     </button>
@@ -282,35 +302,69 @@ const VouchersTable = () => {
             {isViewModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-50">
                     <div className="bg-white rounded-lg shadow-lg p-6">
-                        <h2 className="text-lg font-semibold mb-4">Voucher Details</h2>
-                        <div className="space-y-4">
+                        <h2 className="text-lg font-semibold mb-4">Edit Voucher Details</h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <strong>Code:</strong>
-                                <p>{newVoucher.code}</p>
+                                <input
+                                    type="text"
+                                    className="w-full p-2 border border-gray-300 rounded"
+                                    value={newVoucher.code}
+                                    onChange={(e) => setNewVoucher({ ...newVoucher, code: e.target.value })}
+                                />
                             </div>
                             <div>
                                 <strong>Description:</strong>
-                                <p>{newVoucher.description}</p>
+                                <textarea
+                                    className="w-full p-2 border border-gray-300 rounded"
+                                    value={newVoucher.description}
+                                    onChange={(e) => setNewVoucher({ ...newVoucher, description: e.target.value })}
+                                />
                             </div>
                             <div>
                                 <strong>Discount Value:</strong>
-                                <p>{newVoucher.discount_value}</p>
+                                <input
+                                    type="number"
+                                    className="w-full p-2 border border-gray-300 rounded"
+                                    value={newVoucher.discount_value}
+                                    onChange={(e) => setNewVoucher({ ...newVoucher, discount_value: e.target.value })}
+                                />
                             </div>
                             <div>
                                 <strong>Valid From:</strong>
-                                <p>{newVoucher.valid_from}</p>
+                                <input
+                                    type="date"
+                                    className="w-full p-2 border border-gray-300 rounded"
+                                    value={newVoucher.valid_from}
+                                    onChange={(e) => setNewVoucher({ ...newVoucher, valid_from: e.target.value })}
+                                />
                             </div>
                             <div>
                                 <strong>Valid To:</strong>
-                                <p>{newVoucher.valid_to}</p>
+                                <input
+                                    type="date"
+                                    className="w-full p-2 border border-gray-300 rounded"
+                                    value={newVoucher.valid_to}
+                                    onChange={(e) => setNewVoucher({ ...newVoucher, valid_to: e.target.value })}
+                                />
                             </div>
                             <div>
                                 <strong>Minimum Order Value:</strong>
-                                <p>{newVoucher.minimum_order_value}</p>
+                                <input
+                                    type="number"
+                                    className="w-full p-2 border border-gray-300 rounded"
+                                    value={newVoucher.minimum_order_value}
+                                    onChange={(e) => setNewVoucher({ ...newVoucher, minimum_order_value: e.target.value })}
+                                />
                             </div>
                             <div>
                                 <strong>Max Uses:</strong>
-                                <p>{newVoucher.max_uses}</p>
+                                <input
+                                    type="number"
+                                    className="w-full p-2 border border-gray-300 rounded"
+                                    value={newVoucher.max_uses}
+                                    onChange={(e) => setNewVoucher({ ...newVoucher, max_uses: e.target.value })}
+                                />
                             </div>
                         </div>
                         <div className="flex justify-end space-x-4 mt-4">
@@ -318,7 +372,13 @@ const VouchersTable = () => {
                                 className="bg-gray-300 text-black px-4 py-2 rounded font-bold"
                                 onClick={handleViewModalClose}
                             >
-                                Close
+                                Cancel
+                            </button>
+                            <button
+                                className="bg-blue-500 text-white px-4 py-2 rounded font-bold"
+                                onClick={handleSaveVoucher}
+                            >
+                                Save
                             </button>
                         </div>
                     </div>

@@ -117,7 +117,6 @@ exports.applyVoucherToProduct = async (req, res) => {
 
 exports.postDeleteVoucher = (req, res) => {
   const { id } = req.body;
-
   try {
     Voucher.delete(id);
     res.status(200).json({ message: "Delete succesful!" })
@@ -129,10 +128,9 @@ exports.postDeleteVoucher = (req, res) => {
 };
 
 exports.postUpdateVoucher = (req, res) => {
-  const { voucher_id, max_uses,minimum_order_value, valid_from, valid_to, description } = req.body;
-
+  const { discount_value, max_uses, minimum_order_value, valid_from, valid_to, description,  } = req.body.voucher;
   try {
-    Voucher.update(voucher_id, max_uses,minimum_order_value, valid_from, valid_to, description);
+    Voucher.updateVoucher(req.body.id, discount_value, max_uses,minimum_order_value, valid_from, valid_to, description);
     res.status(200).json({ message: "Update succesful!" })
   }
   catch {
