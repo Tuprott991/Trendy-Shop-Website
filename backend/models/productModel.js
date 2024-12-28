@@ -16,7 +16,7 @@ const productSchema = new Schema({
     timestamps: true,
     statics: {
       async SearchProduct(name) {
-        const regex = new RegExp('^' + name + '|' + name, 'i');
+        const regex = new RegExp('\\b' + name + '\\b', 'i');
         const productInfo = await Product.find({ name: { $regex: regex } });
         return productInfo;
       },
