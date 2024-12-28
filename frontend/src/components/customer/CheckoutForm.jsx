@@ -10,6 +10,9 @@ const CheckoutForm = ({ onFormStatusChange }) => {
  });
  useEffect(() => {
   const isFormValid = Object.values(formData).every((field) => field !== "");
+  if (isFormValid) {
+   localStorage.setItem("customerForm", JSON.stringify(formData));
+  }
   onFormStatusChange(isFormValid);
  }, [formData, onFormStatusChange]);
  const handleChange = (e) => {
