@@ -27,8 +27,6 @@ module.exports = () => {
   router.get("/product/review/:id", FeedbackController.getProductFeedback);
   
   router.post("/product/review", FeedbackController.postProductFeedback);
-  
-  router.get("/order/:id", OrderController.getUserOrder);
 
   router.post("/createorders", OrderController.postCreateOrders);
 
@@ -37,6 +35,8 @@ module.exports = () => {
   router.post("/order/discount", VoucherController.applyVoucherToProduct);
 
   router.get("/retailer",UserController.getAllRetailer);
+
+  router.get("/customerrorder", OrderController.getCustomerOrder);
   
   return router;  
 };
