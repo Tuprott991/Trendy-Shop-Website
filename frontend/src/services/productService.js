@@ -2,9 +2,11 @@ import axios from "axios";
 
 const getProductList = async (keyword) => {
  try {
-  const response = await axios.get(
-   `http://localhost:8080/api/customer/search/${keyword}`
-  );
+  const url = keyword
+   ? `http://localhost:8080/api/customer/search/${keyword}`
+   : "http://localhost:8080/api/customer/search/";
+
+  const response = await axios.get(url);
   return response;
  } catch (e) {
   console.log(e.response);

@@ -72,6 +72,10 @@ const AppRoutes = () => {
        element: <CustomerProductDetail />,
       },
       {
+       path: "search/keyword",
+       element: <CustomerSearch />,
+      },
+      {
        path: "search/keyword/:keyword",
        element: <CustomerSearch />,
       },
