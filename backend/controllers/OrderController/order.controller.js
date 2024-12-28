@@ -245,10 +245,10 @@ exports.getCustomerOrder = async (req, res) => {
 
 
 exports.updateOrderStatus = async(req,res) =>{
-  const {id} = req.params
+  const {id, status} = req.params
 
   try{
-    updateOrderStatus = Order.updateStatus(id);
+    updateOrderStatus = Order.updateStatus(id, status);
     res.status(200).json({
       updateOrderStatus,
     })
