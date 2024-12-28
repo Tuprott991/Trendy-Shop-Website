@@ -92,35 +92,6 @@ const addVoucher = async (token, voucher) => {
     }
 };
 
-const getRetailerProfile = async (token) => {
-    try {
-        const response = await axios.get(`http://localhost:8080/api/user/getprofile`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        return response.data;
-    } catch (e) {
-        console.log(e.response);
-        return e.response || { error: 'An error occurred while fetching profile.' };
-    }
-};
-
-const updateRetailerProfile = async (token, data) => {
-    try {
-        const response = await axios.post(`http://localhost:8080/api/user/updateprofile`, data, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        console.log(response.data);
-        return response.data;
-    } catch (e) {
-        console.log(e.response);
-        return e.response || { error: 'An error occurred while updating profile.' };
-    }
-};
-
 const deleteVoucher = async (id) => {
     try {
         const response = await axios.post(`http://localhost:8080/api/retailer/deletevoucher`, { id });
@@ -129,14 +100,30 @@ const deleteVoucher = async (id) => {
         console.log(e.response);
         return e.response;
     }
-}
+};
+
+const updateVoucher = async (id, voucher) => {
+    try {
+        const response = await axios.post(`http://localhost:8080/api/retailer/updatevoucher`, {id, voucher});
+        return response;
+    } catch (e) {
+        if (e.response) {
+            console.error("Server responded with an error:", e.response.status, e.response.data);
+            return e.response;
+        } else if (e.request) {
+            console.error("No response received from server. Check the network or server:", e.request);
+        } else {
+            console.error("Error in request setup:", e.message);
+        }
+        return { status: "error", message: e.message };
+    }
+};
 
 export const retailerService = {
     getDashboard,
     deleteProduct,
     getVoucher,
     addVoucher,
-    getRetailerProfile,
-    updateRetailerProfile,
     deleteVoucher,
+    updateVoucher,
 };

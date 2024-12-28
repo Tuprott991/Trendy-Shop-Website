@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProfileHeader from "../../components/partials/ProfileHeader";
 import ProfileMain from "../../components/retailer/ProfileView/ProfileMain";
-import { retailerService } from "../../services/retailerService";
+import { userService } from "../../services/userService";
 
 const RetailerProfile = () => {
     const token = localStorage.getItem("token");
@@ -12,7 +12,7 @@ const RetailerProfile = () => {
     useEffect(() => {
         const fetchRetailerProfile = async () => {
             try {
-                const response = await retailerService.getRetailerProfile(token);
+                const response = await userService.getUserProfile(token);
                 setRetailerData(response.data);
                 setLoading(false);
             } catch (err) {

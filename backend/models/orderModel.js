@@ -16,7 +16,7 @@ const orderSchema = new Schema(
         items: [
             {
                 product_id: { type: Schema.Types.ObjectId, ref: "Product", required: true },
-                quantity: { type: Number, required: true },
+                quantity: { type: Number, required: true },     
             },
         ],
         vouchers: [
@@ -70,10 +70,9 @@ const orderSchema = new Schema(
 
             async updateStatus(userID, status) {
                 try {
-                    const statusData = {};
                     const updatedStatus = await this.findByIdAndUpdate(
                         userID,
-                        { $set: statusData },
+                        { $set: {status} },
                         { new: true, runValidators: true } // Trả về tài liệu đã được cập nhật và áp dụng validate
                     );
                     if (!updatedStatus) {
@@ -150,17 +149,31 @@ const orderSchema = new Schema(
                     throw new Error("Failed to calculate revenue");
                 }
             },
-            async getOrderUser(userID) {
+            async getCustomerOrder(userID) {
                 try {
-                    const orderData = await this.find({
-                        customer_id: mongoose.Types.ObjectId(userID),
-                    });
-                    return orderData;
+                    // Lấy tất cả các đơn hàng của người dùng với customer_id khớp userID
+                    const orders = await this.find({ customer_id: userID });
+            
+                    if (orders.length === 0) {
+                        throw new Error("No orders found for this user");
+                    }
+            
+                    // Gộp các đơn hàng dựa trên unique_code
+                    const groupedOrders = orders.reduce((acc, order) => {
+                        const code = order.unique_code || "no_code"; // Dùng "no_code" nếu unique_code không tồn tại
+                        if (!acc[code]) {
+                            acc[code] = []; // Khởi tạo danh sách đơn hàng cho unique_code
+                        }
+                        acc[code].push(order); // Thêm đơn hàng vào nhóm tương ứng
+                        return acc;
+                    }, {});
+            
+                    return groupedOrders;
                 } catch (error) {
-                    console.error("Error get orders information:", error);
-                    throw new Error("failed to get orders information");
+                    console.error("Error retrieving orders:", error);
+                    throw new Error("Failed to retrieve customer orders");
                 }
-            },
+            }
         },
     }
 );

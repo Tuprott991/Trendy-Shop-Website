@@ -16,78 +16,74 @@ const voucherSchema = new Schema(
     status: { type: Boolean, default: 1}
   },
   {
-    timestamps: true
+    timestamps: true,
+    statics: {
+      async getAll() {
+        // Retrieve all categories
+        const vouchers = await Voucher.find();
+        const filteredVouchers = vouchers.filter((voucher) => voucher.isActive);
+        // Return the filtered categories
+        return filteredVouchers
+      },
+      async getAllRetailVoucher(){
+        const vouchers = await Voucher.find();
+        const filteredVouchers = vouchers.filter((voucher) => voucher.isActive);
+        // Return the filtered categories
+        return filteredVouchers
+      },
+      async isActive() {
+        const now = new Date();
+      
+        // Kiểm tra ngày hết hạn
+        const isNotExpired = !this.valid_to || this.valid_to > now;
+      
+        // Cập nhật trạng thái nếu cần
+        if (this.status !== (isNotExpired ? 1 : 0)) {
+          this.status = isNotExpired ? 1 : 0;
+          await this.save(); // Lưu lại thay đổi
+        }
+      },
+    
+      async updateVoucher(voucherID, discount_value, max_uses, minimum_order_value, valid_from, valid_to, description) {
+        const updateData = {};
+        if (discount_value) updateData.discount_value = discount_value
+        if (max_uses) updateData.max_uses = max_uses;
+        if (valid_from) updateData.valid_from = valid_from;
+        if (minimum_order_value) updateData.minimum_order_value = minimum_order_value;
+        if (valid_to) updateData.valid_to = valid_to;
+        if (description) updateData.description = description;
+        const voucheredUser = await this.findByIdAndUpdate(
+          voucherID,
+          { $set: updateData },
+          { new: true, runValidators: true }
+        );
+        if (!voucheredUser) {
+          throw new Error("User not found");
+        }
+        return voucheredUser
+      },
+    
+
+      async delete(voucherID){
+        try {
+          if (!voucherID) {
+            throw new Error("VoucherID is required");
+          }
+      
+          const deletedVoucher = await this.findByIdAndDelete(voucherID);
+      
+          if (!deletedVoucher) {
+            throw new Error("Voucher not found");
+          }
+      
+          return { message: "Voucher deleted successfully"};
+        } catch (error) {
+          throw new Error(`Failed to delete voucher: ${error.message}`);
+        }
+      }
+    }
   }
 );
-
-// Adding a static method to the schema
-voucherSchema.statics = {
-  async getAll() {
-    // Retrieve all categories
-    const vouchers = await Voucher.find();
-    const filteredVouchers = vouchers.filter((voucher) => voucher.isActive);
-    // Return the filtered categories
-    return filteredVouchers
-  },
-  async getAllRetailVoucher(){
-    const vouchers = await Voucher.find();
-    const filteredVouchers = vouchers.filter((voucher) => voucher.isActive);
-    // Return the filtered categories
-    return filteredVouchers
-  },
-  async isActive() {
-    const now = new Date();
-  
-    // Kiểm tra ngày hết hạn
-    const isNotExpired = !this.valid_to || this.valid_to > now;
-  
-    // Cập nhật trạng thái nếu cần
-    if (this.status !== (isNotExpired ? 1 : 0)) {
-      this.status = isNotExpired ? 1 : 0;
-      await this.save(); // Lưu lại thay đổi
-    }
-  },
-  async update(voucherID, max_uses, minimum_order_value, valid_from, valid_to, description) {
-    const updateData = {};
-    if (max_uses) updateData.max_uses = max_uses;
-    if (valid_from) updateData.valid_from = valid_from;
-    if (minimum_order_value) updateData.minimum_order_value = minimum_order_value;
-    if (valid_to) updateData.valid_to = valid_to;
-    if (description) updateData.description = description;
-
-    // Tìm kiếm và cập nhật người dùng trong database
-
-    const voucheredUser = await this.findByIdAndUpdate(
-      voucherID,
-      { $set: updateData },
-      { new: true, runValidators: true } // Trả về tài liệu đã được cập nhật và áp dụng validate
-    );
-
-     // Nếu không tìm thấy user, báo lỗi
-    if (!voucheredUser) {
-      throw new Error("User not found");
-    }
-    return voucheredUser
-  },
-
-  async delete(voucherID){
-    try {
-      if (!voucherID) {
-        throw new Error("VoucherID is required");
-      }
-  
-      const deletedVoucher = await this.findByIdAndDelete(voucherID);
-  
-      if (!deletedVoucher) {
-        throw new Error("Voucher not found");
-      }
-  
-      return { message: "Voucher deleted successfully"};
-    } catch (error) {
-      throw new Error(`Failed to delete voucher: ${error.message}`);
-    }
-  }
-};
 
 const Voucher = mongoose.model('Voucher', voucherSchema);
 

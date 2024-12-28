@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaUser, FaEnvelope, FaCalendarAlt, FaVenusMars, FaGlobe } from 'react-icons/fa';
-import { retailerService } from "../../../services/retailerService";
+import { userService } from "../../../services/userService";
 
 export default function ProfileHeader() {
     const icon = {
@@ -19,7 +19,7 @@ export default function ProfileHeader() {
 
     const fetchProfile = async () => {
         if (token) {
-            const data = await retailerService.getRetailerProfile(token);
+            const data = await userService.getUserProfile(token);
             if (data) {
                 setProfile(data);
                 setEditProfile(data);
@@ -38,7 +38,7 @@ export default function ProfileHeader() {
 
     const handleSave = async () => {
         try {
-            const updatedProfile = await retailerService.updateRetailerProfile(token, editProfile);
+            const updatedProfile = await userService.updateUserProfile(token, editProfile);
             if (updatedProfile) {
                 setProfile(updatedProfile);
                 setIsEditing(false);

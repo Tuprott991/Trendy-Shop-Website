@@ -150,18 +150,29 @@ exports.postCreateOrders = async(req,res) =>{
           quantity: item.quantity,
         }));
 
+
+      
       // Tính tổng tiền của order
       const total_money = itemsForRetailer.reduce((sum, item) => {
         const product = product_list.find((p) => p.product_id === item.product_id);
         return sum + product.price * item.quantity;
       }, 0);
 
+      itemsForRetailer.forEach(item => {
+        stock_quantity = Product.find({product_id: item.product_id})[0].stock_quantity
+        Product.updateStockQuantity(item.product_id, stock_quantity - item.quantity)
+      });	
       // Gán voucher nếu có
       let vouchers = [];
       if (voucher) {
         const validVoucher = await Voucher.findOne({ code: voucher, retailer_id });
         if (validVoucher) {
-          vouchers.push({ voucher_code: validVoucher.code });
+          vouchers.push({ voucher_code: validVoucher.code});
+          Voucher.update(validVoucher.voucherID, 
+            validVoucher.max_uses-1, 
+            validVoucher.minimum_order_value, valid_from,
+            validVoucher.valid_to, 
+            validVoucher.description);
         }
       }
       
@@ -194,3 +205,57 @@ exports.postCreateOrders = async(req,res) =>{
     });
   }
 };
+
+exports.getOrderviewPage = async (req, res) => {
+  try {
+    const { id } = req.user;
+    if (!id) {
+      return res.status(400).send({ message: "Retailer ID is required." });
+    }
+    const existingRetailer = await User.findOne({ id, role: "retailer" });
+    if (!existingRetailer) {
+      return res.status(400).send({ message: "Retailer does not exist." });
+    }
+    const orders = await Order.find({ retailer_id: id })
+    if (!orders.length) {
+      return res.status(404).send({ message: "No orders found for this retailer." });
+    }
+    return res.status(200).json(orders);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "An error occurred while fetching the voucher page."
+    });
+  }
+};
+
+exports.getCustomerOrder = async (req, res) => {
+  const { id } = req.params;
+  try {
+    customerOrder = Order.getCustomerOrder(id)
+
+    res.status(200).json({
+      customerOrder,
+    });
+  }
+  catch (error) {
+    console.error('Error get orders information:', error);
+    res.status(500).json({ message: 'Error getting orders information', error });
+  }
+}
+
+exports.updateOrderStatus = async(req,res) =>{
+  const {id , status} = req.body
+
+  try{
+    updateOrderStatus = Order.updateStatus(id, status);
+    res.status(200).json({
+      updateOrderStatus,
+    })
+  }
+  catch (error){
+    console.error('Error update status:', error);
+    res.status(500).json({ message: 'Error  update status', error });
+  }
+}
+
+

@@ -7,6 +7,7 @@ module.exports = () => {
   const OrderController = require("../controllers/OrderController/order.controller.js");
   const FeedbackController = require("../controllers/FeedbackController/feedbackController.js");
   const VoucherController = require("../controllers/VoucherController/voucher.Controller.js");
+  const UserController= require("../controllers/UserController/user.controller.js");
   const router = express.Router();
 
 
@@ -26,8 +27,6 @@ module.exports = () => {
   router.get("/product/review/:id", FeedbackController.getProductFeedback);
   
   router.post("/product/review", FeedbackController.postProductFeedback);
-  
-  router.get("/order/:id", OrderController.getUserOrder);
 
   router.post("/createorders", OrderController.postCreateOrders);
 
@@ -35,5 +34,10 @@ module.exports = () => {
 
   router.post("/order/discount", VoucherController.applyVoucherToProduct);
 
+  router.get("/retailer",UserController.getAllRetailer);
+
+  router.get("/customerrorder", OrderController.getCustomerOrder);
+  
+  router.post("/updateProfile/:id", UserController.postUpdateProfieCustomer);
   return router;  
 };
