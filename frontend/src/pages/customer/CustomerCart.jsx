@@ -8,6 +8,11 @@ const CustomerCart = () => {
  const { isQuantity, setIsQuantity } = useContext(DropdownContext);
  const [chosenItem, setChosenItem] = useState();
  const [message, setMessage] = useState();
+ const [discountCart, setDiscountCart] = useState(cart);
+ const handleDiscountCart = (newCart) => {
+  setDiscountCart(newCart);
+ };
+
  const divRef = useRef(null);
  const notiRef = useRef(null);
  useEffect(() => {
@@ -33,7 +38,6 @@ const CustomerCart = () => {
  const setSelectQuantity = async (item, type) => {
   if (type === "increment") {
    if (item.quantity + 1 == item.stock_quantity) {
-    console.log("over stock");
     setChosenItem(item);
     setIsQuantity(true);
     setMessage("increment");
@@ -75,6 +79,7 @@ const CustomerCart = () => {
    setIsQuantity(true);
   };
  };
+ console.log(discountCart);
  return (
   <>
    {isQuantity && (
@@ -121,7 +126,7 @@ const CustomerCart = () => {
      <div className="flex items-start justify-between ">
       <div className="bg-white w-2/3 mt-4 mb-12 rounded-lg">
        <div className="px-12 py-2">
-        {cart.map((item) => (
+        {discountCart.map((item) => (
          <div
           key={`${item._id}+${item.size}`}
           className="flex justify-between border-b-2 border-gray-200 py-4"
@@ -137,8 +142,19 @@ const CustomerCart = () => {
              <div className="font-semibold">{item.name}</div>
              <div className="text-sm">Size: {item.size}</div>
             </div>
-            <div className="text-lg font-bold">
-             ${Math.round(item.price * item.quantity)}
+            <div className="flex gap-2">
+             <div
+              className={`text-lg font-bold ${
+               item.discounted_price && "text-gray-600 line-through"
+              }`}
+             >
+              ${Math.round(item.price * item.quantity)}
+             </div>
+             {item.discounted_price && (
+              <div className="text-lg font-bold text-red-600">
+               ${Math.round(item.discounted_price * item.quantity)}
+              </div>
+             )}
             </div>
            </div>
           </div>
@@ -197,7 +213,7 @@ const CustomerCart = () => {
         ))}
        </div>
       </div>
-      <CartBill></CartBill>
+      <CartBill onCartChange={handleDiscountCart}></CartBill>
      </div>
     </div>
    </div>

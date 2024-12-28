@@ -6,6 +6,21 @@ import ProductCard from "../../components/customer/ProductCard";
 const CustomerSearch = () => {
  const params = useParams();
  const [products, setProducts] = useState([]);
+ console.log(params);
+ const [sortby, setSortby] = useState("");
+ const handleSortChange = (e) => {
+  setSortby(e.target.value);
+  console.log("Selected Sort Option:", e.target.value);
+  if (e.target.value === "lowestPrice") {
+   setProducts((prev) => prev.sort((a, b) => a.price - b.price));
+  } else if (e.target.value === "highestPrice") {
+   setProducts((prev) => prev.sort((a, b) => b.price - a.price));
+  } else if (e.target.value === "leastPopular") {
+   setProducts((prev) => prev.sort((a, b) => a.rating - b.rating));
+  } else if (e.target.value === "mostPopular") {
+   setProducts((prev) => prev.sort((a, b) => b.rating - a.rating));
+  }
+ };
  useEffect(() => {
   const fecthProducts = async () => {
    const response = params.category
@@ -17,17 +32,26 @@ const CustomerSearch = () => {
    setProducts(data);
   };
   fecthProducts();
- }, [params.keyword, params.category]);
+ }, [params]);
  console.log(products);
  return (
   <div className="flex flex-col px-40 bg-slate-100 pb-8">
    <div className="justify-end items-left text-right text-xl mt-8 ">
     <span className="bg-slate-100 font-semibold">Sort by </span>
-    <select className="bg-white " name="" id="">
-     <option value="highestPrice">Highest price</option>
+    <select
+     className="bg-white"
+     name="sortby"
+     id="sortby"
+     value={sortby} // Bind the state to the select value
+     onChange={handleSortChange} // Handle changes to update the state
+    >
+     <option value="" disabled>
+      Select an option
+     </option>
      <option value="lowestPrice">Lowest price</option>
-     <option value="mostPoplular">Most popular</option>
+     <option value="highestPrice">Highest price</option>
      <option value="leastPopular">Least popular</option>
+     <option value="mostPopular">Most popular</option>
     </select>
    </div>
    <div className="flex justify-center items-center ">
