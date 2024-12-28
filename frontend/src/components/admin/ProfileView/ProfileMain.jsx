@@ -20,7 +20,6 @@ export default function ProfileHeader() {
     const fetchProfile = async () => {
         if (token) {
             const data = await adminService.getAdminProfile(token);
-            console.log(data);
             if (data) {
                 setProfile(data);
                 setEditProfile(data);

@@ -47,10 +47,12 @@ exports.getProfile = async (req, res) => {
   try {
     const userID = req.user.id
     userInfo = await User.getInfo(userID)
-    console.log(userInfo)
     if (!userInfo) {
       return res.status(404).send({ message: 'User not found' });
     }
+    if (!userInfo.gender) userInfo.gender = "N/A";
+    if (!userInfo.birthday) userInfo.gender = "N/A";
+    if (!userInfo.region) userInfo.region = "N/A";
     res.status(200).json({
       id: userInfo._id,
       name: userInfo.name,
