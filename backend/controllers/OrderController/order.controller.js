@@ -244,4 +244,19 @@ exports.getCustomerOrder = async (req, res) => {
 }
 
 
+exports.updateOrderStatus = async(req,res) =>{
+  const {id} = req.params
+
+  try{
+    updateOrderStatus = Order.updateStatus(id);
+    res.status(200).json({
+      updateOrderStatus,
+    })
+  }
+  catch (error){
+    console.error('Error update status:', error);
+    res.status(500).json({ message: 'Error  update status', error });
+  }
+}
+
 

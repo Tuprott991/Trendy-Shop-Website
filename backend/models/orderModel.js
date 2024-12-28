@@ -70,10 +70,9 @@ const orderSchema = new Schema(
 
             async updateStatus(userID, status) {
                 try {
-                    const statusData = {};
                     const updatedStatus = await this.findByIdAndUpdate(
                         userID,
-                        { $set: statusData },
+                        { $set: {status} },
                         { new: true, runValidators: true } // Trả về tài liệu đã được cập nhật và áp dụng validate
                     );
                     if (!updatedStatus) {
