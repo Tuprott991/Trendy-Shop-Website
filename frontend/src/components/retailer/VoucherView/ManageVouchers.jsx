@@ -7,6 +7,18 @@ import { retailerService } from "../../../services/retailerService";
 const VouchersTable = () => {
     const [vouchers, setVouchers] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [newVoucher, setNewVoucher] = useState({
+        code: "",
+        description: "",
+        discount_value: 0,
+        valid_from: "",
+        valid_to: "",
+        minimum_order_value: 0,
+        max_uses: 1,
+        status: "Inactive",
+    });
+
     const [selectedVoucherId, setSelectedVoucherId] = useState(null);
     const token = localStorage.getItem("token");
 
@@ -15,7 +27,6 @@ const VouchersTable = () => {
             try {
                 const response = retailerService.getVoucher(token);
                 const data = await response.json();
-                console.log(data);
                 setVouchers(data);
             } catch (error) {
                 console.error("Lỗi khi tải dữ liệu:", error);
@@ -23,6 +34,36 @@ const VouchersTable = () => {
         };
         fetchVouchers();
     }, []);
+
+    const handleAddVoucher = () => {
+        setIsAddModalOpen(true);
+    };
+
+    const handleAddVoucherSubmit = async () => {
+        const voucherData = { ...newVoucher };
+        try {
+            const response = await retailerService.addVoucher(token, voucherData);
+            console.log('Response: ',response)
+        } catch {
+            console.error("Lỗi khi tải dữ liệu:", error);
+        }
+        setVouchers([...vouchers, { ...newVoucher, id: Date.now() }]);
+        setIsAddModalOpen(false);
+        setNewVoucher({
+            code: "",
+            description: "",
+            discount_value: 0,
+            valid_from: "",
+            valid_to: "",
+            minimum_order_value: 0,
+            max_uses: 1,
+            status: "Inactive",
+        });
+    };
+
+    const handleAddModalClose = () => {
+        setIsAddModalOpen(false);
+    };
 
     const handleStatusChange = (id, newStatus) => {
         setVouchers((prevVouchers) =>
@@ -118,6 +159,14 @@ const VouchersTable = () => {
 
     return (
         <div className="px-6 py-5">
+            <div className="mb-4 flex justify-end">
+                <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded font-bold hover:bg-blue-600"
+                    onClick={handleAddVoucher}
+                >
+                    Add Voucher
+                </button>
+            </div>
             <Pagination
                 data={vouchers}
                 itemsPerPage={5}
@@ -129,7 +178,9 @@ const VouchersTable = () => {
                         <div className="flex justify-center items-center">
                             <TiDeleteOutline size={150} color="red" />
                         </div>
-                        <p className="text-lg font-semibold mb-4">Are you sure you want to delete this order?</p>
+                        <p className="text-lg font-semibold mb-4">
+                            Are you sure you want to delete this voucher?
+                        </p>
                         <div className="flex justify-end space-x-4">
                             <button
                                 className="bg-gray-300 text-black px-4 py-2 rounded font-bold"
@@ -147,6 +198,79 @@ const VouchersTable = () => {
                     </div>
                 </div>
             )}
+            {isAddModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6">
+                        <h2 className="text-lg font-semibold mb-4">Add New Voucher</h2>
+                        <div className="space-y-4">
+                            <input
+                                type="text"
+                                placeholder="Code"
+                                value={newVoucher.code}
+                                onChange={(e) => setNewVoucher({ ...newVoucher, code: e.target.value })}
+                                className="w-full px-3 py-2 border rounded"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Description"
+                                value={newVoucher.description}
+                                onChange={(e) => setNewVoucher({ ...newVoucher, description: e.target.value })}
+                                className="w-full px-3 py-2 border rounded"
+                            />
+                            <input
+                                type="number"
+                                placeholder="Discount Value"
+                                value={newVoucher.discount_value}
+                                onChange={(e) => setNewVoucher({ ...newVoucher, discount_value: e.target.value })}
+                                className="w-full px-3 py-2 border rounded"
+                            />
+                            <input
+                                type="datetime-local"
+                                placeholder="Valid From"
+                                value={newVoucher.valid_from}
+                                onChange={(e) => setNewVoucher({ ...newVoucher, valid_from: e.target.value })}
+                                className="w-full px-3 py-2 border rounded"
+                            />
+                            <input
+                                type="datetime-local"
+                                placeholder="Valid To"
+                                value={newVoucher.valid_to}
+                                onChange={(e) => setNewVoucher({ ...newVoucher, valid_to: e.target.value })}
+                                className="w-full px-3 py-2 border rounded"
+                            />
+                            <input
+                                type="number"
+                                placeholder="Minimum Order Value"
+                                value={newVoucher.minimum_order_value}
+                                onChange={(e) => setNewVoucher({ ...newVoucher, minimum_order_value: e.target.value })}
+                                className="w-full px-3 py-2 border rounded"
+                            />
+                            <input
+                                type="number"
+                                placeholder="Max Uses"
+                                value={newVoucher.max_uses}
+                                onChange={(e) => setNewVoucher({ ...newVoucher, max_uses: e.target.value })}
+                                className="w-full px-3 py-2 border rounded"
+                            />
+                        </div>
+                        <div className="flex justify-end space-x-4 mt-4">
+                            <button
+                                className="bg-gray-300 text-black px-4 py-2 rounded font-bold"
+                                onClick={handleAddModalClose}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="bg-blue-500 text-white px-4 py-2 rounded font-bold"
+                                onClick={handleAddVoucherSubmit}
+                            >
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };

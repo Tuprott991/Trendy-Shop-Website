@@ -66,8 +66,36 @@ const getVoucher = async (token) => {
     }
 }
 
+const addVoucher = async (token, voucher) => {
+    try {
+        const response = await axios.post(
+            `http://localhost:8080/api/retailer/addvoucher`,
+            voucher,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        console.log("Voucher added successfully:", response.data);
+        return response;
+    } catch (e) {
+        if (e.response) {
+            console.error("Server responded with an error:", e.response.status, e.response.data);
+            return e.response;
+        } else if (e.request) {
+            console.error("No response received from server. Check the network or server:", e.request);
+        } else {
+            console.error("Error in request setup:", e.message);
+        }
+        return { status: "error", message: e.message };
+    }
+};
+
 export const retailerService = {
     getDashboard,
     deleteProduct,
     getVoucher,
+    addVoucher
 };

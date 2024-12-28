@@ -4,36 +4,23 @@ const User = require("../../models/index").User;
 
 exports.postCreateVoucher = async (req, res) => {
   try {
-    const { code, description, retailer_id, discount_value, valid_from, valid_to, minimum_order_value, max_uses } = req.body;
-
-    // Validate required fields
-    if (!code || !discount_value ||!retailer_id || !description || !valid_from || !valid_to) {
+    const retailer_id = req.user.id;
+    console.log(retailer_id);
+    const { code, description, discount_value, valid_from, valid_to, minimum_order_value, max_uses } = req.body;
+    if (!code || !discount_value ||!retailer_id || !description || !valid_from || !valid_to)
       return res.status(400).send({ message: "All required fields must be provided!" });
-    }
-
     const existingRetailer = await User.find({ retailer_id, role: "retailer" });
-    if (!existingRetailer) {
+    if (!existingRetailer)
       return res.status(400).send({ message: "Retailer is not exist." });
-    }
-
-    // Validate dates
     const validFromDate = new Date(valid_from);
     const validToDate = new Date(valid_to);
-    if (isNaN(validFromDate.getTime()) || isNaN(validToDate.getTime())) {
+    if (isNaN(validFromDate.getTime()) || isNaN(validToDate.getTime()))
       return res.status(400).send({ message: "Invalid dates provided!" });
-    }
-
-    if (validFromDate >= validToDate) {
+    if (validFromDate >= validToDate)
       return res.status(400).send({ message: "'valid_from' must be before 'valid_to'!" });
-    }
-
-    // Check if voucher code already exists
     const existingVoucher = await Voucher.findOne({ code });
-    if (existingVoucher) {
+    if (existingVoucher)
       return res.status(400).send({ message: "Voucher code is already in use!" });
-    }
-
-    // Create a new voucher
     const voucher = new Voucher({
       code,
       description,
@@ -45,11 +32,7 @@ exports.postCreateVoucher = async (req, res) => {
       max_uses,
       used_count: 0
     });
-
-    // Save the voucher
     await voucher.save();
-
-    // Send a success response
     res.status(201).send({ message: "Voucher created successfully!", voucher });
   } catch (err) {
     res.status(500).send({
