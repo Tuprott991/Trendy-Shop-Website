@@ -73,19 +73,19 @@ const orderSchema = new Schema(
                     const updatedStatus = await this.findByIdAndUpdate(
                         userID,
                         { $set: {status} },
-                        { new: true, runValidators: true } // Trả về tài liệu đã được cập nhật và áp dụng validate
+                        { new: true, runValidators: true }
                     );
                     if (!updatedStatus) {
                         throw new Error("User not found");
                     }
                     return updatedStatus;
+
                 } catch (error) {
                     console.error("Error update order status:", error);
                     throw new Error("failed to update order status");
                 }
             },
 
-            // Tổng số orders theo userID
             async orderInfo(userID) {
                 try {
                     const orderData = await this.find({
@@ -110,7 +110,6 @@ const orderSchema = new Schema(
                 }
             },
 
-            // Tổng số delivered orders (completed) theo userID
             async countDeliveredOrders(userID) {
                 try {
                     const deliveredOrders = await this.countDocuments({
@@ -124,7 +123,6 @@ const orderSchema = new Schema(
                 }
             },
 
-            // Tính revenue dựa trên total_money của những order completed
             async calculateRevenue(userID) {
                 try {
                     const totalRevenue = await this.aggregate([
@@ -141,33 +139,27 @@ const orderSchema = new Schema(
                             },
                         },
                     ]);
-
-                    // Nếu không có kết quả, trả về 0
                     return totalRevenue.length > 0 ? totalRevenue[0].totalRevenue : 0;
                 } catch (error) {
                     console.error("Error calculating revenue:", error);
                     throw new Error("Failed to calculate revenue");
                 }
             },
+
             async getCustomerOrder(userID) {
                 try {
-                    // Lấy tất cả các đơn hàng của người dùng với customer_id khớp userID
                     const orders = await this.find({ customer_id: userID });
-            
                     if (orders.length === 0) {
                         throw new Error("No orders found for this user");
                     }
-            
-                    // Gộp các đơn hàng dựa trên unique_code
                     const groupedOrders = orders.reduce((acc, order) => {
-                        const code = order.unique_code || "no_code"; // Dùng "no_code" nếu unique_code không tồn tại
+                        const code = order.unique_code || "no_code";
                         if (!acc[code]) {
-                            acc[code] = []; // Khởi tạo danh sách đơn hàng cho unique_code
+                            acc[code] = [];
                         }
-                        acc[code].push(order); // Thêm đơn hàng vào nhóm tương ứng
+                        acc[code].push(order);
                         return acc;
                     }, {});
-            
                     return groupedOrders;
                 } catch (error) {
                     console.error("Error retrieving orders:", error);

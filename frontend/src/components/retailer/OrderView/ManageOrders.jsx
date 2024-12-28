@@ -6,9 +6,9 @@ import { retailerService } from "../../../services/retailerService";
 const OrdersTable = () => {
     const token = localStorage.getItem("token");
     const [orders, setOrders] = useState([]);
+    const [loadingStates, setLoadingStates] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -23,22 +23,26 @@ const OrdersTable = () => {
     }, []);
 
     const handleStatusChange = async (id, newStatus) => {
-        setLoading(true);
+        setLoadingStates((prev) => ({ ...prev, [id]: true }));
         try {
+            console.log(id);
             const response = await retailerService.updateOrderStatus(id, newStatus);
             if (response.status === 200) {
                 setOrders((prevOrders) =>
                     prevOrders.map((order) =>
-                        order.id === id ? { ...order, status: newStatus } : order
+                        order._id === id ? { ...order, status: newStatus } : order
                     )
                 );
+                alert("Status updated successfully!");
             } else {
-                console.error("Cập nhật trạng thái không thành công.");
+                console.error("Failed to update status.");
+                alert("Failed to update status!");
             }
         } catch (err) {
             console.error("Error updating status:", err);
+            alert("An error occurred while updating status.");
         } finally {
-            setLoading(false);
+            setLoadingStates((prev) => ({ ...prev, [id]: false }));
         }
     };
 
@@ -78,10 +82,10 @@ const OrdersTable = () => {
                                         ? "bg-gray-200 text-black"
                                         : "bg-amber-200 text-black"
                                         }`}
-                                    disabled={loading}
+                                    disabled={loadingStates[order.id]}
                                 >
                                     <option value="pending" className="text-center">Pending</option>
-                                    <option value="deliveried" className="text-center">Deliveried</option>
+                                    <option value="deliveried" className="text-center">Delivered</option>
                                 </select>
                             </td>
                             <td className="px-6 py-4 text-center">
