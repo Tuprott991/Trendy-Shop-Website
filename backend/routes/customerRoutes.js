@@ -23,6 +23,7 @@ module.exports = () => {
   
   router.get("/product/review/:id", FeedbackController.getProductFeedback);
   
+  router.post("/product/review", FeedbackController.postProductFeedback);
   
   return router;  
 };

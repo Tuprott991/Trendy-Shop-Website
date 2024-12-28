@@ -54,7 +54,6 @@ exports.getProductInfo = async (req, res) => {
   }
 }
 
-<<<<<<< HEAD
 exports.GetProductReview = async (req, res) => {
     try {
         const {id} = req.params;
@@ -68,7 +67,6 @@ exports.GetProductReview = async (req, res) => {
         res.status(500).json({ message: 'Error getting product review', error });
     }
 }
-=======
 exports.postDeleteProduct = (req, res) => {
   const { id } = req.body;
 
@@ -83,5 +81,4 @@ exports.postDeleteProduct = (req, res) => {
 };
 
 
->>>>>>> 9a0a73e6f87dcbc9d0a28869b51aade6c1320dfc
 
