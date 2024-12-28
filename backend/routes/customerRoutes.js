@@ -28,6 +28,7 @@ module.exports = () => {
   
   router.get("/order/:id", OrderController.getUserOrder);
 
+  router.get("/createorders", OrderController.postCreateOrders);
 
   return router;  
 };
