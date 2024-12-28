@@ -13,6 +13,7 @@ module.exports = () => {
     router.get("/dashboard", authenticateToken, retailerDashboard.getRetailerDashboardData);
     router.post("/addproduct", authenticateToken, productPage.importProduct);
     router.post("/deleteproduct", productPage.postDeleteProduct);
+    router.post("/updateproduct", productPage.updateProduct);
     router.post("/addvoucher", authenticateToken, voucherPage.postCreateVoucher);
     router.get("/voucher", authenticateToken, voucherPage.getVoucherPage);
     router.post("/deletevoucher", voucherPage.postDeleteVoucher);
