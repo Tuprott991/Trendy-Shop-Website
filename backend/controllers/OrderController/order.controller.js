@@ -159,7 +159,7 @@ exports.postCreateOrders = async (req, res) => {
       }, 0);
 
       itemsForRetailer.forEach(item => {
-        stock_quantity = Product.find({ product_id: item.product_id })[0].stock_quantity
+        stock_quantity = Product.findOne({ product_id: item.product_id }).stock_quantity
         Product.updateStockQuantity(item.product_id, stock_quantity - item.quantity)
       });
       // Gán voucher nếu có
