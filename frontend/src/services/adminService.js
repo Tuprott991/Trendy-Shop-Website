@@ -49,9 +49,20 @@ const getManageRetailer = async () => {
     }
 }
 
+const deleteRetailer = async (id) => {
+    try {
+        const response = await axios.post(`http://localhost:8080/api/user/deleteuser`, { id });
+        return response;
+    } catch (e) {
+        console.log(e.response);
+        return e.response;
+    }
+}
+
 export const adminService = {
     getAdminProfile,
     updateAdminProfile,
     getAdminDashboard,
     getManageRetailer,
+    deleteRetailer
 };

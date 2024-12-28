@@ -28,12 +28,25 @@ const RetailersTable = () => {
         setIsModalOpen(true);
     };
 
-    const handleConfirmDelete = () => {
-        setRetailers((prevRetailers) =>
-            prevRetailers.filter((retailer) => retailer.id !== selectedRetailer)
-        );
-        setIsModalOpen(false);
-        setSelectedRetailer(null);
+    const handleConfirmDelete = async () => {
+        if (!selectedRetailer) return;
+        try {
+            const response = await adminService.deleteRetailer(selectedRetailer);
+            console.log(response);
+            if (response.status === 200) {
+                alert("Retailer has been successfully deleted.");
+            } else {
+                const errorData = await response.json();
+                console.error("Error when deleting:", errorData);
+                alert("Unable to delete retailer. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error when sending request:", error);
+            alert("An error occurred. Please check your network connection.");
+        } finally {
+            setIsModalOpen(false);
+            setSelectedRetailer(null);
+        }
     };
 
     const handleCloseModal = () => {
@@ -63,7 +76,7 @@ const RetailersTable = () => {
                                 <div className="flex space-x-4 justify-center">
                                     <button
                                         className="hover:text-red-500 transition-all"
-                                        onClick={() => handleDeleteClick(retailer.id)}
+                                        onClick={() => handleDeleteClick(retailer._id)}
                                     >
                                         <CgTrash size={25} color="red" />
                                     </button>
