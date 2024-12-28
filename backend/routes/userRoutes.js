@@ -13,6 +13,6 @@ module.exports =  () =>{
     router.post("/updateprofile", authenticateToken, user.postUpdateProfile);
     router.post("/deleteuser", authenticateToken, user.postDeleteUser);
     router.get("/admindashboard", user.getAdminDashboardData); 
-    router.get("/manage_retailer", user.manageRetailer);
+    router.get("/manageretailer", user.manageRetailer);
     return router;  
 };  

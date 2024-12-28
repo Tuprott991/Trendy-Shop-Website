@@ -95,7 +95,7 @@ const userSchema = new Schema(
       
 
       // Instance method for creating a new user (can be used directly from an instance)
-        async create(name,email,password,role) {
+        async create(name, email, password, role, birthday, gender, avatar, region) {
           try{
             // Check if the user already exists
             const existingUser = await this.findOne({ email });
@@ -114,6 +114,10 @@ const userSchema = new Schema(
               password: hashedPassword,
               role, // Assign the role selected by the user
               order_list: [], // Ensure order_list is empty
+              birthday,
+              gender,
+              avatar,
+              region
             });
 
             // Save User to the database
