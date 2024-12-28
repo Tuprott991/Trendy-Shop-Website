@@ -128,7 +128,7 @@ exports.getUserOrder= async (req, res) => {
 };
 
 exports.postCreateOrders = async(req,res) =>{
-  const {customer_id, product_list, voucher,name, address, city, phone, email, payment_method} = req.body
+  const {customer_id, product_list, voucher, name, address, city, phone, email, payment_method} = req.body
 
   try {
     // Lấy danh sách unique retailer_id
