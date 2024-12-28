@@ -121,6 +121,16 @@ const updateRetailerProfile = async (token, data) => {
     }
 };
 
+const deleteVoucher = async (id) => {
+    try {
+        const response = await axios.post(`http://localhost:8080/api/retailer/deletevoucher`, { id });
+        return response;
+    } catch (e) {
+        console.log(e.response);
+        return e.response;
+    }
+}
+
 export const retailerService = {
     getDashboard,
     deleteProduct,
@@ -128,4 +138,5 @@ export const retailerService = {
     addVoucher,
     getRetailerProfile,
     updateRetailerProfile,
+    deleteVoucher,
 };
