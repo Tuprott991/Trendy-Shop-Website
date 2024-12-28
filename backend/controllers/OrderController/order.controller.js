@@ -6,10 +6,10 @@ exports.postAddOrder = async (req, res) => {
   const { id, status_order, address, phone, payment_method, items, voucher } = req.body;
 
   try {
-    // Step 1: Initialize an object to group items by retailer (user_id)
+    // Initialize an object to group items by retailer (user_id)
     const retailerItemsMap = {};
 
-    // Step 2: Iterate over items and fetch the user_id for each product
+    // Iterate over items and fetch the user_id for each product
     for (let item of items) {
       // Look up the product by its product_id to get the user_id (retailer)
       const product = await Product.findOne({ _id: item.product_id }).select('user_id stock_quantity'); // Get user_id and stock_quantity of the product
@@ -41,7 +41,7 @@ exports.postAddOrder = async (req, res) => {
       });
     }
 
-    // Step 3: For each retailer_id, create an order with corresponding products
+    // For each retailer_id, create an order with corresponding products
     const createdOrders = [];
 
     for (let retailer_id in retailerItemsMap) {
@@ -74,7 +74,7 @@ exports.postAddOrder = async (req, res) => {
       createdOrders.push(savedOrder); // Add the created order to the list
     }
 
-    // Step 4: Return the created orders
+    // Return the created orders
     return res.status(201).json({
       message: 'Orders created successfully',
       orders: createdOrders
