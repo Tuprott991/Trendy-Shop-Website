@@ -8,6 +8,7 @@ const VouchersTable = () => {
     const [vouchers, setVouchers] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [newVoucher, setNewVoucher] = useState({
         code: "",
         description: "",
@@ -36,6 +37,14 @@ const VouchersTable = () => {
         };
         fetchVouchers();
     }, []);
+
+    const handleStatusChange = (id, newStatus) => {
+        setVouchers((prevVouchers) =>
+            prevVouchers.map((voucher) =>
+                voucher.id === id ? { ...voucher, status: newStatus } : voucher
+            )
+        );
+    };
 
     const handleAddVoucher = () => {
         setIsAddModalOpen(true);
@@ -67,16 +76,12 @@ const VouchersTable = () => {
         setIsAddModalOpen(false);
     };
 
-    const handleStatusChange = (id, newStatus) => {
-        setVouchers((prevVouchers) =>
-            prevVouchers.map((voucher) =>
-                voucher.id === id ? { ...voucher, status: newStatus } : voucher
-            )
-        );
+    const handleViewVoucher = () => {
+        setIsViewModalOpen(true);
     };
 
-    const handleViewClick = () => {
-        alert("View Button Clicked!");
+    const handleViewModalClose = () => {
+        setIsViewModalOpen(false);
     };
 
     const handleEditClick = () => {
@@ -270,7 +275,78 @@ const VouchersTable = () => {
                     </div>
                 </div>
             )}
-
+            {isViewModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6">
+                        <h2 className="text-lg font-semibold mb-4">Add New Voucher</h2>
+                        <div className="space-y-4">
+                            <input
+                                type="text"
+                                placeholder="Code"
+                                value={newVoucher.code}
+                                onChange={(e) => setNewVoucher({ ...newVoucher, code: e.target.value })}
+                                className="w-full px-3 py-2 border rounded"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Description"
+                                value={newVoucher.description}
+                                onChange={(e) => setNewVoucher({ ...newVoucher, description: e.target.value })}
+                                className="w-full px-3 py-2 border rounded"
+                            />
+                            <input
+                                type="number"
+                                placeholder="Discount Value"
+                                value={newVoucher.discount_value}
+                                onChange={(e) => setNewVoucher({ ...newVoucher, discount_value: e.target.value })}
+                                className="w-full px-3 py-2 border rounded"
+                            />
+                            <input
+                                type="datetime-local"
+                                placeholder="Valid From"
+                                value={newVoucher.valid_from}
+                                onChange={(e) => setNewVoucher({ ...newVoucher, valid_from: e.target.value })}
+                                className="w-full px-3 py-2 border rounded"
+                            />
+                            <input
+                                type="datetime-local"
+                                placeholder="Valid To"
+                                value={newVoucher.valid_to}
+                                onChange={(e) => setNewVoucher({ ...newVoucher, valid_to: e.target.value })}
+                                className="w-full px-3 py-2 border rounded"
+                            />
+                            <input
+                                type="number"
+                                placeholder="Minimum Order Value"
+                                value={newVoucher.minimum_order_value}
+                                onChange={(e) => setNewVoucher({ ...newVoucher, minimum_order_value: e.target.value })}
+                                className="w-full px-3 py-2 border rounded"
+                            />
+                            <input
+                                type="number"
+                                placeholder="Max Uses"
+                                value={newVoucher.max_uses}
+                                onChange={(e) => setNewVoucher({ ...newVoucher, max_uses: e.target.value })}
+                                className="w-full px-3 py-2 border rounded"
+                            />
+                        </div>
+                        <div className="flex justify-end space-x-4 mt-4">
+                            <button
+                                className="bg-gray-300 text-black px-4 py-2 rounded font-bold"
+                                onClick={handleViewModalClose}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="bg-blue-500 text-white px-4 py-2 rounded font-bold"
+                                onClick={handleAddVoucherSubmit}
+                            >
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
