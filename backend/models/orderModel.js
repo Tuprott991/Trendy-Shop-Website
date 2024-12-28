@@ -3,12 +3,13 @@ const { Schema } = mongoose;
 
 
 const orderSchema = new Schema({
+  customer_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   retailer_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   total_money: { type: Number, required: true },
-  status: { type: String, enum: ['pending', 'completed'], default: 'pending' },
+  status: { type: String, enum: ['pending', 'deliveried'], default: 'pending' },
   address: { type: String },
   phone: { type: String },
-  payment_method: { type: String, enum: ['credit_card', 'cash', 'paypal'], required: true },
+  payment_method: { type: String, enum: ['bank', 'cash'], required: true },
   items: [
     {
       product_id: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
