@@ -1,65 +1,40 @@
-import React, { useState, useEffect } from "react";
-import { retailerService } from "../../../services/retailerService";
+import React, { useEffect } from "react";
 
-const Dashboard = ({ products }) => {
-    const [stats, setStats] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const token = localStorage.getItem("token");
+const Dashboard = ({ stats, products }) => {
+    const processedStats = [
+        {
+            id: 1,
+            label: "Total Products",
+            value: products?.length || 0,
+            icon: "📋",
+        },
+        {
+            id: 2,
+            label: "Total Orders",
+            value: stats?.totalOrders || 0,
+            icon: "📦",
+        },
+        {
+            id: 3,
+            label: "Total Delivered",
+            value: stats?.totalDelivered || 0,
+            icon: "📮",
+        },
+        {
+            id: 4,
+            label: "Total Revenue",
+            value: stats?.totalRevenue || 0,
+            icon: "💰",
+        },
+    ];
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await retailerService.getDashboard(token);
-                console.log(token);
-                if (data?.data) {
-                    const new_stats = [
-                        {
-                            id: 1,
-                            label: "Total Products",
-                            value: products?.length,
-                            icon: "📋",
-                        },
-                        {
-                            id: 2,
-                            label: "Total Orders",
-                            value: data.data.totalOrders,
-                            icon: "📦",
-                        },
-                        {
-                            id: 3,
-                            label: "Total Delivered",
-                            value: data.data.totalDelivered,
-                            icon: "📮",
-                        },
-                        {
-                            id: 4,
-                            label: "Total Revenue",
-                            value: data.data.totalRevenue,
-                            icon: "💰",
-                        },
-                    ];
-                    setStats(new_stats);
-                } else {
-                    setError("Invalid data format.");
-                }
-                setLoading(false);
-            } catch (err) {
-                console.error("Error fetching data:", err);
-                setError("Failed to load data");
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [products]); // Thêm products vào dependencies để cập nhật khi products thay đổi
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
+    if (!processedStats || processedStats.length === 0) {
+        return <div>No data available.</div>;
+    }
 
     return (
         <div className="flex flex-nowrap justify-center gap-6 p-6 bg-gray-100 w-full max-w-full">
-            {stats.map((stat) => (
+            {processedStats.map((stat) => (
                 <div
                     key={stat.id}
                     className="flex items-center justify-between w-1/4 min-w-[150px] p-4 bg-white rounded-lg shadow-lg"

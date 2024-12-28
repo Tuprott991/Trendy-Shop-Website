@@ -17,18 +17,17 @@ export default function ProfileHeader() {
 
     const token = localStorage.getItem("token");
 
-    useEffect(() => {
-        const fetchProfile = async () => {
-            if (token) {
-                const data = await adminService.getAdminProfile(token);
-                console.log(data);
-                if (data) {
-                    setProfile(data);
-                    setEditProfile(data);
-                }
+    const fetchProfile = async () => {
+        if (token) {
+            const data = await adminService.getAdminProfile(token);
+            if (data) {
+                setProfile(data);
+                setEditProfile(data);
             }
-        };
+        }
+    };
 
+    useEffect(() => {
         fetchProfile();
     }, [token]);
 
@@ -39,11 +38,12 @@ export default function ProfileHeader() {
 
     const handleSave = async () => {
         try {
-            console.log(editProfile)
             const updatedProfile = await adminService.updateAdminProfile(token, editProfile);
             if (updatedProfile) {
                 setProfile(updatedProfile);
                 setIsEditing(false);
+                alert("Update successfully");
+                fetchProfile();
             } else {
                 alert("Failed to update profile. Please try again.");
             }
