@@ -12,6 +12,7 @@ const RetailerAside = () => {
     const { isLoginSuccess, logout, setIsLoginSuccess } = useContext(AuthContext);
 
     const [showLogoutModal, setShowLogoutModal] = useState(false);
+    const [activeItem, setActiveItem] = useState("");
     const divRef = useRef(null);
 
     useEffect(() => {
@@ -42,15 +43,16 @@ const RetailerAside = () => {
         setShowLogoutModal(false);
     };
 
-    const handleNavigation = (route) => {
+    const handleNavigation = (route, itemName) => {
         navigate(route);
+        setActiveItem(itemName);
     };
 
     return (
         <>
             {isLoginSuccess && (
                 <div
-                    className="absolute z-50 right-6 top-16 flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                    className="absolute z-50 right-6 top-16 flex items-center p-4 mb-4 text-lg text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
                     role="alert"
                 >
                     <svg
@@ -76,53 +78,51 @@ const RetailerAside = () => {
             )}
 
             <div className="h-screen w-64 bg-white flex flex-col justify-between" ref={divRef}>
-                {/* Title */}
                 <div className="px-6 py-4 mb-10">
                     <h1 className="text-2xl font-bold text-green-600 cursor-pointer hover:opacity-90">
                         SoftWear
                     </h1>
-                    <p className="text-gray-500 text-sm mt-2">Admin Dashboard</p>
+                    <p className="text-gray-500 text-lg mt-2">Admin Dashboard</p>
                 </div>
 
                 <div className="flex-1 flex flex-col px-6 py-4 space-y-4">
                     <div
-                        className="flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all"
-                        onClick={() => handleNavigation("/admin")}
+                        className={`flex items-center gap-5 p-3 rounded-lg cursor-pointer transition-all ${activeItem === "dashboard" ? "bg-emerald-400 text-white" : "hover:bg-emerald-200"
+                            }`}
+                        onClick={() => handleNavigation("/admin", "dashboard")}
                     >
                         <CgHome size={24} />
-                        <span className="text-sm font-semibold">Dashboard</span>
+                        <span className="text-base font-semibold">Dashboard</span>
                     </div>
 
-                    {/* Manage Retailers */}
                     <div
-                        className="flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all"
-                        onClick={() => handleNavigation("/admin/manage")}
+                        className={`flex items-center gap-5 p-3 rounded-lg cursor-pointer transition-all ${activeItem === "manage" ? "bg-emerald-400 text-white" : "hover:bg-emerald-200"
+                            }`}
+                        onClick={() => handleNavigation("/admin/manage", "manage")}
                     >
                         <CgCopy size={24} />
-                        <span className="text-sm font-semibold">Manage Retailer</span>
+                        <span className="text-base font-semibold">Manage Retailer</span>
                     </div>
 
-                    {/* Profile */}
                     <div
-                        className="flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all"
-                        onClick={() => handleNavigation("/admin/profile")}
+                        className={`flex items-center gap-5 p-3 rounded-lg cursor-pointer transition-all ${activeItem === "profile" ? "bg-emerald-400 text-white" : "hover:bg-emerald-200"
+                            }`}
+                        onClick={() => handleNavigation("/admin/profile", "profile")}
                     >
                         <CgProfile size={24} />
-                        <span className="text-sm font-semibold">Profile</span>
+                        <span className="text-base font-semibold">Profile</span>
                     </div>
 
-                    {/* Logout */}
                     <div
-                        className="flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-red-100 text-gray-700 transition-all"
+                        className="flex items-center gap-5 p-3 rounded-lg cursor-pointer hover:bg-red-100 text-gray-700 transition-all"
                         onClick={() => setShowLogoutModal(true)}
                     >
                         <IoLogOutOutline size={24} color="red" />
-                        <span className="text-sm font-semibold text-red-500">Logout</span>
+                        <span className="text-base font-semibold text-red-500">Logout</span>
                     </div>
                 </div>
             </div>
 
-            {/* Logout Confirmation Modal */}
             {showLogoutModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg w-96">

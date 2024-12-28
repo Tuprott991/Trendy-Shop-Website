@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ProfileHeader from "../../components/partials/ProfileHeader";
-import ProfileMain from "../../components/retailer/ProfileView/ProfileMain";
+import ProfileMain from "../../components/partials/ProfileMain";
 import { userService } from "../../services/userService";
 
 const RetailerProfile = () => {
