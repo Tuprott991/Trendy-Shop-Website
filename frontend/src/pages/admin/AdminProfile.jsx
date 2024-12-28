@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProfileHeader from "../../components/partials/ProfileHeader";
 import ProfileMain from "../../components/admin/ProfileView/ProfileMain";
-import { adminService } from "../../services/adminService";
+import { userService } from "../../services/userService";
 
 const AdminProfile = () => {
     const token = localStorage.getItem("token");
@@ -12,7 +12,7 @@ const AdminProfile = () => {
     useEffect(() => {
         const fetchAdminProfile = async () => {
             try {
-                const response = await adminService.getAdminProfile(token);
+                const response = await userService.getUserProfile(token);
                 setAdminData(response.data);
                 setLoading(false);
             } catch (err) {
