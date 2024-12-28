@@ -5,6 +5,7 @@ module.exports = () => {
   const CategoryController = require("../controllers/CategoryController/category.js");
   const ProductController = require("../controllers/ProductController/product.js");
   const OrderController = require("../controllers/OrderController/order.controller.js")
+  const FeedbackController = require("../controllers/FeedbackController/feedbackController.js")
   const router = express.Router();
 
 
@@ -19,6 +20,9 @@ module.exports = () => {
   router.get("/product/detail/:id", ProductController.getProductInfo);
 
   router.post("/order", OrderController.postAddOrder)
+  
+  router.get("/product/review/:id", FeedbackController.getProductFeedback);
+  
   
   return router;  
 };

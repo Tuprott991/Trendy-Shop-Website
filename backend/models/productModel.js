@@ -12,7 +12,8 @@ const productSchema = new Schema({
   size: {type: String, required: false},
   stock_quantity: { type: Number, default: 0 },
   rating :{type: Number, default: 0.0, max: 5.0},
-  image_url: { type: String }
+  image_url: { type: String },
+  
 }, 
 { 
   timestamps: true,
@@ -23,8 +24,12 @@ const productSchema = new Schema({
       return productInfo;
     },
     async GetProductInfo(productID) {
-      const productInfo = await Product.findById(productID);
+      const productInfo = await Product.findById(productID).lean();
       return productInfo
+    },
+    async GetProductReview(productID) {
+      const productInfo = await Product.findById(productID).lean();
+      return productInfo.reviews;
     }
 }
 });

@@ -55,5 +55,17 @@ exports.getProductInfo = async (req, res) => {
     }
 }
 
-
+exports.GetProductReview = async (req, res) => {
+    try {
+        const {id} = req.params;
+        console.log(id);
+        const productReview = await Product.GetProductReview(id);
+        res.status(200).json({ 
+            productReview
+        });
+    } catch (error) {
+        console.error("Error getting product review:", error);
+        res.status(500).json({ message: 'Error getting product review', error });
+    }
+}
 
