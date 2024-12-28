@@ -5,15 +5,15 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 exports.postSignup = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role, birthday, gender, avatar, region } = req.body;
   try {
-    if (!name || !email || !password || !role) {
+    if (!name || !email || !password || !role || !birthday ||  !gender || !region) {
       return res.status(400).send({ message: "All fields are required!" });
     }
     if (!["retailer", "customer"].includes(role)) {
       return res.status(400).send({ message: "Invalid role!" });
     }
-    const userData = await User.create(name, email, password, role);
+    const userData = await User.create(name, email, password, role, birthday, gender, avatar, region);
     if (userData === 1) {
       return res.status(400).send({ message: "Email already exists!" });
     }
