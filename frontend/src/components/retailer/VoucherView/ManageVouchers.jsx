@@ -154,7 +154,7 @@ const VouchersTable = () => {
                                     </button>
                                     <button
                                         className="hover:text-red-500 transition-all"
-                                        onClick={() => handleDeleteClick(voucher.id)}
+                                        onClick={() => handleDeleteClick(voucher._id)}
                                     >
                                         <FaTrash size={20} />
                                     </button>
