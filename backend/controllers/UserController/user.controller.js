@@ -82,6 +82,19 @@ exports.postUpdateProfile = (req, res) => {
   }
 };
 
+
+exports.postUpdateProfieCustomer = (req, res) => {
+  try {
+    const {id}=req.params;
+    const{name,email,birthday,gender,region}=req.body;
+    User.update(id,name,email,birthday,gender,region);
+    res.status(200).json({message:"Update successful"});
+  }catch{
+    console.error(error);
+    res.status(500).json({message:"Update Error"});
+  }
+}
+
 // Delete retailer
 
 exports.postDeleteUser = (req, res) => {
