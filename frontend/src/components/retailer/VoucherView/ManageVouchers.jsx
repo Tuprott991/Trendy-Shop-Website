@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaEye, FaPen, FaTrash } from "react-icons/fa";
+import { FaPen, FaTrash } from "react-icons/fa";
 import { TiDeleteOutline } from "react-icons/ti";
 import Pagination from "../Helper/pagination.jsx";
 import { retailerService } from "../../../services/retailerService";
@@ -98,16 +98,15 @@ const VouchersTable = () => {
         try {
             const response = await retailerService.deleteVoucher(id);
             if (response) {
-                setVouchers((prevVouchers) =>
-                    prevVouchers.filter((voucher) => voucher.id !== id)
-                );
+                const updatedVouchers = await retailerService.getVoucher(token);
+                setVouchers(updatedVouchers.data);
             }
             setIsModalOpen(false);
             setSelectedVoucherId(null);
         } catch (error) {
             console.error("Lỗi khi xóa voucher:", error);
         }
-    };
+    };    
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
