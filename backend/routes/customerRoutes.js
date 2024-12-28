@@ -4,8 +4,9 @@ const express = require("express");
 module.exports = () => {
   const CategoryController = require("../controllers/CategoryController/category.js");
   const ProductController = require("../controllers/ProductController/product.js");
-  const OrderController = require("../controllers/OrderController/order.controller.js")
-  const FeedbackController = require("../controllers/FeedbackController/feedbackController.js")
+  const OrderController = require("../controllers/OrderController/order.controller.js");
+  const FeedbackController = require("../controllers/FeedbackController/feedbackController.js");
+  const VoucherController = require("../controllers/VoucherController/voucher.Controller.js");
   const router = express.Router();
 
 
@@ -28,7 +29,11 @@ module.exports = () => {
   
   router.get("/order/:id", OrderController.getUserOrder);
 
-  router.get("/createorders", OrderController.postCreateOrders);
+  router.post("/createorders", OrderController.postCreateOrders);
+
+  router.post("/order/getVoucher", VoucherController.getVouchersByRetailersID);
+
+  router.post("/order/discount", VoucherController.applyVoucherToProduct);
 
   return router;  
 };
