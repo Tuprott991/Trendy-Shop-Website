@@ -85,7 +85,7 @@ exports.postUpdateProfile = (req, res) => {
 // Delete retailer
 
 exports.postDeleteUser = (req, res) => {
-  const { id } = req.user;
+  const { id } = req.body;
 
   try {
     User.delete(id);
