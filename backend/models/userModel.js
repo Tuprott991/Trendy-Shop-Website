@@ -25,13 +25,14 @@ const userSchema = new Schema(
         return userInfo
       },
 
-      async update(userID, name, email, birthday, gender, region) {
+      async update(userID, name, email, birthday, gender, region, avatar) {
         const updateData = {};
         if (name) updateData.name = name;
         if (email) updateData.email = email;
         if (birthday) updateData.birthday = birthday;
         if (gender) updateData.gender = gender;
         if (region) updateData.region = region;
+        if (avatar) updateData.avatar = avatar;
         // Tìm kiếm và cập nhật người dùng trong database
 
         const updatedUser = await this.findByIdAndUpdate(

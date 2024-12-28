@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { FaUser, FaEnvelope, FaCalendarAlt, FaVenusMars, FaGlobe } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaCalendarAlt, FaVenusMars, FaGlobe, FaFileImage } from 'react-icons/fa';
+import { FaClipboardUser } from "react-icons/fa6";
 import { userService } from "../../services/userService";
 
 const ProfileField = ({ label, value, icon }) => (
@@ -13,11 +14,10 @@ const ProfileField = ({ label, value, icon }) => (
 );
 
 const EditField = ({ name, value, onChange, icon }) => (
-    <div className="flex items-center mb-5">
-        <div className="flex-shrink-0 flex items-center gap-2">
-            {icon}
+    <div className="flex justify-between gap-4">
+        <div className="w-1/8 flex items-center">
             <label htmlFor={name} className="text-gray-700 font-medium capitalize">
-                {name}
+                {icon}
             </label>
         </div>
         <input
@@ -38,6 +38,8 @@ export default function ProfileHeader() {
         birthday: <FaCalendarAlt size={20} className="text-gray-500" />,
         gender: <FaVenusMars size={20} className="text-gray-500" />,
         region: <FaGlobe size={20} className="text-gray-500" />,
+        role: <FaClipboardUser size={20} className="text-gray-500" />,
+        avatar: <FaFileImage size={20} className="text-gray-500" />,
     };
 
     const [profile, setProfile] = useState(null);
@@ -87,11 +89,11 @@ export default function ProfileHeader() {
     return (
         <div className="container mx-auto p-6 max-w-4xl">
             <div className="bg-white shadow-md rounded-lg overflow-hidden">
-                <div className="lg:grid lg:grid-cols-2 lg:gap-6">
-                    <div>
+                <div className="flex justify-between items-center">
+                    <div class="w-1/4 overflow-hidden flex justify-center items-center">
                         <img src={profile["avatar"]} alt="User Avatar" />
                     </div>
-                    <div className="p-6 lg:grid lg:grid-cols-2 lg:gap-6">
+                    <div className="w-3/4 p-6 lg:grid lg:grid-cols-2 lg:gap-5">
                         {Object.keys(profile).map((key) =>
                             key !== "id" && key !== "avatar" && (
                                 <ProfileField
@@ -115,33 +117,35 @@ export default function ProfileHeader() {
             </div>
 
             {isEditing && (
-                <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center">
-                    <div className="bg-white rounded-lg shadow-lg max-w-lg w-full p-6">
-                        <h3 className="text-lg font-bold text-center text-gray-700 mb-4">Edit Profile</h3>
-                        {Object.keys(editProfile).map(
-                            (key) =>
-                                key !== "role" &&
-                                key !== "id" &&
-                                key !== "email" && (
-                                    <EditField
-                                        key={key}
-                                        name={key}
-                                        value={editProfile[key]}
-                                        onChange={handleChange}
-                                        icon={icons[key]}
-                                    />
-                                )
-                        )}
-                        <div className="flex justify-end gap-4 mt-6">
+                <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center px-4">
+                    <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 space-y-6">
+                        <h3 className="text-2xl font-semibold text-center text-gray-800">Edit Profile</h3>
+                        <div className="space-y-4">
+                            {Object.keys(editProfile).map(
+                                (key) =>
+                                    key !== "role" &&
+                                    key !== "id" &&
+                                    key !== "email" && (
+                                        <EditField
+                                            key={key}
+                                            name={key}
+                                            value={editProfile[key]}
+                                            onChange={handleChange}
+                                            icon={icons[key]}
+                                        />
+                                    )
+                            )}
+                        </div>
+                        <div className="flex justify-end gap-3">
                             <button
                                 onClick={() => setIsEditing(false)}
-                                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+                                className="px-5 py-2.5 text-sm font-medium bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleSave}
-                                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500"
+                                className="px-5 py-2.5 text-sm font-medium bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                             >
                                 Save
                             </button>
