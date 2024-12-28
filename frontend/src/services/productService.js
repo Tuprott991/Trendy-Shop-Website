@@ -35,8 +35,21 @@ const getProductDetail = async (id) => {
  }
 };
 
+const getProductFeedback = async (id) => {
+ try {
+  const response = await axios.get(
+   `http://localhost:8080/api/customer/product/review/${id}`
+  );
+  return response;
+ } catch (e) {
+  console.log(e.response);
+  return e.response;
+ }
+};
+
 export const productService = {
  getProductList,
  getProductListCategory,
  getProductDetail,
+ getProductFeedback,
 };
