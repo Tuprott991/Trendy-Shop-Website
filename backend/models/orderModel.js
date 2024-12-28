@@ -127,7 +127,18 @@ const orderSchema = new Schema({
         throw new Error('Failed to calculate revenue');
       }
     },
+    async getOrderUser(userID){
+      try{
+        const orderData = await this.find({customer_id: mongoose.Types.ObjectId(userID)});
+        return orderData;
+      }
+      catch (error){
+        console.error('Error get orders information:', error);
+        throw new Error('failed to get orders information');
+      }
+    }
   },
+
 });
 
 const Order = mongoose.model('Order', orderSchema);
