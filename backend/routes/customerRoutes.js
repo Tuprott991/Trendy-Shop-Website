@@ -31,7 +31,7 @@ module.exports = () => {
 
   router.post("/createorders", OrderController.postCreateOrders);
 
-  router.post("/order/getVoucher", VoucherController.getVouchersByRetailersID);
+  router.post("/order/getvoucher", VoucherController.getVouchersByRetailersID);
 
   router.post("/order/discount", VoucherController.applyVoucherToProduct);
 
