@@ -19,7 +19,8 @@ module.exports = () => {
 
  router.post("/addvoucher", authenticateToken, voucherPage.postCreateVoucher);
  router.get("/voucher", authenticateToken, voucherPage.getVoucherPage);
- router.post("/deletevoucher", authenticateToken, voucherPage.postDeleteVoucher);
+ router.post("/deletevoucher", voucherPage.postDeleteVoucher);
+ router.post("/updatevoucher", voucherPage.postUpdateVoucher);
 
  // router.get("/order",authenticateToken,orderPage.getOrderPage);
 
