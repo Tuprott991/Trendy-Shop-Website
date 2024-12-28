@@ -11,7 +11,6 @@ const feedbackSchema = new Schema({
   email: { type: String, required: true }, // Email of the customer
   comment: { type: String, maxlength: 500 }, // Optional comment
   created_at: { type: Date, default: Date.now }, // Time the feedback was submitted
-<<<<<<< HEAD
 }, 
 {
    timestamps: true ,
@@ -22,42 +21,8 @@ const feedbackSchema = new Schema({
     }
   }
 });
-=======
-}, {
-  timestamps: true,
-  statics: {
-    // Tạo feedback mới, lưu lại lên database
-    async createFeedBack(customer_id, retailer_id, product_id, rating, comment) {
-      try {
-        const feedback = await this.create({
-          customer_id,
-          retailer_id,
-          product_id,
-          rating,
-          comment,
-          created_at: new Date()
-        });
-        return feedback;
-        
-      } catch (error) {
-        throw new Error(`Error creating feedback: ${error.message}`);
-      }
-    },
->>>>>>> 9a0a73e6f87dcbc9d0a28869b51aade6c1320dfc
 
-    // Lấy thông tin của feedback trên dtb theo product_id để hiển thị trên trang product
-    async getFeedBackInformation(product_id) {
-      try {
-        const feedbacks = await this.find({ product_id })
-          .populate('customer_id', 'name') // Chỉ lấy trường 'name' của khách hàng
-          .populate('retailer_id', 'name') // Chỉ lấy trường 'name' của nhà bán lẻ
-          .sort({ created_at: -1 }); // Sắp xếp theo thời gian tạo, mới nhất trước
-        return feedbacks;
-      } catch (error) {
-        throw new Error(`Error retrieving feedbacks: ${error.message}`);
-      }
-    }
-  }
-});
+    
+    
 
 module.exports = mongoose.model('Feedback', feedbackSchema);
