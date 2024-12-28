@@ -115,3 +115,16 @@ exports.applyVoucherToProduct = async (req, res) => {
     });
   }
 };
+
+exports.postDeleteVoucher = (req, res) => {
+  const { voucher_id } = req.body;
+
+  try {
+    User.delete(voucher_id);
+    res.status(200).json({ message: "Delete succesful!" })
+  }
+  catch {
+    console.error(error);
+    res.status(500).json({ message: 'Delete Error' });
+  }
+};
