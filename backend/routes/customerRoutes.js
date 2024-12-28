@@ -7,6 +7,7 @@ module.exports = () => {
   const OrderController = require("../controllers/OrderController/order.controller.js");
   const FeedbackController = require("../controllers/FeedbackController/feedbackController.js");
   const VoucherController = require("../controllers/VoucherController/voucher.Controller.js");
+  const UserController= require("../controllers/UserController/user.controller.js");
   const router = express.Router();
 
 
@@ -35,5 +36,7 @@ module.exports = () => {
 
   router.post("/order/discount", VoucherController.applyVoucherToProduct);
 
+  router.get("/retailer",UserController.getAllRetailer);
+  
   return router;  
 };

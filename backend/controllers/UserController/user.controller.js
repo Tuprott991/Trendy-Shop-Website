@@ -169,3 +169,13 @@ exports.manageRetailer = async (req, res) => {
     res.status(500).json({ message: error.message || 'Error fetching retailer data' });
   }
 };
+
+exports.getAllRetailer= async (req, res) => {
+  try {
+    const retailers = await User.getAllRetailer();
+    res.status(200).json({ message: "Retailers fetched successfully", retailers });
+  } catch (error) {
+    console.error('Error managing retailers:', error);
+    res.status(500).json({ message: error.message || 'Error fetching retailer data' });
+  }
+};
