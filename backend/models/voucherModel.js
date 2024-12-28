@@ -47,9 +47,14 @@ voucherSchema.statics = {
       await this.save(); // Lưu lại thay đổi
     }
   },
-  async update(voucherID, max_uses) {
+  async update(voucherID, max_uses, minimum_order_value, valid_from, valid_to, description) {
     const updateData = {};
     if (max_uses) updateData.max_uses = max_uses;
+    if (valid_from) updateData.valid_from = valid_from;
+    if (minimum_order_value) updateData.minimum_order_value = minimum_order_value;
+    if (valid_to) updateData.valid_to = valid_to;
+    if (description) updateData.description = description;
+
     // Tìm kiếm và cập nhật người dùng trong database
 
     const voucheredUser = await this.findByIdAndUpdate(
@@ -67,21 +72,17 @@ voucherSchema.statics = {
 
   async delete(voucherID){
     try {
-      // Kiểm tra xem userID có được cung cấp không
       if (!voucherID) {
         throw new Error("VoucherID is required");
       }
   
-      // Tìm và xóa người dùng trong cơ sở dữ liệu
       const deletedVoucher = await this.findByIdAndDelete(voucherID);
   
-      // Nếu không tìm thấy user, báo lỗi
       if (!deletedVoucher) {
         throw new Error("Voucher not found");
       }
   
-      // Trả về thông báo thành công hoặc dữ liệu user đã xóa
-      return { message: "Voucher deleted successfully", user: deletedVoucher };
+      return { message: "Voucher deleted successfully"};
     } catch (error) {
       throw new Error(`Failed to delete voucher: ${error.message}`);
     }

@@ -1,6 +1,7 @@
 const { User } = require("../../models/index");
 const Order = require("../../models/index").Order;
 const Product = require("../../models/index").Product;
+const Voucher = require("../../models/index").Voucher;
 
 exports.postAddOrder = async (req, res) => {
   const { id, status_order, address, phone, payment_method, items, voucher } = req.body;
@@ -126,3 +127,70 @@ exports.getUserOrder= async (req, res) => {
   }
 };
 
+exports.postCreateOrders = async(req,res) =>{
+  const {customer_id, product_list, voucher,name, address, city, phone, email, payment_method} = req.body
+
+  try {
+    // Lấy danh sách unique retailer_id
+    const retailer_id_list = product_list.map((item) => item.user_id);
+    const unique_retailer_id_list = [...new Set(retailer_id_list)];
+
+    const unique_code = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+    // Khởi tạo mảng lưu danh sách order được tạo
+    const createdOrders = [];
+
+    // Duyệt qua từng retailer_id để tạo order
+    for (const retailer_id of unique_retailer_id_list) {
+      // Lọc sản phẩm thuộc retailer_id hiện tại
+      const itemsForRetailer = product_list
+        .filter((item) => item.user_id === retailer_id)
+        .map((item) => ({
+          product_id: item.product_id,
+          quantity: item.quantity,
+        }));
+
+      // Tính tổng tiền của order
+      const total_money = itemsForRetailer.reduce((sum, item) => {
+        const product = product_list.find((p) => p.product_id === item.product_id);
+        return sum + product.price * item.quantity;
+      }, 0);
+
+      // Gán voucher nếu có
+      let vouchers = [];
+      if (voucher) {
+        const validVoucher = await Voucher.findOne({ code: voucher, retailer_id });
+        if (validVoucher) {
+          vouchers.push({ voucher_code: validVoucher.code });
+        }
+      }
+      
+      const order = await Order.createOrder(
+        customer_id,
+        retailer_id,
+        total_money,
+        "pending",
+        name,
+        address,
+        city,
+        phone,
+        email,
+        payment_method,
+        itemsForRetailer,
+        vouchers,
+        unique_code
+      );
+      createdOrders.push(order);
+  }
+  res.status(201).json({
+    message: "Orders created successfully",
+    orders: createdOrders,
+  })
+}
+  catch (error){
+    console.error("Error creating orders:", error);
+    res.status(500).json({
+      message: error.message || "Internal server error",
+    });
+  }
+};

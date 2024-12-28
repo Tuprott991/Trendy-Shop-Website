@@ -44,7 +44,18 @@ const productSchema = new Schema({
           throw new Error(`Failed to delete product: ${error.message}`);
         }
       },
-    }
+      async getAllProduct(){
+        try{
+          const product = await this.find();
+          return product;
+        }
+        catch(error){
+          console.error('Error get all product:', error);
+          throw new Error('failed to get all product');
+        }
+      }
+    },
+
   });
 
 const Product = mongoose.model('Product', productSchema);

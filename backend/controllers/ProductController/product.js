@@ -38,17 +38,44 @@ exports.importProduct = async (req, res) => {
 };
 
 exports.getSearchProduct = async (req, res) => {
- try {
-  const { keyword } = req.params;
-  const productInfo = await Product.SearchProduct(keyword);
-  res.status(200).json({
-   productInfo,
-  });
- } catch (error) {
-  console.error("Error searching products:", error);
-  res.status(500).json({ message: "Error searching products", error });
- }
-};
+    try {
+      const keyword = req.params.keyword || req.query.keyword || 'null';
+      const sortBy = req.query.sortBy || 'null';
+      const ascending = req.query.ascending === "true";
+  
+      // Trả về tất cả sản phẩm nếu không có keyword
+      if (keyword === 'null') {
+        const productInfo = await Product.getAllProduct();
+        return res.status(200).json({ productInfo });
+      }
+  
+      if (sortBy === 'null') {
+        const productInfo = await Product.SearchProduct(keyword);
+        return res.status(200).json({ productInfo });
+      } else if (sortBy === 'price' && !ascending) {
+        const productInfo = await Product.SearchProduct(keyword);
+        const productInfoSort = productInfo.sort((a, b) => b.price - a.price);
+        return res.status(200).json({ productInfo: productInfoSort });
+      } else if (sortBy === 'price' && ascending) {
+        const productInfo = await Product.SearchProduct(keyword);
+        const productInfoSort = productInfo.sort((a, b) => a.price - b.price);
+        return res.status(200).json({ productInfo: productInfoSort });
+      } else if (sortBy === 'rating' && !ascending) {
+        const productInfo = await Product.SearchProduct(keyword);
+        const productInfoSort = productInfo.sort((a, b) => b.rating - a.rating);
+        return res.status(200).json({ productInfo: productInfoSort });
+      } else if (sortBy === 'rating' && ascending) {
+        const productInfo = await Product.SearchProduct(keyword);
+        const productInfoSort = productInfo.sort((a, b) => a.rating - b.rating);
+        return res.status(200).json({ productInfo: productInfoSort });
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      return res.status(500).json({ message: "Internal Server Error", error });
+    }
+  };
+  
+  
 
 exports.getProductInfo = async (req, res) => {
  try {

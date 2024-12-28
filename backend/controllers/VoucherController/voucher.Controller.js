@@ -119,11 +119,24 @@ exports.postDeleteVoucher = (req, res) => {
   const { id } = req.body;
 
   try {
-    User.delete(id);
+    Voucher.delete(id);
     res.status(200).json({ message: "Delete succesful!" })
   }
   catch {
     console.error(error);
     res.status(500).json({ message: 'Delete Error' });
+  }
+};
+
+exports.postUpdateVoucher = (req, res) => {
+  const { voucher_id, max_uses,minimum_order_value, valid_from, valid_to, description } = req.body;
+
+  try {
+    Voucher.update(voucher_id, max_uses,minimum_order_value, valid_from, valid_to, description);
+    res.status(200).json({ message: "Update succesful!" })
+  }
+  catch {
+    console.error(error);
+    res.status(500).json({ message: 'Update Error' });
   }
 };
