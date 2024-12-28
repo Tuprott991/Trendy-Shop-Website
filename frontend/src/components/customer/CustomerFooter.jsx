@@ -1,6 +1,6 @@
 const CustomerFooter = () => {
  return (
-  <div className="bg-green-700 w-full py-12">
+  <div className="bg-green-700 w-full py-12 ">
    <div className="container mx-auto">
     <div className="grid md:grid-cols-4 gap-4 text-center">
      <div>

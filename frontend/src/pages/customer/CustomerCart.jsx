@@ -85,7 +85,7 @@ const CustomerCart = () => {
    )}
    <div className="bg-gray-100 h-full">
     {isQuantity && (
-     <div className="shadow-lg ring-1 ring-black/5 rounded-lg absolute z-[100]  top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2  w-fit border pr-8 pl-4 py-2 space-y-2 bg-white text-left font-medium text-sm">
+     <div className="shadow-lg ring-1 ring-black/5 rounded-lg fixed z-[100]  top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2  w-fit border pr-8 pl-4 py-2 space-y-2 bg-white text-left font-medium text-sm">
       <div className="text-left pr-16 pt-3 pb-2">
        {message == "decrement" ? "Remove item" : "Over available stock"}
       </div>

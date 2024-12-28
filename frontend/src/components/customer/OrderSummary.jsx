@@ -70,7 +70,7 @@ const OrderSummary = ({ isFormComplete }) => {
     {!isAbleSubmit && (
      <div
       ref={divRef}
-      className="shadow-lg ring-1 ring-black/5 rounded-lg absolute z-[100]  top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2  w-fit border pr-8 pl-4 py-2 space-y-2 bg-white text-left font-medium text-sm"
+      className="shadow-lg ring-1 ring-black/5 rounded-lg fixed z-[100]  top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2  w-fit border pr-8 pl-4 py-2 space-y-2 bg-white text-left font-medium text-sm"
      >
       <div className="text-left pr-16 pt-3 pb-2">Incomplete information</div>
       <div className="border border-gray-200 w-[100%]"></div>
@@ -92,7 +92,7 @@ const OrderSummary = ({ isFormComplete }) => {
     {checkoutMessage && (
      <div
       ref={divRef}
-      className=" shadow-lg ring-1 ring-black/5 rounded-lg absolute z-[100]  top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2  w-fit border  py-4 space-y-2 bg-white font-medium text-sm"
+      className=" shadow-lg ring-1 ring-black/5 rounded-lg fixed z-[100]  top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2  w-fit border  py-4 space-y-2 bg-white font-medium text-sm"
      >
       <div className="text-center pt-3 pb-2 flex flex-col justify-center items-center px-8 text-lg">
        <img src="/navigation.png" className="w-52 h-52" alt="123" />
