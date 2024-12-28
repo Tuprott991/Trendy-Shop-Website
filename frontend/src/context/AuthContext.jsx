@@ -12,8 +12,9 @@ export const AuthProvider = ({ children }) => {
    setIsAuthenticated(true);
   } else setIsAuthenticated(false);
  }, []);
- const login = (token, email, name, role) => {
+ const login = (token, _id, email, name, role) => {
   localStorage.setItem("token", token);
+  localStorage.setItem("_id", _id);
   localStorage.setItem("email", email);
   localStorage.setItem("name", name);
   localStorage.setItem("role", role);
@@ -23,9 +24,15 @@ export const AuthProvider = ({ children }) => {
 
  const logout = () => {
   localStorage.removeItem("token");
+  localStorage.removeItem("_id");
   localStorage.removeItem("email");
   localStorage.removeItem("name");
   localStorage.removeItem("role");
+  localStorage.removeItem("cart");
+  localStorage.removeItem("customerForm");
+  localStorage.removeItem("discountCart");
+  localStorage.removeItem("voucher");
+
   setIsLoginSuccess(false);
   setIsAuthenticated(false);
  };

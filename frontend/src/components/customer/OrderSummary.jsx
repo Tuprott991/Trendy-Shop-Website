@@ -1,14 +1,38 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { CartContext } from "../../context/CartContext";
 import { CgArrowRight } from "react-icons/cg";
+import { orderService } from "../../services/orderService";
 
 const OrderSummary = ({ isFormComplete }) => {
  const { cart } = useContext(CartContext);
  const [paymentMethod, setPaymentMethod] = useState("bank"); // Track selected payment method
  const [isBankActive, setIsBankActive] = useState(true); // Track if banks are active
  const [choosenBank, setChoosenBank] = useState("tpbank");
- const [discount, setDiscount] = useState(50);
- const [delivery, setDelivery] = useState(30);
+ const discountCart = JSON.parse(localStorage.getItem("discountCart"));
+ const selectedVoucher = JSON.parse(localStorage.getItem("voucher"))
+  ? JSON.parse(localStorage.getItem("voucher"))
+  : null;
+ const subTotal = discountCart.reduce(
+  (acc, item) => acc + item.price * item.quantity,
+  0
+ );
+
+ // Calculate the total discounted price (discounted_price if available, otherwise use price)
+ const discounted = Math.round(
+  discountCart.reduce((acc, item) => {
+   return acc + (item.discounted_price || item.price) * item.quantity;
+  }, 0),
+  2
+ );
+
+ // Calculate the discount as the difference between the subtotal and discounted total
+ const discount = Math.round(subTotal - discounted, 2);
+
+ // Fixed delivery fee (you can adjust it based on conditions if needed)
+ const deliveryFee = 25;
+
+ // Calculate the total (subtotal - discount + delivery fee)
+ const total = Math.round(subTotal - discount + deliveryFee, 2);
  const [isLoading, setIsLoading] = useState(false);
  const [isAbleSubmit, setIsAbleSubmit] = useState(true);
  const [checkoutMessage, setCheckoutMessage] = useState(null);
@@ -40,7 +64,39 @@ const OrderSummary = ({ isFormComplete }) => {
   await new Promise((resolve) => {
    setTimeout(resolve, 2000);
   });
+  const customer_id = localStorage.getItem("_id");
+  console.log(customer_id);
+  const product_list = JSON.parse(localStorage.getItem("cart"));
+  console.log(product_list);
+  const voucher = JSON.parse(localStorage.getItem("voucher"));
+  console.log(voucher);
+  const { name, address, city, phone, email } = JSON.parse(
+   localStorage.getItem("customerForm")
+  );
+  console.log(name, address, city, phone, email, paymentMethod);
+  console.log(paymentMethod);
   //   API TO CHECKOUT
+  //    customer_id,
+  //     product_list,
+  //     voucher,
+  //     name,
+  //     address,
+  //     city,
+  //     phone,
+  //     email,
+  //     payment_method,
+  const response = await orderService.createOrder(
+   customer_id,
+   product_list,
+   voucher,
+   name,
+   address,
+   city,
+   phone,
+   email,
+   paymentMethod
+  );
+  console.log(response);
   setIsLoading(false);
   setCheckoutMessage("Order placed successfully");
  };
@@ -112,7 +168,7 @@ const OrderSummary = ({ isFormComplete }) => {
      </div>
     )}
     <div className="text-lg font-bold">Order summary</div>
-    {cart.map((item) => (
+    {discountCart.map((item) => (
      <div
       key={`${item._id}+${item.size}`}
       className="flex justify-between border-b-2 border-gray-200 py-4"
@@ -131,9 +187,18 @@ const OrderSummary = ({ isFormComplete }) => {
        </div>
       </div>
       <div className="flex flex-col justify-between items-end">
-       <div className="flex justify-center  gap-4 rounded-full font-bold  items-center">
+       <div
+        className={`text-lg font-bold ${
+         item.discounted_price && "text-gray-600 line-through"
+        }`}
+       >
         ${Math.round(item.price * item.quantity)}
        </div>
+       {item.discounted_price && (
+        <div className="text-lg font-bold text-red-600">
+         ${Math.round(item.discounted_price * item.quantity)}
+        </div>
+       )}
       </div>
      </div>
     ))}
@@ -143,18 +208,28 @@ const OrderSummary = ({ isFormComplete }) => {
       <div>${Math.round(subtotal, 2)}</div>
      </div>
      <div className="flex justify-between w-full mt-4  font-bold">
-      <div className="text-gray-500">Discount</div>
+      <div className="text-gray-500">
+       Discount{" "}
+       {selectedVoucher ? (
+        <span className="font-medium  italic">
+         {selectedVoucher.code} ({selectedVoucher.discount_value}%)
+        </span>
+       ) : (
+        <span className="italic">No voucher applied</span>
+       )}
+      </div>
+
       <div className="text-red-600 ">-${discount}</div>
      </div>
      <div className="flex justify-between w-full mt-4  font-bold">
       <div className="text-gray-500">Delivery Fee</div>
-      <div>${delivery}</div>
+      <div>${deliveryFee}</div>
      </div>
     </div>
     <div className="border-b-2 border-gray-200 pt-4"></div>
     <div className="text-2xl flex justify-between w-full mt-4  font-bold">
      <div>Total</div>
-     <div className="">${subtotal - discount + delivery}</div>
+     <div className="">${total}</div>
     </div>
     <div className="flex flex-col justify-center mt-5 gap-4">
      <div className="flex items-center justify-between">

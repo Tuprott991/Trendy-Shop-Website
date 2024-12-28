@@ -24,6 +24,7 @@ const Login = () => {
   if (response.status == 200) {
    await login(
     response.data.token,
+    response.data.user._id,
     response.data.user.email,
     response.data.user.name,
     response.data.user.role

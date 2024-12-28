@@ -75,6 +75,13 @@ const CartBill = ({ onCartChange }) => {
   setSummary({ subTotal, discount, deliveryFee, total });
  }, [discountCart]);
  const handleCheckout = () => {
+  const selectedVoucher = voucherList.find((voucher) => {
+   return voucher.code === selectedCode;
+  });
+  localStorage.setItem("discountCart", JSON.stringify(discountCart));
+  if (selectedVoucher) {
+   localStorage.setItem("voucher", JSON.stringify(selectedVoucher));
+  }
   navigate("/customer/checkout");
  };
  if (!cart || cart.length === 0) {

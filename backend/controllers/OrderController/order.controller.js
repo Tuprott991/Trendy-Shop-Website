@@ -146,26 +146,28 @@ exports.postCreateOrders = async (req, res) => {
       const itemsForRetailer = product_list
         .filter((item) => item.user_id === retailer_id)
         .map((item) => ({
-          product_id: item.product_id,
+          product_id: item._id,
           quantity: item.quantity,
         }));
-
-
+        
 
       // Tính tổng tiền của order
       const total_money = itemsForRetailer.reduce((sum, item) => {
-        const product = product_list.find((p) => p.product_id === item.product_id);
+        const product = product_list.find((p) => p.product_id === item._id);
         return sum + product.price * item.quantity;
       }, 0);
 
-      itemsForRetailer.forEach(item => {
-        stock_quantity = Product.find({ product_id: item.product_id })[0].stock_quantity
-        Product.updateStockQuantity(item.product_id, stock_quantity - item.quantity)
-      });
+      // itemsForRetailer.forEach(item => {
+      //   stock_quantity = Product.findById(item.product_id)
+      //   console.log(stock_quantity)
+      //   // Product.updateStockQuantity(item.product_id, stock_quantity - item.quantity);
+      // });
+
       // Gán voucher nếu có
       let vouchers = [];
       if (voucher) {
         const validVoucher = await Voucher.findOne({ code: voucher, retailer_id });
+        console.log(validVoucher)
         if (validVoucher) {
           vouchers.push({ voucher_code: validVoucher.code });
           Voucher.update(validVoucher.voucherID,
