@@ -194,3 +194,27 @@ exports.postCreateOrders = async(req,res) =>{
     });
   }
 };
+
+exports.getOrderviewPage = async (req, res) => {
+  try {
+    const { id } = req.user;
+    if (!id) {
+      return res.status(400).send({ message: "Retailer ID is required." });
+    }
+    const existingRetailer = await User.findOne({ id, role: "retailer" });
+    if (!existingRetailer) {
+      return res.status(400).send({ message: "Retailer does not exist." });
+    }
+    const orders = await Order.find({ retailer_id: id })
+    if (!orders.length) {
+      return res.status(404).send({ message: "No orders found for this retailer." });
+    }
+    return res.status(200).json(orders);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "An error occurred while fetching the voucher page."
+    });
+  }
+};
+
+

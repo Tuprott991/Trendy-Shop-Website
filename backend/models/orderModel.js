@@ -16,7 +16,7 @@ const orderSchema = new Schema(
         items: [
             {
                 product_id: { type: Schema.Types.ObjectId, ref: "Product", required: true },
-                quantity: { type: Number, required: true },
+                quantity: { type: Number, required: true },     
             },
         ],
         vouchers: [

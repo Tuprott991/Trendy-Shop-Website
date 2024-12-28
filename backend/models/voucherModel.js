@@ -65,7 +65,7 @@ voucherSchema.statics = {
 
      // Nếu không tìm thấy user, báo lỗi
     if (!voucheredUser) {
-      throw new Error("User not found");
+      throw new Error("Voucher not found");
     }
     return voucheredUser
   },

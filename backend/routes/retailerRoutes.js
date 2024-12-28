@@ -21,5 +21,8 @@ module.exports = () => {
     router.post("/deletevoucher", voucherPage.postDeleteVoucher);
     router.post("/updatevoucher", voucherPage.postUpdateVoucher);
 
+    router.post("/order", authenticateToken, orderPage.getOrderviewPage);
+    router.post("")
+
     return router; // Return the router
 };
