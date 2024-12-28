@@ -6,6 +6,7 @@ module.exports = () => {
  const voucherPage = require("../controllers/VoucherController/voucher.Controller");
  const retailerDashboard = require("../controllers/UserController/user.controller");
  const productPage = require("../controllers/ProductController/product");
+ const orderPage = require("../controllers/OrderController/order.controller");
  const router = express.Router();
 
  // Retailer Dashboard Routes

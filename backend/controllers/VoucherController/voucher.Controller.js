@@ -50,7 +50,6 @@ exports.getVoucherPage = async (req, res) => {
       return res.status(400).send({ message: "Retailer does not exist." });
     }
     const vouchers = await Voucher.find({ retailer_id: id })
-      .select("code description discount_value max_uses status");
     if (!vouchers.length) {
       return res.status(404).send({ message: "No vouchers found for this retailer." });
     }
