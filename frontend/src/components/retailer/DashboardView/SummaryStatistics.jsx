@@ -23,7 +23,7 @@ const Dashboard = ({ stats, products }) => {
         {
             id: 4,
             label: "Total Revenue",
-            value: stats?.totalRevenue || 0,
+            value: stats?.totalRevenue.toFixed(0) || 0,
             icon: "💰",
         },
     ];

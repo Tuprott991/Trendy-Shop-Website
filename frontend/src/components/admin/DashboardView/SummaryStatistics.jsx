@@ -22,7 +22,7 @@ const Dashboard = () => {
                         { id: 1, label: "Total Retailers", counts: data.data.retailerCount, revenue: 0, icon: <BsPersonCheck size={30} /> },
                         { id: 2, label: "Total Orders", counts: data.data.totalOrders, revenue: 0, icon: <MdReceiptLong size={30} /> },
                         { id: 3, label: "Total Delivered", counts: data.data.totalDelivered, revenue: 0, icon: <TbTruckDelivery size={30} /> },
-                        { id: 4, label: "Total Revenue", counts: 0, revenue: data.data.totalRevenue, icon: <MdOutlinePriceChange size={30} /> },
+                        { id: 4, label: "Total Revenue", counts: 0, revenue: data.data.totalRevenue.toFixed(0), icon: <MdOutlinePriceChange size={30} /> },
                     ];
 
                     setStats(new_stats);

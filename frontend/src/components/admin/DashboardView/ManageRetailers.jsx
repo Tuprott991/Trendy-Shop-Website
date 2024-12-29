@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Pagination from "../Helper/pagination.jsx";
 import { adminService } from "../../../services/adminService";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const RetailersList = () => {
     const [retailers, setRetailers] = useState([]);
@@ -24,11 +25,17 @@ const RetailersList = () => {
     }, []);
 
     if (loading) {
-        return <div>Đang tải dữ liệu...</div>;
+        return (<div className="loading-container 
+            flex justify-center 
+            items-center 
+            space-x-2">
+            <CircularProgress />
+            <p>Loading...</p>
+        </div>);
     }
 
     if (error) {
-        return <div>Có lỗi xảy ra: {error}</div>;
+        return <div>Error: {error}</div>;
     }
 
     const renderItems = (retailers) => (
@@ -36,7 +43,7 @@ const RetailersList = () => {
             <table className="min-w-full bg-white">
                 <caption className="text-lg font-semibold py-3 bg-white">
                     <div className="flex justify-begin items-center px-6">
-                        <p className="text-lg font-bold">List Products</p>
+                        <p className="text-lg font-bold">List Retailers</p>
                     </div>
                 </caption>
                 <thead className="bg-emerald-500 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white">
@@ -56,7 +63,7 @@ const RetailersList = () => {
                             </td>
                             <td className="px-6 py-4 text-center">{retailer.totalOrders}</td>
                             <td className="px-6 py-4 text-center">{retailer.deliveredOrders}</td>
-                            <td className="px-6 py-4 text-center">${retailer.revenue}</td>
+                            <td className="px-6 py-4 text-center">${retailer.revenue.toFixed(0)}</td>
                         </tr>
                     ))}
                 </tbody>

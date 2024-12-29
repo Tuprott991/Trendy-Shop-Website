@@ -3,6 +3,7 @@ import DashboardHeader from "../../components/retailer/DashboardView/DashboardHe
 import SummaryStatistics from "../../components/retailer/DashboardView/SummaryStatistics";
 import ManageProducts from "../../components/retailer/DashboardView/ManageProducts";
 import { retailerService } from "../../services/retailerService";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const RetailerDashboard = () => {
     const [stats, setStats] = useState({
@@ -52,15 +53,22 @@ const RetailerDashboard = () => {
         }));
     };
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
+    if (loading)
+        return (
+            <div className="loading-container flex justify-center items-center space-x-4">
+                <CircularProgress />
+                <p>Loading...</p>
+            </div>
+        );
+    if (error)
+        return <div>{error}</div>;
 
     return (
         <div>
             <DashboardHeader />
-            <SummaryStatistics stats={stats} products={products}/>
-            <ManageProducts 
-                products={products} 
+            <SummaryStatistics stats={stats} products={products} />
+            <ManageProducts
+                products={products}
                 onProductsChange={handleProductsChange} // Truyền callback để cập nhật sản phẩm
             />
         </div>

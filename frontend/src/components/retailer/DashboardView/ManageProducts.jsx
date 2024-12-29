@@ -143,13 +143,13 @@ const ManageProducts = ({ products, onProductsChange }) => {
                             <td className="px-6 py-4 text-center">
                                 <button
                                     onClick={() => handleEditClick(product._id)}
-                                    className="text-blue-500 hover:text-blue-700 mr-4"
+                                    className="text-black hover:text-blue-500 mr-4"
                                 >
                                     <FaPencilAlt />
                                 </button>
                                 <button
                                     onClick={() => handleDeleteProduct(product._id)}
-                                    className="text-red-500 hover:text-red-700"
+                                    className="text-black hover:text-red-500"
                                 >
                                     <FaTrash />
                                 </button>
