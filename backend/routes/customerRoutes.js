@@ -1,4 +1,3 @@
-// routes/auth.routes.js
 const express = require("express");
 
 module.exports = () => {
@@ -10,12 +9,8 @@ module.exports = () => {
   const UserController= require("../controllers/UserController/user.controller.js");
   const router = express.Router();
 
-
   router.get("/search/:keyword?", ProductController.getSearchProduct);
   
-  
-
-
   router.get("/category/all", CategoryController.getAllCategory);
 
   router.get("/search/category/:id", CategoryController.getFilterCategory);

@@ -53,3 +53,17 @@ exports.findfeedbackbyproductid = async(req, res) => {
         res.status(500).json({ message: "Error getting feedback", error });
     }
 };
+
+exports.updateFeedback= async(req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, contact, email, rating, comment } = req.body;
+        const feedback = await Feedback.updateFeedback(id, name, contact, email, rating, comment);
+        res.status(200).json({
+            feedback,
+        });
+    } catch (error) {
+        console.error("Error updating feedback:", error);
+        res.status(500).json({ message: "Error updating feedback", error });
+    }
+}
