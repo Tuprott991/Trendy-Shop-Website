@@ -44,6 +44,20 @@ const categorySchema = new Schema(
 
         return categoryDoc._id;
       },
+      updateCategory: async function (id, category, target) {
+        const categoryDoc = await this.findById(id);
+
+        if (!categoryDoc) {
+          throw new Error('Category not found');
+        }
+
+        categoryDoc.category = category;
+        categoryDoc.target = target;
+
+        await categoryDoc.save();
+
+        return categoryDoc;
+      },
     },
   }
 );

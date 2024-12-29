@@ -35,6 +35,5 @@ module.exports = () => {
   
   router.post("/updateProfile/:id", UserController.postUpdateProfieCustomer);
 
-  
   return router;  
 };
