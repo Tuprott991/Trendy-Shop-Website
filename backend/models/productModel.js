@@ -54,6 +54,23 @@ const productSchema = new Schema({
           throw new Error('failed to get all product');
         }
       },
+      async updateQuantity(productID, stock_quantity) {
+        if (typeof stock_quantity === "undefined") {
+          throw new Error("Stock quantity is required");
+        }
+  
+        const updatedProduct = await this.findByIdAndUpdate(
+          productID,
+          { $set: { stock_quantity } },
+          { new: true, runValidators: true }
+        );
+  
+        if (!updatedProduct) {
+          throw new Error("Product not found");
+        }
+        return updatedProduct;
+      },
+  
       async updProduct(productID, name, description, price, user_id, category_id, size, stock_quantity, rating, image_url) {
         const updateData = {};
         if (name) updateData.name = name;
