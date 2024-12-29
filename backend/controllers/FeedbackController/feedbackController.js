@@ -41,8 +41,9 @@ exports.postProductFeedback = async (req, res) => {
 
 };
 
-exports.findfeedbackbyproductid(customer_id, product_id) = async(req, res) => {
+exports.findfeedbackbyproductid = async(req, res) => {
     try {
+        const { customer_id, product_id } = req.params;
         const feedback = await Feedback.findfeedbackbyproductid(customer_id, product_id);
         res.status(200).json({
             feedback,
