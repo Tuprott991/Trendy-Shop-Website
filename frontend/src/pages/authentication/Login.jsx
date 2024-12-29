@@ -34,7 +34,7 @@ const Login = () => {
    setFormData({
     email: "",
     password: "",
-    error: response.data.message,
+    error: "Invalid email or password",
    });
   }
  };

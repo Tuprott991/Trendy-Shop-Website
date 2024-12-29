@@ -12,18 +12,20 @@ const OrderSummary = ({ isFormComplete }) => {
  const selectedVoucher = JSON.parse(localStorage.getItem("voucher"))
   ? JSON.parse(localStorage.getItem("voucher"))
   : null;
- const subTotal = discountCart.reduce(
-  (acc, item) => acc + item.price * item.quantity,
-  0
- );
+
+ const subTotal =
+  discountCart &&
+  discountCart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
  // Calculate the total discounted price (discounted_price if available, otherwise use price)
- const discounted = Math.round(
-  discountCart.reduce((acc, item) => {
-   return acc + (item.discounted_price || item.price) * item.quantity;
-  }, 0),
-  2
- );
+ const discounted =
+  discountCart &&
+  Math.round(
+   discountCart.reduce((acc, item) => {
+    return acc + (item.discounted_price || item.price) * item.quantity;
+   }, 0),
+   2
+  );
 
  // Calculate the discount as the difference between the subtotal and discounted total
  const discount = Math.round(subTotal - discounted, 2);
@@ -99,6 +101,10 @@ const OrderSummary = ({ isFormComplete }) => {
   console.log(response);
   setIsLoading(false);
   setCheckoutMessage("Order placed successfully");
+  localStorage.removeItem("voucher");
+  localStorage.removeItem("cart");
+  localStorage.removeItem("discountCart");
+  return;
  };
  useEffect(() => {
   const handleClickOutside = (event) => {
@@ -168,40 +174,41 @@ const OrderSummary = ({ isFormComplete }) => {
      </div>
     )}
     <div className="text-lg font-bold">Order summary</div>
-    {discountCart.map((item) => (
-     <div
-      key={`${item._id}+${item.size}`}
-      className="flex justify-between border-b-2 border-gray-200 py-4"
-     >
-      <div className="flex">
-       <img
-        src={item.image_url}
-        alt={item.name}
-        className="w-16 h-16 px-1 py-1 object-cover border borde-gray-200 rounded-lg"
-       />
-       <div className="ml-4 flex justify-between">
-        <div className="flex flex-col">
-         <div className="font-semibold">{item.name}</div>
-         <div className="mt-1">Quantity: {item.quantity}</div>
+    {discountCart &&
+     discountCart.map((item) => (
+      <div
+       key={`${item._id}+${item.size}`}
+       className="flex justify-between border-b-2 border-gray-200 py-4"
+      >
+       <div className="flex">
+        <img
+         src={item.image_url}
+         alt={item.name}
+         className="w-16 h-16 px-1 py-1 object-cover border borde-gray-200 rounded-lg"
+        />
+        <div className="ml-4 flex justify-between">
+         <div className="flex flex-col">
+          <div className="font-semibold">{item.name}</div>
+          <div className="mt-1">Quantity: {item.quantity}</div>
+         </div>
         </div>
        </div>
-      </div>
-      <div className="flex flex-col justify-between items-end">
-       <div
-        className={`text-lg font-bold ${
-         item.discounted_price && "text-gray-600 line-through"
-        }`}
-       >
-        ${Math.round(item.price * item.quantity)}
-       </div>
-       {item.discounted_price && (
-        <div className="text-lg font-bold text-red-600">
-         ${Math.round(item.discounted_price * item.quantity)}
+       <div className="flex flex-col justify-between items-end">
+        <div
+         className={`text-lg font-bold ${
+          item.discounted_price && "text-gray-600 line-through"
+         }`}
+        >
+         ${Math.round(item.price * item.quantity)}
         </div>
-       )}
+        {item.discounted_price && (
+         <div className="text-lg font-bold text-red-600">
+          ${Math.round(item.discounted_price * item.quantity)}
+         </div>
+        )}
+       </div>
       </div>
-     </div>
-    ))}
+     ))}
     <div className="flex flex-wrap">
      <div className="flex justify-between w-full mt-4  font-bold">
       <div className="text-gray-500">Subtotal</div>

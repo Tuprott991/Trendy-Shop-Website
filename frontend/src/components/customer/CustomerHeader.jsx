@@ -58,6 +58,10 @@ const CustomerHeader = () => {
   navigate("/customer/account");
  };
 
+ const handleHistory = () => {
+  navigate("/customer/history");
+ };
+
  return (
   <>
    {isLoginSuccess && (
@@ -125,7 +129,11 @@ const CustomerHeader = () => {
       />
      </div>
      <div>
-      <CgBox className="cursor-pointer hover:text-green-500" size={22} />
+      <CgBox
+       className="cursor-pointer hover:text-green-500"
+       size={22}
+       onClick={handleHistory}
+      />
      </div>
      <div className="relative " onClick={() => setIsOpen(true)} ref={divRef}>
       <CgUserList

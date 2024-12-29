@@ -23,7 +23,6 @@ const CustomerAccount = () => {
  }, [form]);
 
  const handleSubmit = async (values) => {
-  // Send updated data to the server (you'll need to implement this in your `userService`)
   console.log(values);
   const response = await userService.updateUserProfile(
    localStorage.getItem("token"),
