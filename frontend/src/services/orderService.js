@@ -33,6 +33,26 @@ const createOrder = async (
  }
 };
 
+const getOrderHistory = async (customer_id) => {
+ try {
+  const response = await axios.get(
+   `http://localhost:8080/api/customer/customerorders/${customer_id}`
+  );
+  return response;
+ } catch (e) {
+  // Check if e.response exists before logging it
+  if (e.response) {
+   console.log(e.response);
+   return e.response;
+  } else {
+   // Log error if no response object exists
+   console.log("Error: ", e.message);
+   return { error: e.message };
+  }
+ }
+};
+
 export const orderService = {
  createOrder,
+ getOrderHistory,
 };
