@@ -39,5 +39,6 @@ module.exports = () => {
   router.get("/customerrorder", OrderController.getCustomerOrder);
   
   router.post("/updateProfile/:id", UserController.postUpdateProfieCustomer);
+  
   return router;  
 };

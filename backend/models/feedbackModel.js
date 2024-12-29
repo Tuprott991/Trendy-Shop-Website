@@ -20,8 +20,17 @@ const feedbackSchema = new Schema(
     const feedbacks = await this.find({ product_id: productID });
     return feedbacks;
    },
+   async getAverageRating(productID) {
+    const feedbacks = await this.find({ product_id: productID });
+    const totalFeedbacks = feedbacks.length;
+    let totalRating = 0;
+    feedbacks.forEach((feedback) => {
+     totalRating += feedback.rating;
+    });
+    const averageRating = totalRating / totalFeedbacks;
+    return averageRating;
   },
  }
-);
+});
 
 module.exports = mongoose.model("Feedback", feedbackSchema);
