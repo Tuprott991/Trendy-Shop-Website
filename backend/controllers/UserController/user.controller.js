@@ -68,13 +68,13 @@ exports.getProfile = async (req, res) => {
   }
 };
 
-exports.postUpdateProfile = (req, res) => {
+exports.postUpdateProfile = async (req, res) => {
   const { id } = req.user;
   const { name, email, birthday, gender, region, avatar } = req.body;
 
   try {
-    User.update(id, name, email, birthday, gender, region, avatar);
-    res.status(200).json({ message: "Update succesful!" })
+    const updatedUser = await User.update(id, name, email, birthday, gender, region, avatar);
+    res.status(200).json({ updatedUser })
   }
   catch {
     console.error(error);
