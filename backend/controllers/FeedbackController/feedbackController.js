@@ -46,4 +46,5 @@ exports.postProductFeedback = async (req, res) => {
   console.error("Error creating feedback:", error);
   res.status(500).json({ error: "Failed to create feedback" });
  }
+ exports.getAll
 };
