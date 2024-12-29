@@ -25,6 +25,7 @@ import { AuthContext } from "../context/AuthContext.jsx";
 import CustomerSearch from "../pages/customer/CustomerSearch.jsx";
 import CustomerCart from "../pages/customer/CustomerCart.jsx";
 import CustomerCheckout from "../pages/customer/CustomerCheckout.jsx";
+import CustomerAccount from "../pages/customer/CustomerAccount.jsx";
 
 const AppRoutes = () => {
  const { isAuthenticated } = useContext(AuthContext);
@@ -90,6 +91,10 @@ const AppRoutes = () => {
       {
        path: "checkout",
        element: <CustomerCheckout />,
+      },
+      {
+       path: "account",
+       element: <CustomerAccount />,
       },
      ],
     },

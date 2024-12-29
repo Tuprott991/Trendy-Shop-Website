@@ -131,7 +131,10 @@ const CustomerHeader = () => {
       />
       {isOpen && (
        <div className="shadow-lg ring-1 ring-black/5 rounded-lg absolute z-[100] mt-1 right-0 border pr-8 pl-4 py-2 space-y-2 bg-white text-left font-medium text-sm">
-        <div className="text-gray-800 hover:text-green-500 pr-4 py-1 cursor-pointer">
+        <div
+         className="text-gray-800 hover:text-green-500 pr-4 py-1 cursor-pointer"
+         onClick={() => navigate("/customer/account")}
+        >
          Account
         </div>
         <div className="border w-[125%]"></div>
