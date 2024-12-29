@@ -27,6 +27,8 @@ module.exports = () => {
 
   router.post("/order/discount", VoucherController.applyVoucherToProduct);
 
+  router.post("/getAllFB", FeedbackController.getAllFeedback);
+  
   router.get("/retailer",UserController.getAllRetailer);
 
   router.get("/feedback/:customer_id/:product_id", FeedbackController.findfeedbackbyproductid); 

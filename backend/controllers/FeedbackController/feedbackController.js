@@ -13,6 +13,17 @@ exports.getProductFeedback = async (req, res) => {
         res.status(500).json({ message: "Error getting feedback", error });
     }
 };
+exports.getAllFeedback = async (req, res) => {
+    try {
+        const feedbacks = await Feedback.getAllFeedback();
+        res.status(200).json({
+            feedbacks,
+        });
+    } catch (error) {
+        console.error("Error getting feedback:", error);
+        res.status(500).json({ message: "Error getting feedback", error });
+    }
+}
 
 exports.postProductFeedback = async (req, res) => {
     try {
