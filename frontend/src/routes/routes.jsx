@@ -26,6 +26,7 @@ import CustomerSearch from "../pages/customer/CustomerSearch.jsx";
 import CustomerCart from "../pages/customer/CustomerCart.jsx";
 import CustomerCheckout from "../pages/customer/CustomerCheckout.jsx";
 import CustomerAccount from "../pages/customer/CustomerAccount.jsx";
+import CustomerHistory from "../pages/customer/CustomerHistory.jsx";
 
 const AppRoutes = () => {
  const { isAuthenticated } = useContext(AuthContext);
@@ -95,6 +96,10 @@ const AppRoutes = () => {
       {
        path: "account",
        element: <CustomerAccount />,
+      },
+      {
+       path: "history",
+       element: <CustomerHistory />,
       },
      ],
     },
