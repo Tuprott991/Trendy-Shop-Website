@@ -42,13 +42,10 @@ exports.getSearchProduct = async (req, res) => {
     const keyword = req.params.keyword || req.query.keyword || 'null';
     const sortBy = req.query.sortBy || 'null';
     const ascending = req.query.ascending === "true";
-
-    // Trả về tất cả sản phẩm nếu không có keyword
     if (keyword === 'null') {
       const productInfo = await Product.getAllProduct();
       return res.status(200).json({ productInfo });
     }
-
     if (sortBy === 'null') {
       const productInfo = await Product.SearchProduct(keyword);
       return res.status(200).json({ productInfo });
@@ -74,8 +71,6 @@ exports.getSearchProduct = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error", error });
   }
 };
-
-
 
 exports.getProductInfo = async (req, res) => {
   try {
@@ -105,7 +100,6 @@ exports.GetProductReview = async (req, res) => {
 
 exports.postDeleteProduct = async (req, res) => {
   const { id } = req.body;
-
   try {
     Product.delete(id);
     res.status(200).json({ message: "Delete succesful!" });
@@ -120,13 +114,11 @@ exports.postUpdateProduct = async (req, res) => {
     name, description, price, user_id, category_id, size, stock_quantity, rating, image_url
   } = req.body;
   try {
-    console.log(req.body.id);
     const update = await Product.updProduct(req.body.id, name, description, price, user_id, category_id, size, stock_quantity, rating, image_url);
     res.status(200).json({ message: "Update successful!" });
-  } catch (error) { // Capture the error here
-    console.error(error); // Log the error for debugging
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Update Error" });
   }
 };
 
- 
