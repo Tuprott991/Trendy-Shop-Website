@@ -11,7 +11,6 @@ const feedbackSchema = new Schema(
   contact: { type: String, required: true }, // Contact of the customer
   email: { type: String, required: true }, // Email of the customer
   comment: { type: String, maxlength: 500 }, // Optional comment
-  // created_at: { type: Date, default: Date.now }, // Time the feedback was submitted
  },
  {
   timestamps: true,
