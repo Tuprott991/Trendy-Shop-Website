@@ -41,7 +41,7 @@ const VouchersTable = () => {
     const handleStatusChange = (id, newStatus) => {
         setVouchers((prevVouchers) =>
             prevVouchers.map((voucher) =>
-                voucher.id === id ? { ...voucher, status: newStatus } : voucher
+                voucher._id === id ? { ...voucher, status: newStatus } : voucher
             )
         );
     };
@@ -156,7 +156,7 @@ const VouchersTable = () => {
                             <td className="px-6 py-4 text-center">
                                 <select
                                     value={voucher.status}
-                                    onChange={(e) => handleStatusChange(voucher.id, e.target.value)}
+                                    onChange={(e) => handleStatusChange(voucher._id, e.target.value)}
                                     className={`rounded px-3 py-1.5 text-sm ${voucher.status === false
                                         ? "bg-gray-200 text-black"
                                         : "bg-amber-200 text-black"
@@ -173,7 +173,7 @@ const VouchersTable = () => {
                                     </button>
                                     <button
                                         className="hover:text-red-500 transition-all"
-                                        onClick={() => handleDeleteClick(voucher.id)}
+                                        onClick={() => handleDeleteClick(voucher._id)}
                                     >
                                         <FaTrash size={20} />
                                     </button>
