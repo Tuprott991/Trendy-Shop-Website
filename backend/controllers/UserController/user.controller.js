@@ -171,15 +171,15 @@ exports.getAdminDashboardData = async (req, res) => {
   const totalOrders = await Order.countDocuments(); // -> Total orders
 
   // Fetch total delivered orders
-  const totalDelivered = await Order.countDocuments({ status: "completed" }); // -> Delieved
+  const totalDelivered = await Order.countDocuments({ status: "deliveried" }); // -> Delieved
 
   // Calculate total revenue
 
-  const orders = await Order.find({ status: "completed" }); // ID  -> Mảng
+  const orders = await Order.find({ status: "deliveried" }); // ID  -> Mảng
 
   // sum là giá trị tích lũy, order là currentValue khi lướt qua mảng, 0 là giá trị khởi tạo, đây là loop
   const totalRevenue = orders.reduce(
-   (sum, order) => sum + order.total_amount,
+   (sum, order) => sum + order.total_money,
    0
   );
 
