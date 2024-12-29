@@ -3,129 +3,6 @@ const Order = require("../../models/index").Order;
 const Product = require("../../models/index").Product;
 const Voucher = require("../../models/index").Voucher;
 
-exports.postAddOrder = async (req, res) => {
-  const { id, status_order, address, phone, payment_method, items, voucher } = req.body;
-
-  try {
-    // Initialize an object to group items by retailer (user_id)
-    const retailerItemsMap = {};
-
-    // Iterate over items and fetch the user_id for each product
-    for (let item of items) {
-      // Look up the product by its product_id to get the user_id (retailer)
-      const product = await Product.findOne({ _id: item.product_id }).select('user_id stock_quantity'); // Get user_id and stock_quantity of the product
-
-      if (!product) {
-        return res.status(404).json({ error: `Product with ID ${item.product_id} not found` });
-      }
-
-      const retailer_id = product.user_id;
-
-      // Ensure stock is available for the order
-      if (product.stock_quantity < item.quantity) {
-        return res.status(400).json({ error: `Not enough stock for product ${item.product_id}` });
-      }
-
-      // Subtract the ordered quantity from stock_quantity
-      product.stock_quantity -= item.quantity;
-
-      // Save the updated product with the new stock_quantity
-      await product.save();
-
-      // Group items by retailer_id
-      if (!retailerItemsMap[retailer_id]) {
-        retailerItemsMap[retailer_id] = [];  // Initialize an empty array for this retailer
-      }
-      retailerItemsMap[retailer_id].push({
-        product_id: item.product_id,
-        quantity: item.quantity
-      });
-    }
-
-    // For each retailer_id, create an order with corresponding products
-    const createdOrders = [];
-
-    for (let retailer_id in retailerItemsMap) {
-      // Get the items for this retailer
-      const retailerItems = retailerItemsMap[retailer_id];
-
-      // Create the order for the retailer with their specific items
-      const savedOrder = await Order.createOrder(
-        retailer_id,
-        total_money,
-        status_order,
-        address,
-        phone,
-        payment_method,
-        retailerItems,
-        vouchers
-      );
-
-      // Push the created order _id into the user's order_list
-      const updatedUser = await User.findByIdAndUpdate(
-        id, // Use the `id` from the request body to find the user
-        { $push: { order_list: savedOrder._id } }, // Add the saved order _id to the order_list array
-        { new: true } // Return the updated document
-      );
-
-      if (!updatedUser) {
-        return res.status(404).json({ error: `User with ID ${id} not found` }); // If user not found, return an error
-      }
-
-      createdOrders.push(savedOrder); // Add the created order to the list
-    }
-
-    // Return the created orders
-    return res.status(201).json({
-      message: 'Orders created successfully',
-      orders: createdOrders
-    }); // Return the saved orders
-
-  } catch (error) {
-    console.error('Error creating order:', error);
-    return res.status(500).json({ error: 'Failed to create orders' }); // Return error message
-  }
-};
-
-exports.getOrderPage = async (req, res) => {
-  const { id } = req.query;  // Assuming 'id' is a query parameter for retailer_id
-
-  try {
-    const orders = await Order.find({ retailer_id: id })  // Fetch orders for a specific retailer
-      .populate('retailer_id', 'name email');  // Populate retailer details (name, email)
-
-    const customerDetails = orders.map(order => ({
-      name: order.retailer_id.name,    // Retailer name
-      email: order.retailer_id.email,  // Retailer email
-      address: order.address,          // Address from the order
-      phone: order.phone,              // Phone from the order
-      status: order.status,            // Status from the order (pending, completed)
-    }));
-
-    res.status(200).send({
-      message: "Successfully fetched customers for orders",
-      customers: customerDetails, // Include the customer details in the response
-    });
-
-  } catch (err) {
-    res.status(500).send({ message: err.message || "Cannot find order." });
-  }
-};
-
-
-exports.getUserOrder = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const orderData = await Order.getOrderUser(id);
-    res.status(200).json({
-      orderData,
-    });
-  }
-  catch (error) {
-    console.error('Error get orders information:', error);
-    res.status(500).json({ message: 'Error getting orders information', error });
-  }
-};
 
 exports.postCreateOrders = async (req, res) => {
   const { customer_id, product_list, voucher, name, address, city, phone, email, payment_method } = req.body
@@ -139,44 +16,73 @@ exports.postCreateOrders = async (req, res) => {
 
     // Khởi tạo mảng lưu danh sách order được tạo
     const createdOrders = [];
+    // console.log(product_list)
 
     // Duyệt qua từng retailer_id để tạo order
     for (const retailer_id of unique_retailer_id_list) {
       // Lọc sản phẩm thuộc retailer_id hiện tại
+      // Ứng với mỗi retailer có trong product_list, ta đi lấy ra các items nào liên quan tới product đó
       const itemsForRetailer = product_list
-        .filter((item) => item.user_id === retailer_id)
+        .filter((item) => item.user_id === retailer_id) 
         .map((item) => ({
+          name: item.name,
+          description: item.description,
+          price: item.price,
+          retailer_id: item.user_id,
+          category_id: item.category_id,
+          size: item.size,
+          rating: item.rating,
+          image_url: item.image_url,
+          
           product_id: item._id,
           quantity: item.quantity,
         }));
         
 
       // Tính tổng tiền của order
-      const total_money = itemsForRetailer.reduce((sum, item) => {
-        const product = product_list.find((p) => p.product_id === item._id);
-        return sum + product.price * item.quantity;
-      }, 0);
+      
 
-      // itemsForRetailer.forEach(item => {
-      //   stock_quantity = Product.findById(item.product_id)
-      //   console.log(stock_quantity)
-      //   // Product.updateStockQuantity(item.product_id, stock_quantity - item.quantity);
-      // });
-
-      // Gán voucher nếu có
       let vouchers = [];
+      let useVoucher = 0;
+      // Gán voucher nếu có
       if (voucher) {
-        const validVoucher = await Voucher.findOne({ code: voucher, retailer_id });
-        console.log(validVoucher)
+        const validVoucher = await Voucher.findOne({ code: voucher.code, retailer_id });
         if (validVoucher) {
-          vouchers.push({ voucher_code: validVoucher.code });
-          Voucher.update(validVoucher.voucherID,
-            validVoucher.max_uses - 1,
-            validVoucher.minimum_order_value, valid_from,
-            validVoucher.valid_to,
-            validVoucher.description);
+          useVoucher = 1;
+          const now = new Date();
+          if (validVoucher.valid_from <= now && validVoucher.valid_to >= now && 
+              validVoucher.status &&  
+              validVoucher.max_uses - validVoucher.used_count > 0) {
+
+            vouchers.push({ voucher_code: validVoucher.code , discount_value: validVoucher.discount_value});
+      
+            // Update the used_count and save
+            await Voucher.findByIdAndUpdate(validVoucher._id, {
+              $inc: { max_uses: -1 },
+            });
+
+          } else {
+            throw new Error(`Voucher is invalid or expired.`);
+          }
         }
       }
+      
+      if (useVoucher && vouchers.length > 0) {
+        total_money = itemsForRetailer.reduce((sum, item) => {
+          return sum + item.price * item.quantity * (1 - vouchers[0].discount_value / 100);
+        }, 0);
+      } else {
+        total_money = itemsForRetailer.reduce((sum, item) => {
+          return sum + item.price * item.quantity;
+        }, 0);
+      }
+
+      itemsForRetailer.map(async (item) => {  
+        await Product.findByIdAndUpdate(item.product_id, {
+          $inc: { stock_quantity: -item.quantity },
+        });
+    
+      })
 
       const order = await Order.createOrder(
         customer_id,
@@ -193,6 +99,7 @@ exports.postCreateOrders = async (req, res) => {
         vouchers,
         unique_code
       );
+
       createdOrders.push(order);
     }
     res.status(201).json({
@@ -231,9 +138,11 @@ exports.getOrderviewPage = async (req, res) => {
 };
 
 exports.getCustomerOrder = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.body;
   try {
-    customerOrder = Order.getCustomerOrder(id)
+    customerOrder = await Order.getCustomerOrder(id)
+
+
 
     res.status(200).json({
       customerOrder,

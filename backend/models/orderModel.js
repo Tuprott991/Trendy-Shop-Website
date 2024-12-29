@@ -15,6 +15,14 @@ const orderSchema = new Schema(
         payment_method: { type: String, enum: ["bank", "cash"], required: true },
         items: [
             {
+                name: { type: String, required: true },
+                description: { type: String },
+                price: { type: Number, required: true },
+                retailer_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+                category_id: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
+                size: { type: String, required: false },
+                rating: { type: Number, default: 0.0, max: 5.0 },
+                image_url: { type: String },
                 product_id: { type: Schema.Types.ObjectId, ref: "Product", required: true },
                 quantity: { type: Number, required: true },     
             },
@@ -63,8 +71,8 @@ const orderSchema = new Schema(
                     const savedOrder = await order.save();
                     return savedOrder;
                 } catch (error) {
-                    console.error("Error get orders information:", error);
-                    throw new Error("failed to get orders information");
+                    console.error("Error create information:", error);
+                    throw new Error("failed to create orders");
                 }
             },
 
@@ -152,15 +160,41 @@ const orderSchema = new Schema(
                     if (orders.length === 0) {
                         throw new Error("No orders found for this user");
                     }
+            
+                    // Nhóm các đơn hàng dựa trên unique_code
                     const groupedOrders = orders.reduce((acc, order) => {
                         const code = order.unique_code || "no_code";
                         if (!acc[code]) {
-                            acc[code] = [];
+                            acc[code] = {
+                                ...order.toObject(), // Copy tất cả các trường từ đơn hàng
+                                total_money: 0,
+                                items: [],
+                                vouchers: [],
+                                retailer_id: [],
+                            };
                         }
-                        acc[code].push(order);
+                        acc[code].total_money += order.total_money;
+            
+                        acc[code].items.push(...order.items);
+            
+                        // Gộp vouchers
+                        acc[code].vouchers.push(...order.vouchers);
+            
+                        // Gộp retailer_ids (tránh trùng lặp)
+                        if (!acc[code].retailer_id.includes(order.retailer_id.toString())) {
+                            acc[code].retailer_id.push(order.retailer_id.toString());
+                        }
+            
                         return acc;
                     }, {});
-                    return groupedOrders;
+            
+                    // Chuyển retailer_ids thành chuỗi phân cách bằng dấu "+"
+                    const mergedOrders = Object.values(groupedOrders).map(order => ({
+                        ...order,
+                        retailer_id: order.retailer_id.join(", "),
+                    }));
+            
+                    return mergedOrders;
                 } catch (error) {
                     console.error("Error retrieving orders:", error);
                     throw new Error("Failed to retrieve customer orders");
