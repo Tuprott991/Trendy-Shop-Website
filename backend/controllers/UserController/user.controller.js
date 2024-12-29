@@ -207,9 +207,9 @@ exports.getRetailerDashboardData = async (req, res) => {
     }
     const productCount = await Product.countDocuments({ user_id: id });
     const totalOrders = await Order.countDocuments({ retailer_id: id });
-    const totalDelivered = await Order.countDocuments({ retailer_id: id, status: 'completed' });
-    const orders = await Order.find({ retailer_id: id, status: 'completed' });
-    const totalRevenue = orders.reduce((sum, order) => sum + order.total_amount, 0);
+    const totalDelivered = await Order.countDocuments({ retailer_id: id, status: 'deliveried' });
+    const orders = await Order.find({ retailer_id: id, status: 'deliveried' });
+    const totalRevenue = orders.reduce((sum, order) => sum + order.total_money, 0);
     const productList = await Product.find({ user_id: id })
       .populate({
         path: 'category_id',
