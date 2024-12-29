@@ -255,3 +255,31 @@ exports.getAllRetailer = async (req, res) => {
    .json({ message: error.message || "Error fetching retailer data" });
  }
 };
+
+exports.getAllRetailers = async (req, res) => {
+  try {
+    // Lấy danh sách retailer từ cơ sở dữ liệu
+    const retailers = await User.getAllRetailer();
+
+    // Kiểm tra nếu không có dữ liệu
+    if (!retailers || retailers.length === 0) {
+      return res.status(404).json({ 
+        message: "No retailers found" 
+      });
+    }
+
+    // Trả về phản hồi thành công
+    res.status(200).json({
+      message: "Retailers fetched successfully",
+      retailers,
+    });
+  } catch (error) {
+    console.error("Error fetching retailers:", error);
+
+    // Trả về lỗi server với thông tin chi tiết
+    res.status(500).json({ 
+      message: "An error occurred while fetching retailers",
+      error: error.message,
+    });
+  }
+};
