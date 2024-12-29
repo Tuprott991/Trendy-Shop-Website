@@ -94,6 +94,10 @@ const productSchema = new Schema({
       async GetProductCategory(categoryID) {
         const productCategory = await Product.find({ category_id: categoryID });
         return productCategory; 
+      },
+      async GetProductReview(productID) {
+        const productReview = await Product.findById(productID).populate('reviews');
+        return productReview;
       }
     
   }});

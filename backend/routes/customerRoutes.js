@@ -14,7 +14,7 @@ module.exports = () => {
   router.get("/search/:keyword?", ProductController.getSearchProduct);
   
   
-  //router.post("/getId", CategoryController.getId); cái này không xài
+
 
   router.get("/category/all", CategoryController.getAllCategory);
 
