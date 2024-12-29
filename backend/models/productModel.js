@@ -90,6 +90,10 @@ const productSchema = new Schema({
           throw new Error("Product not found");
         }
         return updatedProduct
+      },
+      async GetProductCategory(categoryID) {
+        const productCategory = await Product.find({ category_id: categoryID });
+        return productCategory; 
       }
     
   }});

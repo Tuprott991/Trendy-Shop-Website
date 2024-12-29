@@ -62,16 +62,12 @@ exports.getFilterCategory = async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: 'Category ID is required' });
     }
-
     
     const categoryFound = await Category.findById(id);
-
     if (!categoryFound) {
       return res.status(404).json({ message: 'Category not found' });
     }
-
-    
-    const products = await Product.find({ categoryId: id });
+    const products = await Product.find({ category_id: id });
 
     if (products.length === 0) {
       return res.status(404).json({ message: 'No products found for this category' });

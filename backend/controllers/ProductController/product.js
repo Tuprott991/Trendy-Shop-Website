@@ -117,13 +117,14 @@ exports.postDeleteProduct = async (req, res) => {
 
 exports.postUpdateProduct = async (req, res) => {
   const {
-    name, description, price, size, stock_quantity, image_url
+    name, description, price, user_id, category_id, size, stock_quantity, rating, image_url
   } = req.body;
   try {
-    const updatedProduct = await Product.updProduct(req.body._id, name, description, price, size, stock_quantity, image_url);
+    console.log(req.body.id);
+    const update = await Product.updProduct(req.body.id, name, description, price, user_id, category_id, size, stock_quantity, rating, image_url);
     res.status(200).json({ message: "Update successful!" });
-  } catch (error) {
-    console.error(error);
+  } catch (error) { // Capture the error here
+    console.error(error); // Log the error for debugging
     res.status(500).json({ message: "Update Error" });
   }
 };
