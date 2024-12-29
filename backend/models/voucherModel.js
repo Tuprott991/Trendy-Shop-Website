@@ -46,6 +46,7 @@ const voucherSchema = new Schema(
     
       async updateVoucher(voucherID, discount_value, max_uses, minimum_order_value, valid_from, valid_to, description) {
         const updateData = {};
+        if (code) updateData.code = code
         if (discount_value) updateData.discount_value = discount_value
         if (max_uses) updateData.max_uses = max_uses;
         if (valid_from) updateData.valid_from = valid_from;
