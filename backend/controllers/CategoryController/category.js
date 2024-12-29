@@ -80,4 +80,19 @@ exports.getFilterCategory = async (req, res) => {
   }
 };
 
-
+exports.findCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ message: 'Category ID is required' });
+    }
+    const categoryFound = await Category.findById(id);
+    if (!categoryFound) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+    return res.status(200).json({ category: categoryFound });
+  } catch (error) {
+    console.error('Error retrieving category:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+}
