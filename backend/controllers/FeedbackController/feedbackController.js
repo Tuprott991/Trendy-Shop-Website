@@ -40,3 +40,15 @@ exports.postProductFeedback = async (req, res) => {
     }
 
 };
+
+exports.findfeedbackbyproductid(customer_id, product_id) = async(req, res) => {
+    try {
+        const feedback = await Feedback.findfeedbackbyproductid(customer_id, product_id);
+        res.status(200).json({
+            feedback,
+        });
+    } catch (error) {
+        console.error("Error getting feedback:", error);
+        res.status(500).json({ message: "Error getting feedback", error });
+    }
+};

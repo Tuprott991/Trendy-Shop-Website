@@ -34,6 +34,8 @@ module.exports = () => {
 
   router.get("/retailer",UserController.getAllRetailer);
 
+  router.get("/feedback/:customer_id/:product_id", FeedbackController.findfeedbackbyproductid); 
+
   router.get("/customerorders/:id", OrderController.getCustomerOrder);
   
   router.post("/updateProfile/:id", UserController.postUpdateProfieCustomer);
