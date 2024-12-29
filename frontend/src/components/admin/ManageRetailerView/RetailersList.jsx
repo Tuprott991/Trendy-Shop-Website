@@ -32,9 +32,11 @@ const RetailersTable = () => {
         if (!selectedRetailer) return;
         try {
             const response = await adminService.deleteRetailer(selectedRetailer);
-            console.log(response);
             if (response.status === 200) {
                 alert("Retailer has been successfully deleted.");
+                setRetailers((prevRetailers) =>
+                    prevRetailers.filter((retailer) => retailer._id !== selectedRetailer)
+                );
             } else {
                 const errorData = await response.json();
                 console.error("Error when deleting:", errorData);
@@ -47,7 +49,7 @@ const RetailersTable = () => {
             setIsModalOpen(false);
             setSelectedRetailer(null);
         }
-    };
+    };    
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
