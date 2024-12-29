@@ -16,7 +16,7 @@ exports.postcreateCate = async (req, res) => {
     } catch (error) {
       return res.status(400).json({ message: error.message });
     }
-  } catch (error) {
+  } catch (error) {-
     console.error('Error creating category:', error);
     return res.status(500).json({ message: 'Server error' });
   }

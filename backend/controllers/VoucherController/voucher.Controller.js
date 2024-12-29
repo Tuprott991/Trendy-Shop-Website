@@ -166,6 +166,7 @@ exports.postDeleteVoucher = (req, res) => {
 
 exports.postUpdateVoucher = (req, res) => {
   const {
+    code,
     discount_value,
     max_uses,
     minimum_order_value,
@@ -176,6 +177,7 @@ exports.postUpdateVoucher = (req, res) => {
   try {
     Voucher.updateVoucher(
       req.body.id,
+      code,
       discount_value,
       max_uses,
       minimum_order_value,

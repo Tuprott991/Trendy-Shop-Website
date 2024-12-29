@@ -154,47 +154,56 @@ const orderSchema = new Schema(
                 }
             },
 
+            // async getCustomerOrder(userID) {
+            //     try {
+            //         const orders = await this.find({ customer_id: userID });
+            //         if (orders.length === 0) {
+            //             throw new Error("No orders found for this user");
+            //         }
+            
+            //         // Nhóm các đơn hàng dựa trên unique_code
+            //         const groupedOrders = orders.reduce((acc, order) => {
+            //             const code = order.unique_code || "no_code";
+            //             if (!acc[code]) {
+            //                 acc[code] = {
+            //                     ...order.toObject(), // Copy tất cả các trường từ đơn hàng
+            //                     total_money: 0,
+            //                     items: [],
+            //                     vouchers: [],
+            //                     retailer_id: [],
+            //                 };
+            //             }
+            //             acc[code].total_money += order.total_money;
+            
+            //             acc[code].items.push(...order.items);
+            
+            //             // Gộp vouchers
+            //             acc[code].vouchers.push(...order.vouchers);
+            
+            //             // Gộp retailer_ids (tránh trùng lặp)
+            //             if (!acc[code].retailer_id.includes(order.retailer_id.toString())) {
+            //                 acc[code].retailer_id.push(order.retailer_id.toString());
+            //             }
+            
+            //             return acc;
+            //         }, {});
+            
+            //         // Chuyển retailer_ids thành chuỗi phân cách bằng dấu "+"
+            //         const mergedOrders = Object.values(groupedOrders).map(order => ({
+            //             ...order,
+            //             retailer_id: order.retailer_id.join(", "),
+            //         }));
+            
+            //         return mergedOrders;
+            //     } catch (error) {
+            //         console.error("Error retrieving orders:", error);
+            //         throw new Error("Failed to retrieve customer orders");
+            //     }
+            // }
             async getCustomerOrder(userID) {
                 try {
                     const orders = await this.find({ customer_id: userID });
-                    if (orders.length === 0) {
-                        throw new Error("No orders found for this user");
-                    }
-            
-                    // Nhóm các đơn hàng dựa trên unique_code
-                    const groupedOrders = orders.reduce((acc, order) => {
-                        const code = order.unique_code || "no_code";
-                        if (!acc[code]) {
-                            acc[code] = {
-                                ...order.toObject(), // Copy tất cả các trường từ đơn hàng
-                                total_money: 0,
-                                items: [],
-                                vouchers: [],
-                                retailer_id: [],
-                            };
-                        }
-                        acc[code].total_money += order.total_money;
-            
-                        acc[code].items.push(...order.items);
-            
-                        // Gộp vouchers
-                        acc[code].vouchers.push(...order.vouchers);
-            
-                        // Gộp retailer_ids (tránh trùng lặp)
-                        if (!acc[code].retailer_id.includes(order.retailer_id.toString())) {
-                            acc[code].retailer_id.push(order.retailer_id.toString());
-                        }
-            
-                        return acc;
-                    }, {});
-            
-                    // Chuyển retailer_ids thành chuỗi phân cách bằng dấu "+"
-                    const mergedOrders = Object.values(groupedOrders).map(order => ({
-                        ...order,
-                        retailer_id: order.retailer_id.join(", "),
-                    }));
-            
-                    return mergedOrders;
+                    return orders;
                 } catch (error) {
                     console.error("Error retrieving orders:", error);
                     throw new Error("Failed to retrieve customer orders");
