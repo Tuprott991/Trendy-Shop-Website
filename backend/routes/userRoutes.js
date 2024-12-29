@@ -14,5 +14,7 @@ module.exports =  () =>{
     router.post("/deleteuser", user.postDeleteUser);
     router.get("/admindashboard", user.getAdminDashboardData); 
     router.get("/manageretailer", user.manageRetailer);
+    router.get("/getretailerslist", user.getRetailerList);
+    
     return router;  
 };  
