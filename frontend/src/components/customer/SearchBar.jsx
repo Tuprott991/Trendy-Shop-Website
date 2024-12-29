@@ -42,7 +42,7 @@ const SearchBar = () => {
   <>
    <div className="flex gap-8 font-bold text-sm text-gray-900">
     <div className="group relative h-full">
-     <div className="ml-8 cursor-pointer  flex items-center  group-hover:text-green-600 duration-100 ">
+     <div className="text-lg ml-8 cursor-pointer  flex items-center  group-hover:text-green-600 duration-100 ">
       Category
       <svg
        className="-mr-1 size-5 text-gray-900 group-hover:text-green-600 duration-100"
@@ -79,7 +79,7 @@ const SearchBar = () => {
            : ""
          }`}
         >
-         <h2 className="text-sm font-semibold text-gray-900">{category}</h2>
+         <h2 className="font-semibold text-gray-900">{category}</h2>
          <ul className="pt-2 space-y-1 flex flex-col gap-2">
           {categories[category].map((item) => (
            <li
@@ -97,12 +97,12 @@ const SearchBar = () => {
      </div>
     </div>
 
-    <div className="cursor-pointer hover:text-green-500 transition-all duration-75">
+    {/* <div className="cursor-pointer hover:text-green-500 transition-all duration-75">
      On sale
     </div>
     <div className="cursor-pointer hover:text-green-500 transition-all duration-75">
      Retailer
-    </div>
+    </div> */}
    </div>
    <form onSubmit={handleSubmit} className="ml-8 flex items-center w-[45%]">
     <div className="absolute ml-4">

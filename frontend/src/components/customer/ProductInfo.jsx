@@ -26,7 +26,7 @@ const ProductInfo = ({ product }) => {
  const handleCart = async () => {
   setIsLoading(true);
   await new Promise((resolve) => {
-   setTimeout(resolve, 2000);
+   setTimeout(resolve, 1500);
   });
   addToCart({ ...product, size: selectedSize, quantity: selectQuantity });
   setIsLoading(false);
@@ -155,6 +155,7 @@ const ProductInfo = ({ product }) => {
       )}
      </button>
     </div>
+    <div className="mt-4">Description: {product.description}</div>
    </div>
   </div>
  );

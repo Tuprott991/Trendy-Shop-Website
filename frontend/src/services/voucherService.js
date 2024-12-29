@@ -8,7 +8,6 @@ const getVoucherList = async (retailerIDs) => {
   );
   return response;
  } catch (e) {
-  console.log(e.response);
   return e.response;
  }
 };

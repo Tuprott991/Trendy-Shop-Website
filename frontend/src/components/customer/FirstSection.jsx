@@ -8,7 +8,7 @@ const FirstSection = () => {
  }, []);
  const navigate = useNavigate();
  const handleClick = async () => {
-  navigate("/customer/product/1");
+  navigate("/customer/search/keyword/");
  };
  return (
   <div className="relative ">

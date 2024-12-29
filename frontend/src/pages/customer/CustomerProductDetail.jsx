@@ -33,7 +33,7 @@ const CustomerProductDetail = () => {
    <div className="pt-12 ">
     <ProductInfo product={product}></ProductInfo>
     <ProductReview product={product}></ProductReview>
-    <div className="flex flex-wrap justify-center">
+    <div className="flex flex-wrap justify-center pb-12">
      <h1 className="text-center text-3xl font-semibold text-gray-800 mb-12">
       You might also like
      </h1>

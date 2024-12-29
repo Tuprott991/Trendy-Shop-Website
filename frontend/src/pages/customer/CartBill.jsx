@@ -28,7 +28,7 @@ const CartBill = ({ onCartChange }) => {
  }, [cart]);
  useEffect(() => {
   const fetchDiscount = async () => {
-   if (selectedCode === "Add voucher") {
+   if (selectedCode === "Add voucher" || !voucherList) {
     setDiscountCart(cart);
     onCartChange(cart);
    } else {
@@ -36,6 +36,7 @@ const CartBill = ({ onCartChange }) => {
      cart,
      selectedCode
     );
+
     setDiscountCart(response.data.products);
     onCartChange(response.data.products);
    }

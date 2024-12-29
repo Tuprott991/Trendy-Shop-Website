@@ -10,6 +10,7 @@ const CustomerCart = () => {
  const [message, setMessage] = useState();
  const [discountCart, setDiscountCart] = useState(cart);
  const handleDiscountCart = (newCart) => {
+  console.log(newCart);
   setDiscountCart(newCart);
  };
 
@@ -76,6 +77,8 @@ const CustomerCart = () => {
  const handleRemoveItemButton = (item) => {
   return () => {
    setChosenItem(item);
+   setMessage("decrement");
+
    setIsQuantity(true);
   };
  };
@@ -88,7 +91,7 @@ const CustomerCart = () => {
      onClick={() => setIsQuantity((prev) => !prev)}
     ></div>
    )}
-   <div className="bg-gray-100 h-full">
+   <div className="bg-gray-100 min-h-screen">
     {isQuantity && (
      <div className="shadow-lg ring-1 ring-black/5 rounded-lg fixed z-[100]  top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2  w-fit border pr-8 pl-4 py-2 space-y-2 bg-white text-left font-medium text-sm">
       <div className="text-left pr-16 pt-3 pb-2">

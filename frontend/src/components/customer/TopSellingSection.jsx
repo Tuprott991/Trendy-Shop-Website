@@ -14,7 +14,7 @@ const TopSellingSection = () => {
   fetchTopSelling();
  }, []);
  const handleViewAll = () => {
-  navigate("/customer/search");
+  navigate("/customer/search/keyword/");
  };
  console.log(topSelling);
  return (
