@@ -45,6 +45,7 @@ const getVoucher = async (token) => {
                 Authorization: `Bearer ${token}`,
             },
         });
+        console.log(response);
         return response;
     } catch (e) {
         console.log(e.response);

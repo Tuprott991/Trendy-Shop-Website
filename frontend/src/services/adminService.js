@@ -10,6 +10,16 @@ const getAdminDashboard = async () => {
     }
 }
 
+const getDashboardRetailer = async () => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/user/getretailerslist`);
+        return response;
+    } catch (e) {
+        console.log(e.response);
+        return e.response;
+    }
+}
+
 const getManageRetailer = async () => {
     try {
         const response = await axios.get(`http://localhost:8080/api/user/manageretailer`);
@@ -33,5 +43,6 @@ const deleteRetailer = async (id) => {
 export const adminService = {
     getAdminDashboard,
     getManageRetailer,
-    deleteRetailer
+    deleteRetailer,
+    getDashboardRetailer
 };
