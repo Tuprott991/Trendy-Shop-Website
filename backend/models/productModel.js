@@ -54,47 +54,47 @@ const productSchema = new Schema({
           throw new Error('failed to get all product');
         }
       },
-
-    async updateProduct(productID, name, description, price, user_id, category_id, size, stock_quantity, rating, image_url) {
-      const updateData = {};
-      if (name) updateData.name = name;
-      if (description) updateData.description = description;
-      if (price) updateData.price = price;
-      if (user_id) updateData.user_id = user_id;
-      if (category_id) updateData.category_id = category_id;
-      if (size) updateData.size = size;
-      if (stock_quantity) updateData.stock_quantity = stock_quantity;
-      if (rating) updateData.rating = rating;
-      if (image_url) updateData.image_url = image_url;
-
-      const updatedProduct = await this.findByIdAndUpdate(
-        productID,
-        { $set: updateData },
-        { new: true, runValidators: true }
-      );
-
-      if (!updatedProduct) {
-        throw new Error("Product not found");
+      async updateQuantity(productID, stock_quantity) {
+        if (typeof stock_quantity === "undefined") {
+          throw new Error("Stock quantity is required");
+        }
+  
+        const updatedProduct = await this.findByIdAndUpdate(
+          productID,
+          { $set: { stock_quantity } },
+          { new: true, runValidators: true }
+        );
+  
+        if (!updatedProduct) {
+          throw new Error("Product not found");
+        }
+        return updatedProduct;
+      },
+  
+      async updProduct(productID, name, description, price, user_id, category_id, size, stock_quantity, rating, image_url) {
+        const updateData = {};
+        if (name) updateData.name = name;
+        if (description) updateData.description = description;
+        if (price) updateData.price = price;
+        if (user_id) updateData.user_id = user_id;
+        if (category_id) updateData.category_id = category_id;
+        if (size) updateData.size = size;
+        if (stock_quantity) updateData.stock_quantity = stock_quantity;
+        if (rating) updateData.rating = rating;
+        if (image_url) updateData.image_url = image_url;
+  
+        const updatedProduct = await this.findByIdAndUpdate(
+          productID,
+          { $set: updateData },
+          { new: true, runValidators: true }
+        );
+  
+        if (!updatedProduct) {
+          throw new Error("Product not found");
+        }
+        return updatedProduct
       }
-      return updatedProduct
-    },
-
-    async updateStockQuantity(productID, stock_quantity) {
-      if (typeof stock_quantity === "undefined") {
-        throw new Error("Stock quantity is required");
-      }
-
-      const updatedProduct = await this.findByIdAndUpdate(
-        productID,
-        { $set: { stock_quantity } },
-        { new: true, runValidators: true }
-      );
-
-      if (!updatedProduct) {
-        throw new Error("Product not found");
-      }
-      return updatedProduct;
-    }
+    
   }});
 
 const Product = mongoose.model('Product', productSchema);

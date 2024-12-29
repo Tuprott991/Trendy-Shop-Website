@@ -122,7 +122,7 @@ exports.postUpdateProduct = async (req, res) => {
   } = req.body;
   try {
     console.log(req.body.id);
-    const update = await Product.updateProduct(req.body.id, name, description, price, user_id, category_id, size, stock_quantity, rating, image_url);
+    const update = await Product.updProduct(req.body.id, name, description, price, user_id, category_id, size, stock_quantity, rating, image_url);
     res.status(200).json({ message: "Update successful!" });
   } catch (error) { // Capture the error here
     console.error(error); // Log the error for debugging
