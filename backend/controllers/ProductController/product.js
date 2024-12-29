@@ -93,7 +93,6 @@ exports.getProductInfo = async (req, res) => {
 exports.GetProductReview = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
     const productReview = await Product.GetProductReview(id);
     res.status(200).json({
       productReview,
@@ -118,14 +117,13 @@ exports.postDeleteProduct = async (req, res) => {
 
 exports.postUpdateProduct = async (req, res) => {
   const {
-    name, description, price, user_id, category_id, size, stock_quantity, rating, image_url
+    name, description, price, size, stock_quantity, image_url
   } = req.body;
   try {
-    console.log(req.body.id);
-    const update = await Product.updProduct(req.body.id, name, description, price, user_id, category_id, size, stock_quantity, rating, image_url);
+    const updatedProduct = await Product.updProduct(req.body._id, name, description, price, size, stock_quantity, image_url);
     res.status(200).json({ message: "Update successful!" });
-  } catch (error) { // Capture the error here
-    console.error(error); // Log the error for debugging
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Update Error" });
   }
 };

@@ -196,7 +196,6 @@ exports.getRetailerDashboardData = async (req, res) => {
     const orders = await Order.find({ retailer_id: id, status: 'completed' });
     const totalRevenue = orders.reduce((sum, order) => sum + order.total_amount, 0);
     const productList = await Product.find({ user_id: id })
-      .select("name size price category_id")
       .populate({
         path: 'category_id',
         select: 'category target',
