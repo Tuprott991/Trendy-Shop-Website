@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { Navigate, Link } from "react-router-dom";
+import { Navigate, Link, useNavigate } from "react-router-dom";
 import { AiOutlineLock, AiOutlineUser, AiOutlineTeam } from "react-icons/ai";
 import { authenticationService } from "../../services/authenticationService";
 const Signup = () => {
  const { isAuthenticated, login } = useContext(AuthContext);
  const [isLoading, setIsLoading] = useState(false);
-
+ const navigate = useNavigate();
  const [formData, setFormData] = useState({
   name: "",
   email: "",
@@ -27,7 +27,7 @@ const Signup = () => {
    [name]: value,
   }));
  };
-
+ console.log(formData);
  const handleSubmit = async (e) => {
   e.preventDefault();
   setIsLoading(true);
@@ -39,6 +39,8 @@ const Signup = () => {
     ...prevData,
     error: "Confirm Password doesn't match with Password",
    }));
+   setIsLoading(false);
+
    return;
   }
   if (password.length < 8 || !/[A-Z]/.test(password) || !/\d/.test(password)) {
@@ -64,8 +66,10 @@ const Signup = () => {
    if (response.status === 200 || response.status === 201) {
     console.log("Signup successful:", response.data);
     const { token, user } = response.data;
-    await login(token, user.email, user.name, user.role);
+    // await login(token, user.email, user.name, user.role);
+    setIsLoading(false);
 
+    navigate("/login");
     console.log("User logged in successfully");
    } else {
     throw new Error(response.data.message || "Signup failed");
