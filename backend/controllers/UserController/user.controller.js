@@ -110,6 +110,47 @@ exports.postDeleteUser = (req, res) => {
   }
 };
 
+exports.getRetailerList = async (req, res) => {
+  try {
+    // Lấy danh sách retailer
+    const retailers = await User.find({ role: 'retailer' }).select('name email order_list');
+
+    const retailerData = [];
+
+    // Duyệt qua từng retailer
+    for (let retailer of retailers) {
+      // Lấy danh sách các đơn hàng của retailer
+      const orders = await Order.find({ retailer_id: retailer._id });
+
+      // Số lượng đơn hàng
+      const totalOrders = orders.length;
+
+      // Số lượng đơn hàng đã giao (status: 'deliveried')
+      const deliveredOrders = orders.filter(order => order.status === 'deliveried').length;
+
+      // Tính doanh thu từ các đơn hàng đã giao
+      const revenue = orders
+        .filter(order => order.status === 'deliveried')
+        .reduce((total, order) => total + order.total_money, 0);
+
+      // Đẩy thông tin retailer vào mảng
+      retailerData.push({
+        name: retailer.name,
+        email: retailer.email,
+        totalOrders,
+        deliveredOrders,
+        revenue
+      });
+    }
+
+    // Trả kết quả cho frontend
+    res.status(200).json(retailerData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching retailer data' });
+  }
+};
+
 
 exports.getAdminDashboardData = async (req, res) => {
   try {
