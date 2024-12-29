@@ -138,12 +138,9 @@ exports.getOrderviewPage = async (req, res) => {
 };
 
 exports.getCustomerOrder = async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.params;
   try {
     customerOrder = await Order.getCustomerOrder(id)
-
-
-
     res.status(200).json({
       customerOrder,
     });
