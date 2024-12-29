@@ -163,4 +163,15 @@ exports.updateOrderStatus = async (req, res) => {
   }
 }
 
+exports.deleteOrder = async (req, res) => {
+  const { id } = req.body;
+  try {
+    Order.delete(id);
+    res.status(200).json({ message: "Delete succesful!" });
+  } catch {
+    console.error(error);
+    res.status(500).json({ message: "Delete Error" });
+  }
+}
+
 

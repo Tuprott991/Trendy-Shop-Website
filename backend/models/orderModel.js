@@ -208,6 +208,20 @@ const orderSchema = new Schema(
                     console.error("Error retrieving orders:", error);
                     throw new Error("Failed to retrieve customer orders");
                 }
+            },
+            async deleteOrder(orderID) {
+                try {
+                    if (!orderID) {
+                        throw new Error("OrderID is required");
+                    }
+                    const deletedOrder = await this.findByIdAndDelete(orderID);
+                    if (!deletedOrder) {
+                        throw new Error("Order not found");
+                    }
+                    return { message: "Order deleted successfully" };
+                } catch (error) {
+                    throw new Error(`Failed to delete order: ${error.message}`);
+                }
             }
         },
     }
